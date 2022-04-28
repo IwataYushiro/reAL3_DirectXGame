@@ -2,6 +2,7 @@
 
 #include "Audio.h"
 #include "DirectXCommon.h"
+#include "DebugCamera.h"
 #include "DebugText.h"
 #include "Input.h"
 #include "Model.h"
@@ -54,6 +55,8 @@ class GameScene {
 	WorldTransform worldTransform_;
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
+	//デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
