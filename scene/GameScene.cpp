@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
-#include "TextureManager.h"
+#include "AxisIndicator.h"
 #include "PrimitiveDrawer.h"
+#include "TextureManager.h"
 #include <cassert>
 
 GameScene::GameScene() {}
@@ -18,7 +19,7 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
-	//3Dモデルの生成
+	// 3Dモデルの生成
 	model_ = Model::Create();
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
@@ -26,9 +27,16 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1260, 720);
+	//軸方向表示の表示を有効にする
+	AxisIndicator::GetInstance()->SetVisible(true);
+	//軸方向表示が参照するビュープロジェクションを指定する(アドレス無し)
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
 }
 
-void GameScene::Update() { debugCamera_->Update(); }
+void GameScene::Update() {
+	//デバッグカメラの更新
+	debugCamera_->Update();
+}
 
 void GameScene::Draw() {
 
@@ -56,7 +64,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	//3Dモデル描画
+	// 3Dモデル描画
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
