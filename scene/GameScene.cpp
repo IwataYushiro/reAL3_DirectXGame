@@ -12,6 +12,8 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
+	//ファイル名を指定してテクスチャを読み込む
+	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
 }
 
 void GameScene::Update() {}
