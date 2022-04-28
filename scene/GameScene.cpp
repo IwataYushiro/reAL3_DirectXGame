@@ -1,10 +1,11 @@
 ﻿#include "GameScene.h"
 #include "TextureManager.h"
+#include "PrimitiveDrawer.h"
 #include <cassert>
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() { delete model_; }
 
 void GameScene::Initialize() {
 
@@ -14,6 +15,8 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
+	//3Dモデルの生成
+	model_ = Model::Create();
 }
 
 void GameScene::Update() {}
