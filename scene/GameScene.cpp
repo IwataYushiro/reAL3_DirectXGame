@@ -66,9 +66,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	// 3Dモデル描画
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
-
+	
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
 
 	for (int i = 0; i < 12; i++) {
