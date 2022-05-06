@@ -31,6 +31,8 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向表示が参照するビュープロジェクションを指定する(アドレス無し)
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&debugCamera_->GetViewProjection());
 }
 
 void GameScene::Update() {
@@ -66,6 +68,15 @@ void GameScene::Draw() {
 	/// </summary>
 	// 3Dモデル描画
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+
+	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
+
+	for (int i = 0; i < 12; i++) {
+		PrimitiveDrawer::GetInstance()->DrawLine3d(
+		  cubeVertex[edgeList[i][0]], cubeVertex[edgeList[i][1]], color);
+	}
+	
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
