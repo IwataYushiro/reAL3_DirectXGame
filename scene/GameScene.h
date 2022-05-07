@@ -5,12 +5,14 @@
 #include "DebugText.h"
 #include "DirectXCommon.h"
 #include "Input.h"
+#include <math.h>
 #include "Model.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
+#define PI 3.1415f
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -58,7 +60,7 @@ class GameScene {
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	Vector3 cubeBaseVertex[8]= {
+	Vector3 cubeBaseVertex[8] = {
 	  {0.0f, 5.0f, 0.0f},
       {0.0f, 0.0f, 0.0f},
       {5.0f, 0.0f, 0.0f},
@@ -91,16 +93,32 @@ class GameScene {
 
 	Vector4 baseColor = {0xFF, 0xFF, 0xFF, 0xFF};
 	Vector4 moveColor = {0xFF, 0x00, 0x00, 0xFF};
+	Vector4 rotatedColor = {0x00, 0xFF, 0x00, 0xFF};
+	Vector4 scaledColor = {0x00, 0x00, 0xFF, 0xFF};
 
+	//アフィン変換
+	//平行移動
 	Vector4 affinMove[4] = {
 	  {1.0f, 0.0f, 0.0f, 10.0f},
 	  {0.0f, 1.0f, 0.0f, 10.0f},
 	  {0.0f, 0.0f, 1.0f, 10.0f},
 	  {0.0f, 0.0f, 0.0f, 1.0f }
     };
-	//アフィン変換
-
+	//回転
+	Vector4 affinRotated[4] = {
+	  {1.0f, 0.0f, 0.0f, 0.0f},
+	  {0.0f, cos(PI / 4), -sin(PI/4), 0.0f},
+	  {0.0f, sin(PI / 4), cos(PI/4),        0.0f},
+	  {0.0f, 0.0f, 0.0f, 1.0f }
+    };
+	//拡大
+	Vector4 affinScaled[4] = {
+	  {1.0f, 0.0f, 0.0f, 10.0f},
+	  {0.0f, 1.0f, 0.0f, 10.0f},
+	  {0.0f, 0.0f, 1.0f, 10.0f},
+	  {0.0f, 0.0f, 0.0f, 1.0f }
+    };
 	/// <summary>
-  /// ゲームシーン用
-  /// </summary>
-	};
+	/// ゲームシーン用
+	/// </summary>
+};

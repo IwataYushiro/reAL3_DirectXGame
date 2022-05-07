@@ -60,8 +60,20 @@ void GameScene::Update() {
 		  affinMove[2].x * cubeBaseVertex[i].x + affinMove[2].y * cubeBaseVertex[i].y +
 		  affinMove[2].z * cubeBaseVertex[i].z + affinMove[2].w;
 
+	}
+	//回転
+	for (int i = 0; i < 8; i++) {
+		cubeRotatedVertex[i].x = affinRotated[0].x * cubeBaseVertex[i].x +
+		                      affinRotated[0].y * cubeBaseVertex[i].y +
+		                      affinRotated[0].z * cubeBaseVertex[i].z + affinRotated[0].w;
 
+		cubeRotatedVertex[i].y = affinRotated[1].x * cubeBaseVertex[i].x +
+		                      affinRotated[1].y * cubeBaseVertex[i].y +
+		                      affinRotated[1].z * cubeBaseVertex[i].z + affinRotated[1].w;
 
+		cubeRotatedVertex[i].z = affinRotated[2].x * cubeBaseVertex[i].x +
+		                      affinRotated[2].y * cubeBaseVertex[i].y +
+		                      affinRotated[2].z * cubeBaseVertex[i].z + affinRotated[2].w;
 	}
 }
 
@@ -101,6 +113,10 @@ void GameScene::Draw() {
 	for (int i = 0; i < 12; i++) {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
 		  cubeMoveVertex[baseEdgeList[i][0]], cubeMoveVertex[baseEdgeList[i][1]], moveColor);
+	}
+	for (int i = 0; i < 12; i++) {
+		PrimitiveDrawer::GetInstance()->DrawLine3d(
+		  cubeRotatedVertex[baseEdgeList[i][0]], cubeRotatedVertex[baseEdgeList[i][1]], rotatedColor);
 	}
 
 	// 3Dオブジェクト描画後処理
