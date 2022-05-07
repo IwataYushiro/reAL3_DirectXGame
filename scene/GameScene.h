@@ -58,7 +58,7 @@ class GameScene {
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	Vector3 cubeVertex[8] = {
+	Vector3 cubeBaseVertex[8]= {
 	  {0.0f, 5.0f, 0.0f},
       {0.0f, 0.0f, 0.0f},
       {5.0f, 0.0f, 0.0f},
@@ -68,8 +68,13 @@ class GameScene {
       {5.0f, 0.0f, 5.0f},
       {5.0f, 5.0f, 5.0f}
     };
+	//原点移動、平行移動、回転、拡大の行列の宣言
+	Vector3 cubeOriginVertex[8];
+	Vector3 cubeMoveVertex[8];
+	Vector3 cubeRotatedVertex[8];
+	Vector3 cubeScaledVertex[8];
 
-	int edgeList[12][2] = {
+	int baseEdgeList[12][2] = {
 	  {0, 1},
       {1, 2},
       {2, 3},
@@ -84,7 +89,17 @@ class GameScene {
       {3, 7}
     };
 
-	Vector4 color = {0xFF, 0xFF, 0xFF, 0xFF};
+	Vector4 baseColor = {0xFF, 0xFF, 0xFF, 0xFF};
+	Vector4 moveColor = {0xFF, 0x00, 0x00, 0xFF};
+
+	Vector4 affinMove[4] = {
+	  {1.0f, 0.0f, 0.0f, 10.0f},
+	  {0.0f, 1.0f, 0.0f, 10.0f},
+	  {0.0f, 0.0f, 1.0f, 10.0f},
+	  {0.0f, 0.0f, 0.0f, 1.0f }
+    };
+	//アフィン変換
+
 	/// <summary>
   /// ゲームシーン用
   /// </summary>

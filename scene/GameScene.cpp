@@ -19,6 +19,13 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
+	// 原点移動、平行移動、回転、拡大の行列の初期化
+	for (int i = 0; i < 8; i++) {
+		cubeOriginVertex[i] = cubeBaseVertex[i];
+		cubeMoveVertex[i] = cubeBaseVertex[i];
+		cubeRotatedVertex[i] = cubeBaseVertex[i];
+		cubeScaledVertex[i] = cubeBaseVertex[i];
+	}
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//ワールドトランスフォームの初期化
@@ -38,6 +45,24 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	//デバッグカメラの更新
 	debugCamera_->Update();
+
+	//平行移動
+	for (int i = 0; i < 8; i++) {
+		cubeMoveVertex[i].x =
+		  affinMove[0].x * cubeBaseVertex[i].x + affinMove[0].y * cubeBaseVertex[i].y +
+		  affinMove[0].z * cubeBaseVertex[i].z + affinMove[0].w;
+
+		cubeMoveVertex[i].y =
+		  affinMove[1].x * cubeBaseVertex[i].x + affinMove[1].y * cubeBaseVertex[i].y +
+		  affinMove[1].z * cubeBaseVertex[i].z + affinMove[1].w;
+
+		cubeMoveVertex[i].z =
+		  affinMove[2].x * cubeBaseVertex[i].x + affinMove[2].y * cubeBaseVertex[i].y +
+		  affinMove[2].z * cubeBaseVertex[i].z + affinMove[2].w;
+
+
+
+	}
 }
 
 void GameScene::Draw() {
@@ -68,12 +93,15 @@ void GameScene::Draw() {
 	/// </summary>
 	
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
-
+	//ベース
 	for (int i = 0; i < 12; i++) {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeVertex[edgeList[i][0]], cubeVertex[edgeList[i][1]], color);
+		  cubeBaseVertex[baseEdgeList[i][0]], cubeBaseVertex[baseEdgeList[i][1]], baseColor);
 	}
-	
+	for (int i = 0; i < 12; i++) {
+		PrimitiveDrawer::GetInstance()->DrawLine3d(
+		  cubeMoveVertex[baseEdgeList[i][0]], cubeMoveVertex[baseEdgeList[i][1]], moveColor);
+	}
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
