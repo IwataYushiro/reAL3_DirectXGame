@@ -5,14 +5,14 @@
 #include "DebugText.h"
 #include "DirectXCommon.h"
 #include "Input.h"
-#include <math.h>
 #include "Model.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include <math.h>
 
-#define PI 3.1415f
+#define PI 3.141592f
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -70,8 +70,7 @@ class GameScene {
       {5.0f, 0.0f, 5.0f},
       {5.0f, 5.0f, 5.0f}
     };
-	//原点移動、平行移動、回転、拡大の行列の宣言
-	Vector3 cubeOriginVertex[8];
+	//平行移動、回転、拡大の行列の宣言
 	Vector3 cubeMoveVertex[8];
 	Vector3 cubeRotatedVertex[8];
 	Vector3 cubeScaledVertex[8];
@@ -106,17 +105,17 @@ class GameScene {
     };
 	//回転
 	Vector4 affinRotated[4] = {
-	  {1.0f, 0.0f, 0.0f, 0.0f},
-	  {0.0f, cos(PI / 4), -sin(PI/4), 0.0f},
-	  {0.0f, sin(PI / 4), cos(PI/4),        0.0f},
-	  {0.0f, 0.0f, 0.0f, 1.0f }
+	  {1.0f, 0.0f,        0.0f,         0.0f},
+	  {0.0f, cos(PI / 4), -sin(PI / 4), 0.0f},
+	  {0.0f, sin(PI / 4), cos(PI / 4),  0.0f},
+	  {0.0f, 0.0f,        0.0f,         1.0f}
     };
 	//拡大
 	Vector4 affinScaled[4] = {
-	  {1.0f, 0.0f, 0.0f, 10.0f},
-	  {0.0f, 1.0f, 0.0f, 10.0f},
-	  {0.0f, 0.0f, 1.0f, 10.0f},
-	  {0.0f, 0.0f, 0.0f, 1.0f }
+	  {2.0f, 0.0f, 0.0f, 0.0f},
+	  {0.0f, 2.0f, 0.0f, 0.0f},
+	  {0.0f, 0.0f, 2.0f, 0.0f},
+	  {0.0f, 0.0f, 0.0f, 1.0f}
     };
 	/// <summary>
 	/// ゲームシーン用

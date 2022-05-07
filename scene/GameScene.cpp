@@ -19,9 +19,8 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
-	// 原点移動、平行移動、回転、拡大の行列の初期化
+	//平行移動、回転、拡大の行列の初期化
 	for (int i = 0; i < 8; i++) {
-		cubeOriginVertex[i] = cubeBaseVertex[i];
 		cubeMoveVertex[i] = cubeBaseVertex[i];
 		cubeRotatedVertex[i] = cubeBaseVertex[i];
 		cubeScaledVertex[i] = cubeBaseVertex[i];
@@ -75,6 +74,20 @@ void GameScene::Update() {
 		                      affinRotated[2].y * cubeBaseVertex[i].y +
 		                      affinRotated[2].z * cubeBaseVertex[i].z + affinRotated[2].w;
 	}
+	//拡大
+	for (int i = 0; i < 8; i++) {
+		cubeScaledVertex[i].x = affinScaled[0].x * cubeBaseVertex[i].x +
+		                      affinScaled[0].y * cubeBaseVertex[i].y +
+		                      affinScaled[0].z * cubeBaseVertex[i].z + affinScaled[0].w;
+
+		cubeScaledVertex[i].y = affinScaled[1].x * cubeBaseVertex[i].x +
+		                      affinScaled[1].y * cubeBaseVertex[i].y +
+		                      affinScaled[1].z * cubeBaseVertex[i].z + affinScaled[1].w;
+
+		cubeScaledVertex[i].z = affinScaled[2].x * cubeBaseVertex[i].x +
+		                      affinScaled[2].y * cubeBaseVertex[i].y +
+		                      affinScaled[2].z * cubeBaseVertex[i].z + affinScaled[2].w;
+	}
 }
 
 void GameScene::Draw() {
@@ -110,15 +123,21 @@ void GameScene::Draw() {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
 		  cubeBaseVertex[baseEdgeList[i][0]], cubeBaseVertex[baseEdgeList[i][1]], baseColor);
 	}
+	//平行移動
 	for (int i = 0; i < 12; i++) {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
 		  cubeMoveVertex[baseEdgeList[i][0]], cubeMoveVertex[baseEdgeList[i][1]], moveColor);
 	}
+	//回転
 	for (int i = 0; i < 12; i++) {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
 		  cubeRotatedVertex[baseEdgeList[i][0]], cubeRotatedVertex[baseEdgeList[i][1]], rotatedColor);
 	}
-
+	//拡大
+	for (int i = 0; i < 12; i++) {
+		PrimitiveDrawer::GetInstance()->DrawLine3d(
+		  cubeScaledVertex[baseEdgeList[i][0]], cubeScaledVertex[baseEdgeList[i][1]], scaledColor);
+	}
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
