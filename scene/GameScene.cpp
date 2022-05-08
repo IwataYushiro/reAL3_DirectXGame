@@ -25,8 +25,39 @@ void GameScene::Initialize() {
 		cubeRotatedVertex[i] = cubeBaseVertex[i];
 		cubeScaledVertex[i] = cubeBaseVertex[i];
 	}
+
+	//平行移動
+	for (int i = 0; i < 8; i++) {
+		cubeBaseVertex[i].x =
+		  (affinScaled[0].x * cubeScaledVertex[i].x + affinScaled[0].y * cubeScaledVertex[i].y +
+		   affinScaled[0].z * cubeScaledVertex[i].z + affinScaled[0].w) +
+		  (affinRotated[0].x * cubeRotatedVertex[i].x + affinRotated[0].y * cubeRotatedVertex[i].y +
+		   affinRotated[0].z * cubeRotatedVertex[i].z + affinRotated[0].w)+
+		  (affinMove[0].x * cubeMoveVertex[i].x + affinMove[0].y * cubeMoveVertex[i].y +
+		   affinMove[0].z * cubeMoveVertex[i].z + affinMove[0].w);
+
+		cubeBaseVertex[i].y =
+		  (affinScaled[1].x * cubeScaledVertex[i].x + affinScaled[1].y * cubeScaledVertex[i].y +
+		   affinScaled[1].z * cubeScaledVertex[i].z + affinScaled[1].w) +
+		  (affinRotated[1].x * cubeRotatedVertex[i].x + affinRotated[1].y * cubeRotatedVertex[i].y +
+		   affinRotated[1].z * cubeRotatedVertex[i].z + affinRotated[1].w) +
+		  (affinMove[1].x * cubeMoveVertex[i].x + affinMove[1].y * cubeMoveVertex[i].y +
+		   affinMove[1].z * cubeMoveVertex[i].z + affinMove[1].w);
+
+		cubeBaseVertex[i].z =
+		  (affinScaled[2].x * cubeScaledVertex[i].x + affinScaled[2].y * cubeScaledVertex[i].y +
+		   affinScaled[2].z * cubeScaledVertex[i].z + affinScaled[2].w) +
+		  (affinRotated[2].x * cubeRotatedVertex[i].x + affinRotated[2].y * cubeRotatedVertex[i].y +
+		   affinRotated[2].z * cubeRotatedVertex[i].z + affinRotated[2].w) +
+		  (affinMove[2].x * cubeMoveVertex[i].x + affinMove[2].y * cubeMoveVertex[i].y +
+		   affinMove[2].z * cubeMoveVertex[i].z + affinMove[2].w);
+	}
+	//回転
+	
+
 	// 3Dモデルの生成
 	model_ = Model::Create();
+	worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
@@ -44,50 +75,6 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	//デバッグカメラの更新
 	debugCamera_->Update();
-
-	//平行移動
-	for (int i = 0; i < 8; i++) {
-		cubeMoveVertex[i].x =
-		  affinMove[0].x * cubeBaseVertex[i].x + affinMove[0].y * cubeBaseVertex[i].y +
-		  affinMove[0].z * cubeBaseVertex[i].z + affinMove[0].w;
-
-		cubeMoveVertex[i].y =
-		  affinMove[1].x * cubeBaseVertex[i].x + affinMove[1].y * cubeBaseVertex[i].y +
-		  affinMove[1].z * cubeBaseVertex[i].z + affinMove[1].w;
-
-		cubeMoveVertex[i].z =
-		  affinMove[2].x * cubeBaseVertex[i].x + affinMove[2].y * cubeBaseVertex[i].y +
-		  affinMove[2].z * cubeBaseVertex[i].z + affinMove[2].w;
-
-	}
-	//回転
-	for (int i = 0; i < 8; i++) {
-		cubeRotatedVertex[i].x = affinRotated[0].x * cubeBaseVertex[i].x +
-		                      affinRotated[0].y * cubeBaseVertex[i].y +
-		                      affinRotated[0].z * cubeBaseVertex[i].z + affinRotated[0].w;
-
-		cubeRotatedVertex[i].y = affinRotated[1].x * cubeBaseVertex[i].x +
-		                      affinRotated[1].y * cubeBaseVertex[i].y +
-		                      affinRotated[1].z * cubeBaseVertex[i].z + affinRotated[1].w;
-
-		cubeRotatedVertex[i].z = affinRotated[2].x * cubeBaseVertex[i].x +
-		                      affinRotated[2].y * cubeBaseVertex[i].y +
-		                      affinRotated[2].z * cubeBaseVertex[i].z + affinRotated[2].w;
-	}
-	//拡大
-	for (int i = 0; i < 8; i++) {
-		cubeScaledVertex[i].x = affinScaled[0].x * cubeBaseVertex[i].x +
-		                      affinScaled[0].y * cubeBaseVertex[i].y +
-		                      affinScaled[0].z * cubeBaseVertex[i].z + affinScaled[0].w;
-
-		cubeScaledVertex[i].y = affinScaled[1].x * cubeBaseVertex[i].x +
-		                      affinScaled[1].y * cubeBaseVertex[i].y +
-		                      affinScaled[1].z * cubeBaseVertex[i].z + affinScaled[1].w;
-
-		cubeScaledVertex[i].z = affinScaled[2].x * cubeBaseVertex[i].x +
-		                      affinScaled[2].y * cubeBaseVertex[i].y +
-		                      affinScaled[2].z * cubeBaseVertex[i].z + affinScaled[2].w;
-	}
 }
 
 void GameScene::Draw() {
@@ -116,7 +103,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	
+
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
 	//ベース
 	for (int i = 0; i < 12; i++) {
@@ -131,7 +118,8 @@ void GameScene::Draw() {
 	//回転
 	for (int i = 0; i < 12; i++) {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeRotatedVertex[baseEdgeList[i][0]], cubeRotatedVertex[baseEdgeList[i][1]], rotatedColor);
+		  cubeRotatedVertex[baseEdgeList[i][0]], cubeRotatedVertex[baseEdgeList[i][1]],
+		  rotatedColor);
 	}
 	//拡大
 	for (int i = 0; i < 12; i++) {
