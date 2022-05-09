@@ -22,7 +22,9 @@ void GameScene::Initialize() {
 	//平行移動、回転、拡大の行列の初期化
 	for (int i = 0; i < 8; i++) {
 		cubeMoveVertex[i] = cubeBaseVertex[i];
-		cubeRotatedVertex[i] = cubeBaseVertex[i];
+		cubeRotatedVertexX[i] = cubeBaseVertex[i];
+		cubeRotatedVertexY[i] = cubeBaseVertex[i];
+		cubeRotatedVertexZ[i] = cubeBaseVertex[i];
 		cubeScaledVertex[i] = cubeBaseVertex[i];
 	}
 	// 3Dモデルの生成
@@ -60,19 +62,47 @@ void GameScene::Update() {
 		  affinMove[2].z * cubeBaseVertex[i].z + affinMove[2].w;
 
 	}
-	//回転
+	//X軸回転
 	for (int i = 0; i < 8; i++) {
-		cubeRotatedVertex[i].x = affinRotated[0].x * cubeBaseVertex[i].x +
-		                      affinRotated[0].y * cubeBaseVertex[i].y +
-		                      affinRotated[0].z * cubeBaseVertex[i].z + affinRotated[0].w;
+		cubeRotatedVertexX[i].x = affinRotatedX[0].x * cubeBaseVertex[i].x +
+		                      affinRotatedX[0].y * cubeBaseVertex[i].y +
+		                      affinRotatedX[0].z * cubeBaseVertex[i].z + affinRotatedX[0].w;
 
-		cubeRotatedVertex[i].y = affinRotated[1].x * cubeBaseVertex[i].x +
-		                      affinRotated[1].y * cubeBaseVertex[i].y +
-		                      affinRotated[1].z * cubeBaseVertex[i].z + affinRotated[1].w;
+		cubeRotatedVertexX[i].y = affinRotatedX[1].x * cubeBaseVertex[i].x +
+		                      affinRotatedX[1].y * cubeBaseVertex[i].y +
+		                      affinRotatedX[1].z * cubeBaseVertex[i].z + affinRotatedX[1].w;
 
-		cubeRotatedVertex[i].z = affinRotated[2].x * cubeBaseVertex[i].x +
-		                      affinRotated[2].y * cubeBaseVertex[i].y +
-		                      affinRotated[2].z * cubeBaseVertex[i].z + affinRotated[2].w;
+		cubeRotatedVertexX[i].z = affinRotatedX[2].x * cubeBaseVertex[i].x +
+		                      affinRotatedX[2].y * cubeBaseVertex[i].y +
+		                      affinRotatedX[2].z * cubeBaseVertex[i].z + affinRotatedX[2].w;
+	}
+	// Y軸回転
+	for (int i = 0; i < 8; i++) {
+		cubeRotatedVertexY[i].x = affinRotatedY[0].x * cubeBaseVertex[i].x +
+		                          affinRotatedY[0].y * cubeBaseVertex[i].y +
+		                          affinRotatedY[0].z * cubeBaseVertex[i].z + affinRotatedY[0].w;
+
+		cubeRotatedVertexY[i].y = affinRotatedY[1].x * cubeBaseVertex[i].x +
+		                          affinRotatedY[1].y * cubeBaseVertex[i].y +
+		                          affinRotatedY[1].z * cubeBaseVertex[i].z + affinRotatedY[1].w;
+
+		cubeRotatedVertexY[i].z = affinRotatedY[2].x * cubeBaseVertex[i].x +
+		                          affinRotatedY[2].y * cubeBaseVertex[i].y +
+		                          affinRotatedY[2].z * cubeBaseVertex[i].z + affinRotatedY[2].w;
+	}
+	// Z軸回転
+	for (int i = 0; i < 8; i++) {
+		cubeRotatedVertexZ[i].x = affinRotatedZ[0].x * cubeBaseVertex[i].x +
+		                          affinRotatedZ[0].y * cubeBaseVertex[i].y +
+		                          affinRotatedZ[0].z * cubeBaseVertex[i].z + affinRotatedZ[0].w;
+
+		cubeRotatedVertexZ[i].y = affinRotatedZ[1].x * cubeBaseVertex[i].x +
+		                          affinRotatedZ[1].y * cubeBaseVertex[i].y +
+		                          affinRotatedZ[1].z * cubeBaseVertex[i].z + affinRotatedZ[1].w;
+
+		cubeRotatedVertexZ[i].z = affinRotatedZ[2].x * cubeBaseVertex[i].x +
+		                          affinRotatedZ[2].y * cubeBaseVertex[i].y +
+		                          affinRotatedZ[2].z * cubeBaseVertex[i].z + affinRotatedZ[2].w;
 	}
 	//拡大
 	for (int i = 0; i < 8; i++) {
@@ -128,10 +158,22 @@ void GameScene::Draw() {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
 		  cubeMoveVertex[baseEdgeList[i][0]], cubeMoveVertex[baseEdgeList[i][1]], moveColor);
 	}
-	//回転
+	//X軸回転
 	for (int i = 0; i < 12; i++) {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeRotatedVertex[baseEdgeList[i][0]], cubeRotatedVertex[baseEdgeList[i][1]], rotatedColor);
+		  cubeRotatedVertexX[baseEdgeList[i][0]], cubeRotatedVertexX[baseEdgeList[i][1]], rotatedColorX);
+	}
+	// Y軸回転
+	for (int i = 0; i < 12; i++) {
+		PrimitiveDrawer::GetInstance()->DrawLine3d(
+		  cubeRotatedVertexY[baseEdgeList[i][0]], cubeRotatedVertexY[baseEdgeList[i][1]],
+		  rotatedColorY);
+	}
+	// Z軸回転
+	for (int i = 0; i < 12; i++) {
+		PrimitiveDrawer::GetInstance()->DrawLine3d(
+		  cubeRotatedVertexZ[baseEdgeList[i][0]], cubeRotatedVertexZ[baseEdgeList[i][1]],
+		  rotatedColorZ);
 	}
 	//拡大
 	for (int i = 0; i < 12; i++) {

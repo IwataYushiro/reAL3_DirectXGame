@@ -72,7 +72,9 @@ class GameScene {
     };
 	//平行移動、回転、拡大の行列の宣言
 	Vector3 cubeMoveVertex[8];
-	Vector3 cubeRotatedVertex[8];
+	Vector3 cubeRotatedVertexX[8];
+	Vector3 cubeRotatedVertexY[8];
+	Vector3 cubeRotatedVertexZ[8];
 	Vector3 cubeScaledVertex[8];
 
 	int baseEdgeList[12][2] = {
@@ -92,7 +94,9 @@ class GameScene {
 
 	Vector4 baseColor = {0xFF, 0xFF, 0xFF, 0xFF};
 	Vector4 moveColor = {0xFF, 0x00, 0x00, 0xFF};
-	Vector4 rotatedColor = {0x00, 0xFF, 0x00, 0xFF};
+	Vector4 rotatedColorX = {0x00, 0xFF, 0x00, 0xFF};
+	Vector4 rotatedColorY = {0x00, 0xFF, 0xFF, 0xFF};
+	Vector4 rotatedColorZ = {0xFF, 0xFF, 0x00, 0xFF};
 	Vector4 scaledColor = {0x00, 0x00, 0xFF, 0xFF};
 
 	//アフィン変換
@@ -103,12 +107,26 @@ class GameScene {
 	  {0.0f, 0.0f, 1.0f, 10.0f},
 	  {0.0f, 0.0f, 0.0f, 1.0f }
     };
-	//回転
-	Vector4 affinRotated[4] = {
+	// X軸回転
+	Vector4 affinRotatedX[4] = {
 	  {1.0f, 0.0f,        0.0f,         0.0f},
 	  {0.0f, cos(PI / 4), -sin(PI / 4), 0.0f},
 	  {0.0f, sin(PI / 4), cos(PI / 4),  0.0f},
 	  {0.0f, 0.0f,        0.0f,         1.0f}
+    };
+	// Y軸回転
+	Vector4 affinRotatedY[4] = {
+	  {cos(PI / 4), 0.0f, -sin(PI / 4), 0.0f},
+	  {0.0f,        1.0f, 0.0f,         0.0f},
+	  {sin(PI / 4), 0.0f, cos(PI / 4),  0.0f},
+	  {0.0f,        0.0f, 0.0f,         1.0f}
+    };
+	// Z軸回転
+	Vector4 affinRotatedZ[4] = {
+	  {cos(PI / 4),  sin(PI / 4), 0.0f, 0.0f},
+	  {-sin(PI / 4), cos(PI / 4), 0.0f, 0.0f},
+	  {0.0f,         0.0f,        1.0f, 0.0f},
+	  {0.0f,         0.0f,        0.0f, 1.0f}
     };
 	//拡大
 	Vector4 affinScaled[4] = {
