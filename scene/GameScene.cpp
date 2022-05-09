@@ -21,6 +21,18 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
+	worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
+	//スケーリング行列を宣言
+	Matrix4 matScale;
+	matScale.m[4][4] = {
+	  {2.0f, 0.0f, 0.0f, 0.0f},
+	  {0.0f, 2.0f, 0.0f, 0.0f},
+	  {0.0f, 0.0f, 2.0f, 0.0f},
+	  {0.0f, 0.0f, 0.0f, 1.0f}
+    };
+	worldTransform_.matWorld_ = worldTransform_.scale_*matScale;
+	//
+	worldTransform_.TransferMatrix();
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
@@ -75,7 +87,6 @@ void GameScene::Draw() {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
 		  cubeVertex[edgeList[i][0]], cubeVertex[edgeList[i][1]], color);
 	}
-	
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
