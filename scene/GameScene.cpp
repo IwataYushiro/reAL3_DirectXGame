@@ -21,17 +21,21 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
-	worldTransform_.scale_ = {2.0f, 2.0f, 2.0f};
+	worldTransform_.scale_ = {5.0f, 5.0f, 5.0f};
 	//スケーリング行列を宣言
 	Matrix4 matScale;
-	matScale.m[4][4] = {
-	  {2.0f, 0.0f, 0.0f, 0.0f},
-	  {0.0f, 2.0f, 0.0f, 0.0f},
-	  {0.0f, 0.0f, 2.0f, 0.0f},
-	  {0.0f, 0.0f, 0.0f, 1.0f}
-    };
-	worldTransform_.matWorld_ = worldTransform_.scale_*matScale;
-	//
+	matScale.m[0][0] = worldTransform_.scale_.x;
+	matScale.m[1][1] = worldTransform_.scale_.y;
+	matScale.m[2][2] = worldTransform_.scale_.z;
+	matScale.m[3][3] = 1.0f;
+
+	worldTransform_.matWorld_.m[0][0] = 1.0f;
+	worldTransform_.matWorld_.m[0][1] = 1.0f;
+	worldTransform_.matWorld_.m[0][2] = 1.0f;
+	worldTransform_.matWorld_.m[0][3] = 0.0f;
+
+	worldTransform_.matWorld_=worldTransform_.matWorld_.operator*=(matScale);
+	//行列の転送
 	worldTransform_.TransferMatrix();
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
