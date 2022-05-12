@@ -22,23 +22,24 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	worldTransform_.scale_ = {5.0f, 5.0f, 5.0f};
+	
+	//ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
 	//スケーリング行列を宣言
 	Matrix4 matScale;
 	matScale.m[0][0] = worldTransform_.scale_.x;
 	matScale.m[1][1] = worldTransform_.scale_.y;
 	matScale.m[2][2] = worldTransform_.scale_.z;
 	matScale.m[3][3] = 1.0f;
-
-	worldTransform_.matWorld_.m[0][0] = 1.0f;
-	worldTransform_.matWorld_.m[0][1] = 1.0f;
-	worldTransform_.matWorld_.m[0][2] = 1.0f;
-	worldTransform_.matWorld_.m[0][3] = 0.0f;
-
-	worldTransform_.matWorld_=worldTransform_.matWorld_.operator*=(matScale);
+	//単位行列を代入
+	worldTransform_.matWorld_.m[0][0]= 1.0f;
+	worldTransform_.matWorld_.m[1][1] = 1.0f;
+	worldTransform_.matWorld_.m[2][2] = 1.0f;
+	worldTransform_.matWorld_.m[3][3] = 1.0f;
+	
+	worldTransform_.matWorld_.operator*=(matScale);
 	//行列の転送
 	worldTransform_.TransferMatrix();
-	//ワールドトランスフォームの初期化
-	worldTransform_.Initialize();
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
