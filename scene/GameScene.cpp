@@ -44,15 +44,16 @@ void GameScene::Initialize() {
 	matRotY = MathUtility::Matrix4RotationY(worldTransform_.rotation_.y);
 	//各軸の回転行列を合成
 	matRot = matRotZ.operator*=(matRotX).operator*=(matRotY);//順番が大事
-	//
+	//平行移動行列を宣言
 	Matrix4 matTrans = MathUtility::Matrix4Identity();
-	//
+	//移動量を行列に設定
 	matTrans = MathUtility::Matrix4Translation(
 	  worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z );
 	//単位行列を代入
 	worldTransform_.matWorld_ = MathUtility::Matrix4Identity();
-	worldTransform_.matWorld_.operator*=(matTrans);
+	//合成
+	worldTransform_.matWorld_.operator*=(matScale).operator*=(matRot).operator*=(matTrans);
 	//行列の転送
 	worldTransform_.TransferMatrix();
 	//ビュープロジェクションの初期化
