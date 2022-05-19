@@ -32,11 +32,7 @@ void GameScene::Initialize() {
 	matScale.m[2][2] = worldTransform_.scale_.z;
 	matScale.m[3][3] = 1.0f;
 	//単位行列を代入
-	worldTransform_.matWorld_.m[0][0]= 1.0f;
-	worldTransform_.matWorld_.m[1][1] = 1.0f;
-	worldTransform_.matWorld_.m[2][2] = 1.0f;
-	worldTransform_.matWorld_.m[3][3] = 1.0f;
-	
+	worldTransform_.matWorld_ = MathUtility::Matrix4Identity();
 	worldTransform_.matWorld_.operator*=(matScale);
 	//行列の転送
 	worldTransform_.TransferMatrix();
