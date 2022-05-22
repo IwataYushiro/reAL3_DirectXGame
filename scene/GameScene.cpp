@@ -54,6 +54,7 @@ void GameScene::Initialize() {
 	worldTransform_.matWorld_ = MathUtility::Matrix4Identity();
 	//合成
 	worldTransform_.matWorld_.operator*=(matScale).operator*=(matRot).operator*=(matTrans);
+	
 	//行列の転送
 	worldTransform_.TransferMatrix();
 	//ビュープロジェクションの初期化

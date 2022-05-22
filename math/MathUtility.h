@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Vector3.h"
 #include "Matrix4.h"
+#include "Vector3.h"
 
 namespace MathUtility {
 
@@ -42,6 +42,7 @@ Matrix4 Matrix4RotationZ(float angle);
 
 // 平行移動行列の作成
 Matrix4 Matrix4Translation(float tx, float ty, float tz);
+Matrix4 Matrix4WorldTransform(const Vector3& scale, const Vector3& rotation, const Vector3& transform);
 
 // ビュー行列の作成
 Matrix4 Matrix4LookAtLH(const Vector3& eye, const Vector3& target, const Vector3& up);
