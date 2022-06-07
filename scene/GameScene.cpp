@@ -73,7 +73,7 @@ void GameScene::Draw() {
 
 	for (int i = 0; i < 12; i++) {
 		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeVertex[edgeList[i][0]], cubeVertex[edgeList[i][1]], color);
+		  cubeVertex_[edgeList_[i][0]], cubeVertex_[edgeList_[i][1]], color);
 	}
 	
 

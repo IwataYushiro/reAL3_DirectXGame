@@ -58,7 +58,7 @@ class GameScene {
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	Vector3 cubeVertex[8] = {
+	Vector3 cubeVertex_[8] = {
 	  {0.0f, 5.0f, 0.0f},
       {0.0f, 0.0f, 0.0f},
       {5.0f, 0.0f, 0.0f},
@@ -69,7 +69,7 @@ class GameScene {
       {5.0f, 5.0f, 5.0f}
     };
 
-	int edgeList[12][2] = {
+	int edgeList_[12][2] = {
 	  {0, 1},
       {1, 2},
       {2, 3},
