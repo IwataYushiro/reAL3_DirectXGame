@@ -99,7 +99,7 @@ void GameScene::Initialize() {
 	worldTransform_.matWorld_ = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 	                             0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 	//合成
-	worldTransform_.matWorld_ *= matTrans;
+	worldTransform_.matWorld_ *= matScale*=matRot*=matTrans;
 
 	//行列の転送
 	worldTransform_.TransferMatrix();
