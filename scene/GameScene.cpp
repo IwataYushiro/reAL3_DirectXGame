@@ -83,11 +83,23 @@ void GameScene::Initialize() {
 	//各軸の回転行列を合成
 	matRot *= matRotZ *= matRotX *= matRotY; //順番が大事
 	
+	//平行移動行列を宣言
+	Matrix4 matTrans = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	                    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+	
+	//移動量を行列に設定
+	matTrans = {
+	  1.0f,0.0f,0.0f,0.0f,
+	  0.0f,1.0f,0.0f,0.0f,
+	  0.0f,0.0f,1.0f,0.0f,
+	  worldTransform_.translation_.x,worldTransform_.translation_.y,worldTransform_.translation_.z,1.0f
+	};
+
 	//単位行列を代入
 	worldTransform_.matWorld_ = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 	                             0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 	//合成
-	worldTransform_.matWorld_ *= matRot;
+	worldTransform_.matWorld_ *= matTrans;
 
 	//行列の転送
 	worldTransform_.TransferMatrix();
