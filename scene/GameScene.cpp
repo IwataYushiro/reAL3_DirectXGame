@@ -31,75 +31,90 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 
 	//スケーリング行列を宣言
-	Matrix4 matScale = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	                    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-	matScale = {
-	  worldTransform_.scale_.x,
-	  0.0f,
-	  0.0f,
-	  0.0f,
-	  0.0f,
-	  worldTransform_.scale_.y,
-	  0.0f,
-	  0.0f,
-	  0.0f,
-	  0.0f,
-	  worldTransform_.scale_.z,
-	  0.0f,
-	  0.0f,
-	  0.0f,
-	  0.0f,
-	  1.0f};
+	Matrix4 matScale = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+	    0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	matScale.m[0][0] = worldTransform_.scale_.x;
+	matScale.m[1][1] = worldTransform_.scale_.y;
+	matScale.m[2][2] = worldTransform_.scale_.z;
 
 	//合成用回転行列を宣言
-	Matrix4 matRot = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	                  0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+	Matrix4 matRot = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+	    0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
 
 	//各軸用回転行列を宣言
-	Matrix4 matRotX, matRotY, matRotZ = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	                                     0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-	//各軸の回転行列の要素数を設定
-	matRotZ = {
-		cos(worldTransform_.rotation_.z), sin(worldTransform_.rotation_.z),0.0f,0.0f,
-	  -sin(worldTransform_.rotation_.z), cos(worldTransform_.rotation_.z), 0.0f, 0.0f,
-	  0.0f,0.0f,1.0f,0.0f,
-	  0.0f,0.0f,0.0f,1.0f
-	};
+	Matrix4 matRotX = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+	    0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	}; 
 	
-	matRotX = {
-		1.0f,0.0f,0.0f,0.0f,
-	  0.0f,cos(worldTransform_.rotation_.x),sin(worldTransform_.rotation_.x),0.0f,
-	  0.0f,-sin(worldTransform_.rotation_.x),cos(worldTransform_.rotation_.x),0.0f,
-	  0.0f,0.0f,0.0f,1.0f
-	};
-	
-	matRotY = {
-		cos(worldTransform_.rotation_.y),0.0f, -sin(worldTransform_.rotation_.y),0.0f,
-		0.0f,1.0f,0.0f,0.0f,
-	  sin(worldTransform_.rotation_.y),0.0f,cos(worldTransform_.rotation_.y),0.0f,
-	  0.0f,0.0f,0.0f,1.0f
+	Matrix4 matRotY = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+	    0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
 	};
 
+	Matrix4 matRotZ = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+	    0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	//各軸の回転行列の要素数を設定
+	matRotZ.m[0][0] = cos(worldTransform_.rotation_.z);
+	matRotZ.m[0][1] = sin(worldTransform_.rotation_.z);
+	matRotZ.m[1][0] = -sin(worldTransform_.rotation_.z);
+	matRotZ.m[1][1] = cos(worldTransform_.rotation_.z);
+	
+	
+	matRotX.m[1][1] = cos(worldTransform_.rotation_.x);
+	matRotX.m[1][2] = sin(worldTransform_.rotation_.x);
+	matRotX.m[2][1] = -sin(worldTransform_.rotation_.x);
+	matRotX.m[2][2] = cos(worldTransform_.rotation_.x);
+	
+	
+	matRotY.m[0][0] = cos(worldTransform_.rotation_.y);
+	matRotY.m[0][2] = -sin(worldTransform_.rotation_.y);
+	matRotY.m[2][0] = sin(worldTransform_.rotation_.y);
+	matRotY.m[2][2] = cos(worldTransform_.rotation_.y);
+	
 	//各軸の回転行列を合成
 	matRot *= matRotZ *= matRotX *= matRotY; //順番が大事
 	
 	//平行移動行列を宣言
-	Matrix4 matTrans = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	                    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+	Matrix4 matTrans = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+	    0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
 	
 	//移動量を行列に設定
-	matTrans = {
-	  1.0f,0.0f,0.0f,0.0f,
-	  0.0f,1.0f,0.0f,0.0f,
-	  0.0f,0.0f,1.0f,0.0f,
-	  worldTransform_.translation_.x,worldTransform_.translation_.y,worldTransform_.translation_.z,1.0f
-	};
+	matTrans.m[3][0] = worldTransform_.translation_.x;
+	matTrans.m[3][1] = worldTransform_.translation_.y;
+	matTrans.m[3][2] = worldTransform_.translation_.z;
 
 	//単位行列を代入
-	worldTransform_.matWorld_ = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-	                             0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+	worldTransform_.matWorld_ = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+	    0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
 	//合成
-	worldTransform_.matWorld_ *= matScale*=matRot*=matTrans;
+	worldTransform_.matWorld_ *= matScale *= matRot *= matTrans;
 
 	//行列の転送
 	worldTransform_.TransferMatrix();
