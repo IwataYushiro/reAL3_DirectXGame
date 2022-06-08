@@ -6,6 +6,7 @@
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
+#include "math/MyMathUtility.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
