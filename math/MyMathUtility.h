@@ -2,6 +2,7 @@
 
 #include "Matrix4.h"
 #include "Vector3.h"
+#include "WorldTransform.h"
 
 namespace MyMathUtility {
 
@@ -33,7 +34,7 @@ Matrix4 MyMatrix4Identity();
 Matrix4 MyMatrix4Transpose(const Matrix4& m);
 
 // 拡大縮小行列の作成
-Matrix4 MyMatrix4Scaling(float sx, float sy, float sz);
+Matrix4 MyMatrix4Scaling(Vector3 scale);
 
 // 回転行列の作成
 Matrix4 MyMatrix4RotationX(float angle);
@@ -41,13 +42,13 @@ Matrix4 MyMatrix4RotationY(float angle);
 Matrix4 MyMatrix4RotationZ(float angle);
 
 //合成済み回転行列の作成
-Matrix4 MyMatrix4Rotation(float ax, float ay, float az);
+Matrix4 MyMatrix4Rotation(Vector3 rotation);
 
 // 平行移動行列の作成
-Matrix4 MyMatrix4Translation(float tx, float ty, float tz);
+Matrix4 MyMatrix4Translation(Vector3 translation);
 
 //ワールド行列の作成
-Matrix4 MyMatrix4WorldTransform(const Vector3& scale, const Vector3& rotation, const Vector3& transform);
+Matrix4 MyMatrix4WorldTransform(WorldTransform worldTransform);
 
 // ビュー行列の作成
 Matrix4 MyMatrix4LookAtLH(const Vector3& eye, const Vector3& target, const Vector3& up);

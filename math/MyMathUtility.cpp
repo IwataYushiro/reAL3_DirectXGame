@@ -9,14 +9,14 @@ Matrix4 MyMathUtility::MyMatrix4Identity() {
 }
 
 // 拡大縮小行列の作成
-Matrix4 MyMathUtility::MyMatrix4Scaling(float sx, float sy, float sz) {
+Matrix4 MyMathUtility::MyMatrix4Scaling(Vector3 scale) {
 
 	//スケーリング行列を宣言
 	Matrix4 matScale = MyMathUtility::MyMatrix4Identity();
 
-	matScale.m[0][0] = sx;
-	matScale.m[1][1] = sy;
-	matScale.m[2][2] = sz;
+	matScale.m[0][0] = scale.x;
+	matScale.m[1][1] = scale.y;
+	matScale.m[2][2] = scale.z;
 
 	return matScale;
 }
@@ -58,16 +58,16 @@ Matrix4 MyMathUtility::MyMatrix4RotationZ(float angle) {
 	return matRotZ;
 }
 
-Matrix4 MyMathUtility::MyMatrix4Rotation(float ax, float ay, float az) {
+Matrix4 MyMathUtility::MyMatrix4Rotation(Vector3 rotation) {
 
 	//合成用回転行列を宣言
 	Matrix4 matRot = MyMathUtility::MyMatrix4Identity();
 	//各軸用回転行列を宣言
-	Matrix4 matRotX = MyMathUtility::MyMatrix4RotationX(ax);
+	Matrix4 matRotX = MyMathUtility::MyMatrix4RotationX(rotation.x);
 	//各軸用回転行列を宣言
-	Matrix4 matRotY = MyMathUtility::MyMatrix4RotationY(ay);
+	Matrix4 matRotY = MyMathUtility::MyMatrix4RotationY(rotation.y);
 	//各軸用回転行列を宣言
-	Matrix4 matRotZ = MyMathUtility::MyMatrix4RotationZ(az);
+	Matrix4 matRotZ = MyMathUtility::MyMatrix4RotationZ(rotation.z);
 
 	//各軸の回転行列を合成
 	matRot *= matRotZ *= matRotX *= matRotY; //順番が大事
@@ -75,24 +75,24 @@ Matrix4 MyMathUtility::MyMatrix4Rotation(float ax, float ay, float az) {
 	return matRot;
 }
 
-Matrix4 MyMathUtility::MyMatrix4Translation(float tx, float ty, float tz) {
+Matrix4 MyMathUtility::MyMatrix4Translation(Vector3 translation) {
 	Matrix4 matTrans = MyMathUtility::MyMatrix4Identity();
 
-	matTrans.m[3][0] = tx;
-	matTrans.m[3][1] = ty;
-	matTrans.m[3][2] = tz;
+	matTrans.m[3][0] = translation.x;
+	matTrans.m[3][1] = translation.y;
+	matTrans.m[3][2] = translation.z;
 
 	return matTrans;
 }
 
-Matrix4 MyMathUtility::MyMatrix4WorldTransform(const Vector3&scale, const Vector3& rotation, const Vector3& transform) {
+Matrix4 MyMathUtility::MyMatrix4WorldTransform(WorldTransform worldTransform) {
 	Matrix4 matWorld = MyMathUtility::MyMatrix4Identity();
 
-	Matrix4 matScale = MyMathUtility::MyMatrix4Scaling(scale.x, scale.y, scale.z);
+	Matrix4 matScale = MyMathUtility::MyMatrix4Scaling(worldTransform.scale_);
 
-	Matrix4 matRot = MyMathUtility::MyMatrix4Rotation(rotation.x, rotation.y, rotation.z);
+	Matrix4 matRot = MyMathUtility::MyMatrix4Rotation(worldTransform.rotation_);
 	
-	Matrix4 matTrans = MyMathUtility::MyMatrix4Translation(transform.x, transform.y, transform.z);
+	Matrix4 matTrans = MyMathUtility::MyMatrix4Translation(worldTransform.translation_);
 	
 	//合成
 	matWorld*= matScale *= matRot *= matTrans;
