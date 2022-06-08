@@ -30,35 +30,9 @@ void GameScene::Initialize() {
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
-	//スケーリング行列を宣言
-	Matrix4 matScale = MyMathUtility::MyMatrix4Scaling(
-	  worldTransform_.scale_.x, worldTransform_.scale_.y, worldTransform_.scale_.z);
-
-	//合成用回転行列を宣言
-	Matrix4 matRot = MyMathUtility::MyMatrix4Rotation(
-	  worldTransform_.rotation_.x, worldTransform_.rotation_.y, worldTransform_.rotation_.z);
-	//平行移動行列を宣言
-	Matrix4 matTrans = {
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-	    0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-	
-	//移動量を行列に設定
-	matTrans.m[3][0] = worldTransform_.translation_.x;
-	matTrans.m[3][1] = worldTransform_.translation_.y;
-	matTrans.m[3][2] = worldTransform_.translation_.z;
-
-	//単位行列を代入
-	worldTransform_.matWorld_ = {
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-	    0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-	//合成
-	worldTransform_.matWorld_ *= matScale *= matRot *= matTrans;
+	//変換
+	worldTransform_.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(
+	  worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	//行列の転送
 	worldTransform_.TransferMatrix();

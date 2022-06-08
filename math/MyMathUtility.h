@@ -45,9 +45,9 @@ Matrix4 MyMatrix4Rotation(float ax, float ay, float az);
 
 // 平行移動行列の作成
 Matrix4 MyMatrix4Translation(float tx, float ty, float tz);
+
 //ワールド行列の作成
-Matrix4
-  MyMatrix4WorldTransform(const Vector3& scale, const Vector3& rotation, const Vector3& transform);
+Matrix4 MyMatrix4WorldTransform(const Vector3& scale, const Vector3& rotation, const Vector3& transform);
 
 // ビュー行列の作成
 Matrix4 MyMatrix4LookAtLH(const Vector3& eye, const Vector3& target, const Vector3& up);

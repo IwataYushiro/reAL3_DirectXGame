@@ -1,8 +1,6 @@
 #include "MyMathUtility.h"
 #include <math.h>
 
-namespace MyMathUtility {
-
 // íPà çsóÒÇãÅÇﬂÇÈ
 Matrix4 MyMathUtility::MyMatrix4Identity() {
 	Matrix4 m = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
@@ -22,7 +20,6 @@ Matrix4 MyMathUtility::MyMatrix4Scaling(float sx, float sy, float sz) {
 
 	return matScale;
 }
-
 // âÒì]çsóÒÇÃçÏê¨
 Matrix4 MyMathUtility::MyMatrix4RotationX(float angle) {
 
@@ -77,4 +74,29 @@ Matrix4 MyMathUtility::MyMatrix4Rotation(float ax, float ay, float az) {
 
 	return matRot;
 }
-} // namespace MyMathUtility
+
+Matrix4 MyMathUtility::MyMatrix4Translation(float tx, float ty, float tz) {
+	Matrix4 matTrans = MyMathUtility::MyMatrix4Identity();
+
+	matTrans.m[3][0] = tx;
+	matTrans.m[3][1] = ty;
+	matTrans.m[3][2] = tz;
+
+	return matTrans;
+}
+
+Matrix4 MyMathUtility::MyMatrix4WorldTransform(const Vector3&scale, const Vector3& rotation, const Vector3& transform) {
+	Matrix4 matWorld = MyMathUtility::MyMatrix4Identity();
+
+	Matrix4 matScale = MyMathUtility::MyMatrix4Scaling(scale.x, scale.y, scale.z);
+
+	Matrix4 matRot = MyMathUtility::MyMatrix4Rotation(rotation.x, rotation.y, rotation.z);
+	
+	Matrix4 matTrans = MyMathUtility::MyMatrix4Translation(transform.x, transform.y, transform.z);
+	
+	//çáê¨
+	matWorld*= matScale *= matRot *= matTrans;
+
+	return matWorld;
+}
+
