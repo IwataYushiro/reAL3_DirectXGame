@@ -63,4 +63,4 @@ Vector3 Vector3TransformNormal(const Vector3& v, const Matrix4& m);
 Matrix4 operator*(const Matrix4& m1, const Matrix4& m2);
 Vector3 operator*(const Vector3& v, const Matrix4& m);
 
-} // namespace MathUtility
+} // namespace MyMathUtility
