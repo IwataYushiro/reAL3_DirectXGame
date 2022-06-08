@@ -21,40 +21,68 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
-	//X,Y,Z軸周りのスケーリングを設定
+	// X,Y,Z軸周りのスケーリングを設定
 	worldTransform_.scale_ = {5.0f, 5.0f, 5.0f};
-	//X,Y,Z軸周りの回転角を設定
+	// X,Y,Z軸周りの回転角を設定
 	worldTransform_.rotation_ = {MathUtility::PI / 4, MathUtility::PI / 4, 0.0f};
-	//X,Y,Z軸周りの平行移動を設定
+	// X,Y,Z軸周りの平行移動を設定
 	worldTransform_.translation_ = {10.0f, 10.0f, 10.0f};
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-	
+
 	//スケーリング行列を宣言
-	Matrix4 matScale;
-	matScale = MathUtility::Matrix4Scaling(
-	  worldTransform_.scale_.x, worldTransform_.scale_.y, worldTransform_.scale_.z);
+	Matrix4 matScale = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	                    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+	matScale = {
+	  worldTransform_.scale_.x,
+	  0.0f,
+	  0.0f,
+	  0.0f,
+	  0.0f,
+	  worldTransform_.scale_.y,
+	  0.0f,
+	  0.0f,
+	  0.0f,
+	  0.0f,
+	  worldTransform_.scale_.z,
+	  0.0f,
+	  0.0f,
+	  0.0f,
+	  0.0f,
+	  1.0f};
+
 	//合成用回転行列を宣言
-	Matrix4 matRot;
+	Matrix4 matRot = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	                  0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+
 	//各軸用回転行列を宣言
-	Matrix4 matRotX,matRotY,matRotZ;
+	Matrix4 matRotX, matRotY, matRotZ = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	                                     0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 	//各軸の回転行列の要素数を設定
-	matRotZ = MathUtility::Matrix4RotationZ(worldTransform_.rotation_.z);
-	matRotX = MathUtility::Matrix4RotationX(worldTransform_.rotation_.x);
-	matRotY = MathUtility::Matrix4RotationY(worldTransform_.rotation_.y);
+	matRotZ = {
+
+	};
+	
+	matRotX = {
+	};
+	
+	matRotY = {
+	};
 	//各軸の回転行列を合成
-	matRot = matRotZ.operator*=(matRotX).operator*=(matRotY);//順番が大事
+	matRot = matRotZ.operator*=(matRotX).operator*=(matRotY); //順番が大事
 	//平行移動行列を宣言
 	Matrix4 matTrans = MathUtility::Matrix4Identity();
 	//移動量を行列に設定
 	matTrans = MathUtility::Matrix4Translation(
 	  worldTransform_.translation_.x, worldTransform_.translation_.y,
-	  worldTransform_.translation_.z );
+	  worldTransform_.translation_.z);
+
 	//単位行列を代入
-	worldTransform_.matWorld_ = MathUtility::Matrix4Identity();
+	worldTransform_.matWorld_ = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+	                             0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 	//合成
-	worldTransform_.matWorld_.operator*=(matScale).operator*=(matRot).operator*=(matTrans);
-	
+	worldTransform_.matWorld_ *= matScale;
+
 	//行列の転送
 	worldTransform_.TransferMatrix();
 	//ビュープロジェクションの初期化
