@@ -29,26 +29,43 @@ void GameScene::Initialize() {
 	// メルセンヌ・ツイスターの乱数エンジン
 	std::mt19937_64 engine(seed_gen());
 	// 乱数範囲を指定(回転角)
-	std::uniform_real_distribution<float> rotationDistX(0, MyMathUtility::PI);
-	std::uniform_real_distribution<float> rotationDistY(0, MyMathUtility::PI);
-	std::uniform_real_distribution<float> rotationDistZ(0, MyMathUtility::PI);
+	std::uniform_real_distribution<float> scaleDistX(1.0f,3.0f);
+	std::uniform_real_distribution<float> scaleDistY(1.0f,3.0f);
+	std::uniform_real_distribution<float> scaleDistZ(1.0f,3.0f);
+	// 乱数範囲を指定(回転角)
+	std::uniform_real_distribution<float> rotationDistX(0.0f, MyMathUtility::PI);
+	std::uniform_real_distribution<float> rotationDistY(0.0f, MyMathUtility::PI);
+	std::uniform_real_distribution<float> rotationDistZ(0.0f, MyMathUtility::PI);
 	// 乱数範囲を指定(座標)
-	std::uniform_real_distribution<float> translationDistX(-10, 10);
-	std::uniform_real_distribution<float> translationDistY(-10, 10);
-	std::uniform_real_distribution<float> translationDistZ(-10, 10);
+	std::uniform_real_distribution<float> translationDistX(-10.0f, 10.0f);
+	std::uniform_real_distribution<float> translationDistY(-10.0f, 10.0f);
+	std::uniform_real_distribution<float> translationDistZ(-10.0f, 10.0f);
 	
 	// X,Y,Z軸周りのスケーリングを設定
 	for (WorldTransform& worldTransform : worldTransforms_)
 	{
-
-		worldTransform.scale_ = {5.0f, 5.0f, 5.0f};
-		// X,Y,Z軸周りの回転角を設定
-		worldTransform.rotation_ = {MathUtility::PI / 4, MathUtility::PI / 4, 0.0f};
-		// X,Y,Z軸周りの平行移動を設定
-		worldTransform.translation_ = {10.0f, 10.0f, 10.0f};
 		//ワールドトランスフォームの初期化
 		worldTransform.Initialize();
 
+		//乱数エンジンを渡し、指定範囲からランダムな数値を得る(拡大)
+		float scaleValueX = scaleDistX(engine);
+		float scaleValueY = scaleDistY(engine);
+		float scaleValueZ = scaleDistZ(engine);
+		//乱数エンジンを渡し、指定範囲からランダムな数値を得る(回転角)
+		float rotationValueX = rotationDistX(engine);
+		float rotationValueY = rotationDistY(engine);
+		float rotationValueZ = rotationDistZ(engine);
+		//乱数エンジンを渡し、指定範囲からランダムな数値を得る(座標)
+		float translationValueX = translationDistX(engine);
+		float translationValueY = translationDistY(engine);
+		float translationValueZ = translationDistZ(engine);
+
+		worldTransform.scale_ = {scaleValueX, scaleValueY, scaleValueZ};
+		// X,Y,Z軸周りの回転角を設定
+		worldTransform.rotation_ = {rotationValueX, rotationValueY, rotationValueZ};
+		// X,Y,Z軸周りの平行移動を設定
+		worldTransform.translation_ = {translationValueX, translationValueY, translationValueZ};
+		
 		//変換
 		worldTransform.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransform);
 

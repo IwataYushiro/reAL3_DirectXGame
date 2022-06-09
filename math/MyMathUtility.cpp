@@ -1,7 +1,13 @@
 #include "MyMathUtility.h"
 #include <math.h>
 
-// 単位行列を求める
+//零ベクトルを返す
+const Vector3 MyMathUtility::MyVector3Zero() { 
+	Vector3 v = {0.0f, 0.0f, 0.0f};
+	
+	return v;
+}
+  // 単位行列を求める
 Matrix4 MyMathUtility::MyMatrix4Identity() {
 	Matrix4 m = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 	             0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
