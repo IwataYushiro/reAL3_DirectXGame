@@ -3,6 +3,7 @@
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include <cassert>
+#include <random>
 
 GameScene::GameScene() {}
 
@@ -21,20 +22,39 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
+	
+	
+	//乱数シード生成器
+	std::random_device seed_gen;
+	// メルセンヌ・ツイスターの乱数エンジン
+	std::mt19937_64 engine(seed_gen());
+	// 乱数範囲を指定(回転角)
+	std::uniform_real_distribution<float> rotationDistX(0, MyMathUtility::PI);
+	std::uniform_real_distribution<float> rotationDistY(0, MyMathUtility::PI);
+	std::uniform_real_distribution<float> rotationDistZ(0, MyMathUtility::PI);
+	// 乱数範囲を指定(座標)
+	std::uniform_real_distribution<float> translationDistX(-10, 10);
+	std::uniform_real_distribution<float> translationDistY(-10, 10);
+	std::uniform_real_distribution<float> translationDistZ(-10, 10);
+	
 	// X,Y,Z軸周りのスケーリングを設定
-	worldTransform_.scale_ = {5.0f, 5.0f, 5.0f};
-	// X,Y,Z軸周りの回転角を設定
-	worldTransform_.rotation_ = {MathUtility::PI / 4, MathUtility::PI / 4, 0.0f};
-	// X,Y,Z軸周りの平行移動を設定
-	worldTransform_.translation_ = {10.0f, 10.0f, 10.0f};
-	//ワールドトランスフォームの初期化
-	worldTransform_.Initialize();
+	for (WorldTransform& worldTransform : worldTransforms_)
+	{
 
-	//変換
-	worldTransform_.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransform_);
+		worldTransform.scale_ = {5.0f, 5.0f, 5.0f};
+		// X,Y,Z軸周りの回転角を設定
+		worldTransform.rotation_ = {MathUtility::PI / 4, MathUtility::PI / 4, 0.0f};
+		// X,Y,Z軸周りの平行移動を設定
+		worldTransform.translation_ = {10.0f, 10.0f, 10.0f};
+		//ワールドトランスフォームの初期化
+		worldTransform.Initialize();
 
-	//行列の転送
-	worldTransform_.TransferMatrix();
+		//変換
+		worldTransform.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransform);
+
+		//行列の転送
+		worldTransform.TransferMatrix();
+	}
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -79,8 +99,9 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	// 3Dモデル描画
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
-
+	for (WorldTransform& worldTransform : worldTransforms_) {
+		model_->Draw(worldTransform, debugCamera_->GetViewProjection(), textureHandle_);
+	}
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
 
 	for (int i = 0; i < 12; i++) {
