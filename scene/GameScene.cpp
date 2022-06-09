@@ -79,7 +79,7 @@ void GameScene::Initialize() {
 	//軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向表示が参照するビュープロジェクションを指定する(アドレス無し)
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&debugCamera_->GetViewProjection());
+	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&debugCamera_->GetViewProjection());
 }
@@ -117,7 +117,7 @@ void GameScene::Draw() {
 	/// </summary>
 	// 3Dモデル描画
 	for (WorldTransform& worldTransform : worldTransforms_) {
-		model_->Draw(worldTransform, debugCamera_->GetViewProjection(), textureHandle_);
+		model_->Draw(worldTransform, viewProjection_, textureHandle_);
 	}
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
 
