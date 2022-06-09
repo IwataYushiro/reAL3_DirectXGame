@@ -106,3 +106,55 @@ Matrix4 MyMathUtility::MyMatrix4WorldTransform(WorldTransform worldTransform) {
 	return matWorld;
 }
 
+//視点移動ベクトルを作成
+Vector3 MyMathUtility::MyVector3ViewEye(Input* key) {
+	//移動ベクトル
+	Vector3 move = MyMathUtility::MyVector3Zero();
+
+	//視点移動の速さ
+	const float kEyeSpeed = 0.2f;
+
+	//押した方向で移動ベクトルを変更
+	if (key->PushKey(DIK_W)) {
+		move.z += kEyeSpeed;
+	} else if (key->PushKey(DIK_S)) {
+		move.z -= kEyeSpeed;
+	}
+
+	return move;
+}
+
+//注視点移動ベクトルを作成
+Vector3 MyMathUtility::MyVector3ViewTarget(Input* key) {
+	//移動ベクトル
+	Vector3 move = MyMathUtility::MyVector3Zero();
+
+	//注視点移動の速さ
+	const float kTargetSpeed = 0.2f;
+
+	//注視点移動処理
+	// //押した方向で移動ベクトルを変更
+	if (key->PushKey(DIK_D)) {
+		move.x += kTargetSpeed;
+	} else if (key->PushKey(DIK_A)) {
+		move.x -= kTargetSpeed;
+	}
+
+	return move;
+}
+
+  //上方向ベクトルを作成
+Vector3 MyMathUtility::MyVector3ViewUp(Input* key, float upAngle) {
+	
+	//上方向の回転速さ[ラジアン/frame]
+	const float kUpRotSpeed = 0.05f;
+
+	//上方向回転処理
+	if (key->PushKey(DIK_SPACE)) {
+		upAngle += kUpRotSpeed;
+		// 2πを超えたら元に戻す
+		upAngle = fmodf(upAngle, MyMathUtility::PI * 2.0f);
+	}
+
+	return {cosf(upAngle), sinf(upAngle), 0.0f};
+}
