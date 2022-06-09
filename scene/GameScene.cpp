@@ -72,6 +72,12 @@ void GameScene::Initialize() {
 		//行列の転送
 		worldTransform.TransferMatrix();
 	}
+	//カメラ視点座標を設定
+	//viewProjection_.eye = {0.0f, 0.0f, -10.0f};
+	//カメラ注視点座標を設定
+	viewProjection_.target = {10.0f, 0.0f, 0.0f};
+	//カメラ上方向ベクトルを設定(右上45度設定)
+	viewProjection_.up = {cosf(MyMathUtility::PI / 4.0f), sinf(MyMathUtility::PI / 4.0f), 0.0f};
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -85,8 +91,59 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	//デバッグカメラの更新
-	debugCamera_->Update();
+	
+	//移動ベクトル
+	Vector3 move = MyMathUtility::MyVector3Zero();
+
+	//視点移動の速さ
+	const float kEyeSpeed = 0.2f;
+	//注視点移動の速さ
+	const float kTargetSpeed = 0.2f;
+	//上方向の回転速さ[ラジアン/frame]
+	const float kUpRotSpeed = 0.05f;
+
+	//視点移動処理
+	//押した方向で移動ベクトルを変更
+	if (input_->PushKey(DIK_W)) {
+		move.z += kEyeSpeed;
+	} else if (input_->PushKey(DIK_S)) {
+		move.z -= kEyeSpeed;
+	}
+	//注視点移動処理
+	// //押した方向で移動ベクトルを変更
+	if (input_->PushKey(DIK_LEFT)) {
+		move.x += kTargetSpeed;
+	} else if (input_->PushKey(DIK_RIGHT)) {
+		move.x -= kTargetSpeed;
+	}
+	//上方向回転処理
+	if (input_->PushKey(DIK_SPACE)) {
+		viewAngle += kUpRotSpeed;
+		// 2πを超えたら元に戻す
+		viewAngle = fmodf(viewAngle, MathUtility::PI * 2.0f);
+	}
+	//視点移動(ベクトルの加算)
+	viewProjection_.eye += move;
+	//注視点移動(ベクトルの加算)
+	viewProjection_.target += move;
+	//上方向ベクトルを計算(半径1の円周上の座標)
+	viewProjection_.up = {cosf(viewAngle), sinf(viewAngle), 0.0f};
+	//行列の再計算
+	viewProjection_.UpdateMatrix();
+
+	//デバック用表示
+	debugText_->SetPos(50, 50);
+	debugText_->Printf(
+	  "eye(%f,%f,%f)", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
+
+	debugText_->SetPos(50, 70);
+	debugText_->Printf(
+	  "target(%f,%f,%f)", viewProjection_.target.x, viewProjection_.target.y,
+	  viewProjection_.target.z);
+
+	debugText_->SetPos(50, 90);
+	debugText_->Printf(
+	  "up(%f,%f,%f)", viewProjection_.up.x, viewProjection_.up.y, viewProjection_.up.z);
 }
 
 void GameScene::Draw() {
