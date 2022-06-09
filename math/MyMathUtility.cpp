@@ -136,6 +136,7 @@ Vector3 MyMathUtility::MyVector3ViewTarget(Input* key) {
 	// //押した方向で移動ベクトルを変更
 	if (key->PushKey(DIK_D)) {
 		move.x += kTargetSpeed;
+		move.x += kTargetSpeed;
 	} else if (key->PushKey(DIK_A)) {
 		move.x -= kTargetSpeed;
 	}
@@ -144,8 +145,10 @@ Vector3 MyMathUtility::MyVector3ViewTarget(Input* key) {
 }
 
   //上方向ベクトルを作成
-Vector3 MyMathUtility::MyVector3ViewUp(Input* key, float upAngle) {
+Vector3 MyMathUtility::MyVector3ViewUp(Input* key, float& upAngle) {
 	
+	Vector3 move={cosf(upAngle), sinf(upAngle), 0.0f};
+
 	//上方向の回転速さ[ラジアン/frame]
 	const float kUpRotSpeed = 0.05f;
 
@@ -156,5 +159,5 @@ Vector3 MyMathUtility::MyVector3ViewUp(Input* key, float upAngle) {
 		upAngle = fmodf(upAngle, MyMathUtility::PI * 2.0f);
 	}
 
-	return {cosf(upAngle), sinf(upAngle), 0.0f};
+	return move;
 }

@@ -92,26 +92,16 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	
-	
-	//上方向の回転速さ[ラジアン/frame]
-	const float kUpRotSpeed = 0.05f;
-
-	//上方向回転処理
-	if (input_->PushKey(DIK_SPACE)) {
-		viewAngle += kUpRotSpeed;
-		// 2πを超えたら元に戻す
-		viewAngle = fmodf(viewAngle, MathUtility::PI * 2.0f);
-	}
 	//視点移動(ベクトルの加算)
 	viewProjection_.eye += MyMathUtility::MyVector3ViewEye(input_);
 	//注視点移動(ベクトルの加算)
 	viewProjection_.target += MyMathUtility::MyVector3ViewTarget(input_);
 	//上方向ベクトルを計算(半径1の円周上の座標)
-	viewProjection_.up = {cosf(viewAngle), sinf(viewAngle), 0.0f};
+	viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
 
-	//デバック用表示
+//デバック用表示
 	debugText_->SetPos(50, 50);
 	debugText_->Printf(
 	  "eye(%f,%f,%f)", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
