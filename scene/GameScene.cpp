@@ -101,34 +101,13 @@ void GameScene::Update() {
 	////上方向ベクトルを計算(半径1の円周上の座標)
 	//viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
 	
-	//速度を設定
-	float kFovSpeed = 0.03f;
-	//上キーで視野角が広がる
-	 if (input_->PushKey(DIK_UP)) {
-		viewProjection_.fovAngleY += kFovSpeed;
-		if (viewProjection_.fovAngleY>MyMathUtility::PI) {
-			viewProjection_.fovAngleY = MyMathUtility::PI;
-		}
-	 }
-	//下キーで視野角が狭まる
-	 else if (input_->PushKey(DIK_DOWN)) {
-		viewProjection_.fovAngleY -= kFovSpeed;
-		if (viewProjection_.fovAngleY < 0.01f) {
-			viewProjection_.fovAngleY = 0.01f;
-		}
-	 }
-
+	//FoV変更処理
+	viewProjection_.fovAngleY =
+	  MyMathUtility::MyProjectionFovAngleY(input_, viewProjection_.fovAngleY);
 	 //クリップ距離変更処理
-	 
-	 //速度を設定
-	 float kNearSpeed = 0.2f;
-	 //WSキーでニアクリップ距離を増減
-	 if (input_->PushKey(DIK_W)) {
-		 viewProjection_.nearZ += kNearSpeed;
-	 } else if (input_->PushKey(DIK_S)) {
-		 viewProjection_.nearZ -= kNearSpeed;
-	 }
-
+	viewProjection_.nearZ = 
+	MyMathUtility::MyProfectionNearClipZ(input_, viewProjection_.nearZ);
+	
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
 

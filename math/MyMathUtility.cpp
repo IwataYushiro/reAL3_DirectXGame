@@ -158,7 +158,7 @@ Vector3 MyMathUtility::MyVector3ViewTarget(Input* key) {
 
   //上方向ベクトルを作成
 Vector3 MyMathUtility::MyVector3ViewUp(Input* key, float& upAngle) {
-	
+	//移動ベクトル
 	Vector3 move={cosf(upAngle), sinf(upAngle), 0.0f};
 
 	//上方向の回転速さ[ラジアン/frame]
@@ -172,4 +172,40 @@ Vector3 MyMathUtility::MyVector3ViewUp(Input* key, float& upAngle) {
 	}
 
 	return move;
+}
+// FoV変更の処理
+float MyMathUtility::MyProjectionFovAngleY(Input* key, float fovY) {
+	//視野角変更の速さ
+	float speed = 0.03f;
+	//上キーで視野角が広がる
+	if (key->PushKey(DIK_UP)) {
+		fovY += speed;
+		if (fovY > MyMathUtility::PI) {
+			fovY = MyMathUtility::PI;
+		}
+	}
+	//下キーで視野角が狭まる
+	else if (key->PushKey(DIK_DOWN)) {
+		fovY -= speed;
+		if (fovY < 0.01f) {
+			fovY = 0.01f;
+		}
+	}
+
+	return fovY;
+}
+
+// ニアクリップ距離の処理
+float MyMathUtility::MyProfectionNearClipZ(Input* key, float nearZ) {
+	//ニアクリップ距離の速さ
+	float speed = 0.2f;
+
+	// WSキーでニアクリップ距離を増減
+	if (key->PushKey(DIK_W)) {
+		nearZ += speed;
+	} else if (key->PushKey(DIK_S)) {
+		nearZ -= speed;
+	}
+
+	return nearZ;
 }

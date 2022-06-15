@@ -62,8 +62,12 @@ Vector3 MyVector3ViewEye(Input* key);
 Vector3 MyVector3ViewTarget(Input* key);
 //上方向ベクトルを作成
 Vector3 MyVector3ViewUp(Input* key, float& upAngle);
+//FoV変更の処理
+float MyProjectionFovAngleY(Input* key,float fovY);
+// ニアクリップ距離の処理
+float MyProfectionNearClipZ(Input* key, float nearZ);
 
-// ビュー行列の作成
+  // ビュー行列の作成
 Matrix4 MyMatrix4LookAtLH(const Vector3& eye, const Vector3& target, const Vector3& up);
 // 並行投影行列の作成
 Matrix4 MyMatrix4Orthographic(
