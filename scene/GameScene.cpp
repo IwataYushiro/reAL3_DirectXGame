@@ -102,21 +102,7 @@ void GameScene::Update() {
 	worldTransforms_[PartId::kRoot].translation_ += move;
 	
 	for (size_t i = 0; i < PartId::kNumPartId; i++) {
-		worldTransforms_[i].matWorld_ = MyMathUtility::MySynMatrix4WorldTransform(worldTransforms_[i]);
-		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kRoot]) {
-			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kRoot].matWorld_;
-		}
-		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kSpine]) {
-			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kSpine].matWorld_;
-		}
-		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kChest]) {
-			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kChest].matWorld_;
-		}
-		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kHip]) {
-			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kHip].matWorld_;
-		}
-		worldTransforms_[i].TransferMatrix();
-
+		worldTransforms_[i].PlayerUpdate(worldTransforms_, i);
 	}
 	//デバック用表示
 	debugText_->SetPos(50, 50);

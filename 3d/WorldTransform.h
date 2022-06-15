@@ -9,7 +9,21 @@
 struct ConstBufferDataWorldTransform {
 	Matrix4 matWorld;           // ローカル → ワールド変換行列
 };
+//パーツID
+enum PartId {
 
+	kRoot,  //大元
+	kSpine, //脊髄
+	kChest, //胸
+	kHead,  //頭
+	kArmL,  //左腕
+	kArmR,  //右腕
+	kHip,   //尻
+	kLegL,  //左足
+	kLegR,  //右足
+
+	kNumPartId //パーツ数
+};
 /// <summary>
 /// ワールド変換データ
 /// </summary>
@@ -45,4 +59,6 @@ struct WorldTransform {
 	/// 行列を転送する
 	/// </summary>
 	void TransferMatrix();
+	//プレイヤー操作
+	void PlayerUpdate(WorldTransform worldTransform[], size_t pointNum);
 };
