@@ -53,10 +53,15 @@ void GameScene::Update() {
 	else if(input_->PushKey(DIK_LEFT)) {
 		move.x -= 0.5f;
 	}
-
+	//親の更新
 	worldTransforms_[0].translation_ += move;
 	worldTransforms_[0].matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransforms_[0]);
 	worldTransforms_[0].TransferMatrix();
+
+	//子の更新
+	worldTransforms_[1].matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransforms_[1]);
+	worldTransforms_[1].matWorld_ *= worldTransforms_[0].matWorld_;
+	worldTransforms_[1].TransferMatrix();
 
 	//デバック用表示
 	debugText_->SetPos(50, 50);
