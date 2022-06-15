@@ -7,12 +7,17 @@ const Vector3 MyMathUtility::MyVector3Zero() {
 	
 	return v;
 }
+//度を求める
+float MyMathUtility::GetDegree(float r) {
+	r = (r * 180) / MyMathUtility::PI;
 
-//ラジアンを求める
-float MyMathUtility::GetRadian(float n) { 
-	n = n * MyMathUtility::PI / 180;
+	return r;
+}
+  //ラジアンを求める
+float MyMathUtility::GetRadian(float d) { 
+	d = d * MyMathUtility::PI / 180;
 
-	return n;
+	return d;
 }
  // 単位行列を求める
 Matrix4 MyMathUtility::MyMatrix4Identity() {

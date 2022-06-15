@@ -73,7 +73,13 @@ void GameScene::Initialize() {
 		worldTransform.TransferMatrix();
 	}
 	//カメラ垂直方向視野角を設定
-	viewProjection_.fovAngleY = MyMathUtility::GetRadian(10.0f);
+	viewProjection_.fovAngleY = MyMathUtility::GetRadian(90.0f);
+	//アスペクト比を設定
+	viewProjection_.aspectRatio = 1.0f;
+	//ニアクリップ距離を設定
+	viewProjection_.nearZ = 52.0f;
+	//ファークリップ距離を設定
+	viewProjection_.farZ = 53.0f;
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -99,8 +105,8 @@ void GameScene::Update() {
 	//上キーで視野角が広がる
 	 if (input_->PushKey(DIK_UP)) {
 		viewProjection_.fovAngleY += kFovSpeed;
-		if (viewProjection_.fovAngleY>MathUtility::PI) {
-			viewProjection_.fovAngleY = MathUtility::PI;
+		if (viewProjection_.fovAngleY>MyMathUtility::PI) {
+			viewProjection_.fovAngleY = MyMathUtility::PI;
 		}
 	 }
 	//下キーで視野角が狭まる
@@ -110,6 +116,8 @@ void GameScene::Update() {
 			viewProjection_.fovAngleY = 0.01f;
 		}
 	 }
+
+
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
 
@@ -126,6 +134,14 @@ void GameScene::Update() {
 	debugText_->SetPos(50, 90);
 	debugText_->Printf(
 	  "up(%f,%f,%f)", viewProjection_.up.x, viewProjection_.up.y, viewProjection_.up.z);
+
+	debugText_->SetPos(50, 110);
+	debugText_->Printf(
+	  "fovAngleY(Degree):%f",MyMathUtility::GetDegree(viewProjection_.fovAngleY));
+
+	debugText_->SetPos(50, 130);
+	debugText_->Printf(
+	  "nearZ:%f",viewProjection_.nearZ);
 }
 
 void GameScene::Draw() {

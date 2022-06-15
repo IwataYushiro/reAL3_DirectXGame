@@ -22,8 +22,11 @@ Vector3& MyVector3Normalize(Vector3& v);
 float MyVector3Dot(const Vector3& v1, const Vector3& v2);
 // 外積を求める
 Vector3 MyVector3Cross(const Vector3& v1, const Vector3& v2);
-//ラジアンを求める
-float GetRadian(float n);
+//度を求める
+float GetDegree(float r);
+  //ラジアンを求める
+float GetRadian(float d);
+
   // 2項演算子オーバーロード
 const Vector3 operator+(const Vector3& v1, const Vector3& v2);
 const Vector3 operator-(const Vector3& v1, const Vector3& v2);
