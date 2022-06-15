@@ -84,6 +84,19 @@ void GameScene::Update() {
 	else if(input_->PushKey(DIK_LEFT)) {
 		move.x = -0.3f;
 	}
+
+	//上半身回転処理
+	if (input_->PushKey(DIK_U)) {
+		worldTransforms_[PartId::kChest].rotation_.y -= 0.1f;
+	} else if (input_->PushKey(DIK_I)) {
+		worldTransforms_[PartId::kChest].rotation_.y += 0.1f;
+	}
+	//下半身回転処理
+	if (input_->PushKey(DIK_J)) {
+		worldTransforms_[PartId::kHip].rotation_.y -= 0.1f;
+	} else if (input_->PushKey(DIK_K)) {
+		worldTransforms_[PartId::kHip].rotation_.y += 0.1f;
+	}
 	//親の更新
 	worldTransforms_[PartId::kRoot].translation_ += move;
 	
