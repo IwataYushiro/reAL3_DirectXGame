@@ -29,7 +29,7 @@ void GameScene::Initialize() {
 	//脊髄
 	worldTransforms_[PartId::kSpine].Initialize();
 	worldTransforms_[PartId::kSpine].parent_ = &worldTransforms_[PartId::kRoot];
-	worldTransforms_[PartId::kSpine].translation_ = {0.0f, 2.0f, 0.0f};
+	worldTransforms_[PartId::kSpine].translation_ = {0.0f, 3.0f, 0.0f};
 	//上半身
 	//胸
 	worldTransforms_[PartId::kChest].Initialize();
@@ -38,29 +38,29 @@ void GameScene::Initialize() {
 	//頭
 	worldTransforms_[PartId::kHead].Initialize();
 	worldTransforms_[PartId::kHead].parent_ = &worldTransforms_[PartId::kChest];
-	worldTransforms_[PartId::kHead].translation_ = {0.0f, 2.0f, 0.0f};
+	worldTransforms_[PartId::kHead].translation_ = {0.0f, 3.0f, 0.0f};
 	//左腕
 	worldTransforms_[PartId::kArmL].Initialize();
 	worldTransforms_[PartId::kArmL].parent_ = &worldTransforms_[PartId::kChest];
-	worldTransforms_[PartId::kArmL].translation_ = {-2.0f, 0.0f, 0.0f};
+	worldTransforms_[PartId::kArmL].translation_ = {-3.0f, 0.0f, 0.0f};
 	//右腕
 	worldTransforms_[PartId::kArmR].Initialize();
 	worldTransforms_[PartId::kArmR].parent_ = &worldTransforms_[PartId::kChest];
-	worldTransforms_[PartId::kArmR].translation_ = {2.0f, 0.0f, 0.0f};
+	worldTransforms_[PartId::kArmR].translation_ = {3.0f, 0.0f, 0.0f};
 
 	//下半身
 	//尻
 	worldTransforms_[PartId::kHip].Initialize();
 	worldTransforms_[PartId::kHip].parent_ = &worldTransforms_[PartId::kSpine];
-	worldTransforms_[PartId::kHip].translation_ = {0.0f, -2.0f, 0.0f};
+	worldTransforms_[PartId::kHip].translation_ = {0.0f, -3.0f, 0.0f};
 	//左足
 	worldTransforms_[PartId::kLegL].Initialize();
 	worldTransforms_[PartId::kLegL].parent_ = &worldTransforms_[PartId::kHip];
-	worldTransforms_[PartId::kLegL].translation_ = {-2.0f, -4.0f, 0.0f};
+	worldTransforms_[PartId::kLegL].translation_ = {-3.0f, -3.0f, 0.0f};
 	//右足
 	worldTransforms_[PartId::kLegR].Initialize();
 	worldTransforms_[PartId::kLegR].parent_ = &worldTransforms_[PartId::kHip];
-	worldTransforms_[PartId::kLegR].translation_ = {2.0f, -4.0f, 0.0f};
+	worldTransforms_[PartId::kLegR].translation_ = {3.0f, -3.0f, 0.0f};
 	
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -77,19 +77,30 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	//キャラクター移動処理
-	Vector3 move = MyMathUtility::MyVector3Zero();	
+	Vector3 move = MyMathUtility::MySetVector3Zero();	
 	if (input_->PushKey(DIK_RIGHT)) {
-		move.x += 0.3f;
+		move.x = 0.3f;
 	}
 	else if(input_->PushKey(DIK_LEFT)) {
-		move.x -= 0.3f;
+		move.x = -0.3f;
 	}
 	//親の更新
 	worldTransforms_[PartId::kRoot].translation_ += move;
 	
 	for (size_t i = 0; i < PartId::kNumPartId; i++) {
-		worldTransforms_[i].matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransforms_[i]);
-		worldTransforms_[i].matWorld_ *= worldTransforms_[i].parent_->matWorld_;
+		worldTransforms_[i].matWorld_ = MyMathUtility::MySynMatrix4WorldTransform(worldTransforms_[i]);
+		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kRoot]) {
+			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kRoot].matWorld_;
+		}
+		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kSpine]) {
+			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kSpine].matWorld_;
+		}
+		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kChest]) {
+			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kChest].matWorld_;
+		}
+		if (worldTransforms_[i].parent_ == &worldTransforms_[PartId::kHip]) {
+			worldTransforms_[i].matWorld_ *= worldTransforms_[PartId::kHip].matWorld_;
+		}
 		worldTransforms_[i].TransferMatrix();
 
 	}
