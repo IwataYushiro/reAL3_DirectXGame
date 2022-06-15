@@ -7,7 +7,14 @@ const Vector3 MyMathUtility::MyVector3Zero() {
 	
 	return v;
 }
-  // 単位行列を求める
+
+//ラジアンを求める
+float MyMathUtility::GetRadian(float n) { 
+	n = n * MyMathUtility::PI / 180;
+
+	return n;
+}
+ // 単位行列を求める
 Matrix4 MyMathUtility::MyMatrix4Identity() {
 	Matrix4 m = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 	             0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};

@@ -72,12 +72,8 @@ void GameScene::Initialize() {
 		//行列の転送
 		worldTransform.TransferMatrix();
 	}
-	//カメラ視点座標を設定
-	//viewProjection_.eye = {0.0f, 0.0f, -10.0f};
-	//カメラ注視点座標を設定
-	viewProjection_.target = {10.0f, 0.0f, 0.0f};
-	//カメラ上方向ベクトルを設定(右上45度設定)
-	viewProjection_.up = {cosf(MyMathUtility::PI / 4.0f), sinf(MyMathUtility::PI / 4.0f), 0.0f};
+	//カメラ垂直方向視野角を設定
+	viewProjection_.fovAngleY = MyMathUtility::GetRadian(10.0f);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -92,12 +88,13 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	
-	//視点移動(ベクトルの加算)
-	viewProjection_.eye += MyMathUtility::MyVector3ViewEye(input_);
-	//注視点移動(ベクトルの加算)
-	viewProjection_.target += MyMathUtility::MyVector3ViewTarget(input_);
-	//上方向ベクトルを計算(半径1の円周上の座標)
-	viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
+	////視点移動(ベクトルの加算)
+	//viewProjection_.eye += MyMathUtility::MyVector3ViewEye(input_);
+	////注視点移動(ベクトルの加算)
+	//viewProjection_.target += MyMathUtility::MyVector3ViewTarget(input_);
+	////上方向ベクトルを計算(半径1の円周上の座標)
+	//viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
+	
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
 
