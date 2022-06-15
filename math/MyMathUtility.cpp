@@ -9,13 +9,13 @@ const Vector3 MyMathUtility::MyVector3Zero() {
 }
 //“x‚ğ‹‚ß‚é
 float MyMathUtility::GetDegree(float r) {
-	r = (r * 180) / MyMathUtility::PI;
+	r = (r * 180.0f) / MyMathUtility::PI;
 
 	return r;
 }
 //ƒ‰ƒWƒAƒ“‚ğ‹‚ß‚é
 float MyMathUtility::GetRadian(float d) {
-	d = d * MyMathUtility::PI / 180;
+	d = d * MyMathUtility::PI / 180.0f;
 
 	return d;
 }
