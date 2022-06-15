@@ -95,6 +95,21 @@ void GameScene::Update() {
 	////上方向ベクトルを計算(半径1の円周上の座標)
 	//viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
 	
+	float kFovSpeed = 0.05f;
+	//上キーで視野角が広がる
+	 if (input_->PushKey(DIK_UP)) {
+		viewProjection_.fovAngleY += kFovSpeed;
+		if (viewProjection_.fovAngleY>MathUtility::PI) {
+			viewProjection_.fovAngleY = MathUtility::PI;
+		}
+	 }
+	//下キーで視野角が狭まる
+	 else if (input_->PushKey(DIK_DOWN)) {
+		viewProjection_.fovAngleY -= kFovSpeed;
+		if (viewProjection_.fovAngleY < 0.01f) {
+			viewProjection_.fovAngleY = 0.01f;
+		}
+	 }
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
 
