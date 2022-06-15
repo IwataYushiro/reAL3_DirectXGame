@@ -97,6 +97,7 @@ void GameScene::Update() {
 	} else if (input_->PushKey(DIK_K)) {
 		worldTransforms_[PartId::kHip].rotation_.y += 0.1f;
 	}
+
 	//親の更新
 	worldTransforms_[PartId::kRoot].translation_ += move;
 	
