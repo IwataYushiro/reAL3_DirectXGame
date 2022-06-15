@@ -6,11 +6,11 @@
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
-#include "math/MyMathUtility.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "math/MyMathUtility.h"
 
 /// <summary>
 /// ゲームシーン
@@ -90,6 +90,6 @@ class GameScene {
 
 	Vector4 color_ = {0xFF, 0xFF, 0xFF, 0xFF};
 	/// <summary>
-  /// ゲームシーン用
-  /// </summary>
-	};
+	/// ゲームシーン用
+	/// </summary>
+};

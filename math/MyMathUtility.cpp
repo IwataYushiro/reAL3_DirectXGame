@@ -2,9 +2,9 @@
 #include <math.h>
 
 //零ベクトルを返す
-const Vector3 MyMathUtility::MyVector3Zero() { 
+const Vector3 MyMathUtility::MyVector3Zero() {
 	Vector3 v = {0.0f, 0.0f, 0.0f};
-	
+
 	return v;
 }
 //度を求める
@@ -13,13 +13,13 @@ float MyMathUtility::GetDegree(float r) {
 
 	return r;
 }
-  //ラジアンを求める
-float MyMathUtility::GetRadian(float d) { 
+//ラジアンを求める
+float MyMathUtility::GetRadian(float d) {
 	d = d * MyMathUtility::PI / 180;
 
 	return d;
 }
- // 単位行列を求める
+// 単位行列を求める
 Matrix4 MyMathUtility::MyMatrix4Identity() {
 	Matrix4 m = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 	             0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
@@ -109,11 +109,11 @@ Matrix4 MyMathUtility::MyMatrix4WorldTransform(WorldTransform worldTransform) {
 	Matrix4 matScale = MyMathUtility::MyMatrix4Scaling(worldTransform.scale_);
 
 	Matrix4 matRot = MyMathUtility::MyMatrix4Rotation(worldTransform.rotation_);
-	
+
 	Matrix4 matTrans = MyMathUtility::MyMatrix4Translation(worldTransform.translation_);
-	
+
 	//合成
-	matWorld*= matScale *= matRot *= matTrans;
+	matWorld *= matScale *= matRot *= matTrans;
 
 	return matWorld;
 }
@@ -156,10 +156,10 @@ Vector3 MyMathUtility::MyVector3ViewTarget(Input* key) {
 	return move;
 }
 
-  //上方向ベクトルを作成
+//上方向ベクトルを作成
 Vector3 MyMathUtility::MyVector3ViewUp(Input* key, float& upAngle) {
 	//移動ベクトル
-	Vector3 move={cosf(upAngle), sinf(upAngle), 0.0f};
+	Vector3 move = {cosf(upAngle), sinf(upAngle), 0.0f};
 
 	//上方向の回転速さ[ラジアン/frame]
 	const float kUpRotSpeed = 0.05f;

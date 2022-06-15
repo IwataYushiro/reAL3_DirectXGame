@@ -22,16 +22,15 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
-	
-	
+
 	//乱数シード生成器
 	std::random_device seed_gen;
 	// メルセンヌ・ツイスターの乱数エンジン
 	std::mt19937_64 engine(seed_gen());
 	// 乱数範囲を指定(回転角)
-	std::uniform_real_distribution<float> scaleDistX(1.0f,3.0f);
-	std::uniform_real_distribution<float> scaleDistY(1.0f,3.0f);
-	std::uniform_real_distribution<float> scaleDistZ(1.0f,3.0f);
+	std::uniform_real_distribution<float> scaleDistX(1.0f, 3.0f);
+	std::uniform_real_distribution<float> scaleDistY(1.0f, 3.0f);
+	std::uniform_real_distribution<float> scaleDistZ(1.0f, 3.0f);
 	// 乱数範囲を指定(回転角)
 	std::uniform_real_distribution<float> rotationDistX(0.0f, MyMathUtility::PI);
 	std::uniform_real_distribution<float> rotationDistY(0.0f, MyMathUtility::PI);
@@ -40,10 +39,9 @@ void GameScene::Initialize() {
 	std::uniform_real_distribution<float> translationDistX(-10.0f, 10.0f);
 	std::uniform_real_distribution<float> translationDistY(-10.0f, 10.0f);
 	std::uniform_real_distribution<float> translationDistZ(-10.0f, 10.0f);
-	
+
 	// X,Y,Z軸周りのスケーリングを設定
-	for (WorldTransform& worldTransform : worldTransforms_)
-	{
+	for (WorldTransform& worldTransform : worldTransforms_) {
 		//ワールドトランスフォームの初期化
 		worldTransform.Initialize();
 
@@ -65,7 +63,7 @@ void GameScene::Initialize() {
 		worldTransform.rotation_ = {rotationValueX, rotationValueY, rotationValueZ};
 		// X,Y,Z軸周りの平行移動を設定
 		worldTransform.translation_ = {translationValueX, translationValueY, translationValueZ};
-		
+
 		//変換
 		worldTransform.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransform);
 
@@ -93,25 +91,24 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	
+
 	////視点移動(ベクトルの加算)
-	//viewProjection_.eye += MyMathUtility::MyVector3ViewEye(input_);
+	// viewProjection_.eye += MyMathUtility::MyVector3ViewEye(input_);
 	////注視点移動(ベクトルの加算)
-	//viewProjection_.target += MyMathUtility::MyVector3ViewTarget(input_);
+	// viewProjection_.target += MyMathUtility::MyVector3ViewTarget(input_);
 	////上方向ベクトルを計算(半径1の円周上の座標)
-	//viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
-	
-	//FoV変更処理
+	// viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
+
+	// FoV変更処理
 	viewProjection_.fovAngleY =
 	  MyMathUtility::MyProjectionFovAngleY(input_, viewProjection_.fovAngleY);
-	 //クリップ距離変更処理
-	viewProjection_.nearZ = 
-	MyMathUtility::MyProfectionNearClipZ(input_, viewProjection_.nearZ);
-	
+	//クリップ距離変更処理
+	viewProjection_.nearZ = MyMathUtility::MyProfectionNearClipZ(input_, viewProjection_.nearZ);
+
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
 
-//デバック用表示
+	//デバック用表示
 	debugText_->SetPos(50, 50);
 	debugText_->Printf(
 	  "eye(%f,%f,%f)", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
@@ -126,12 +123,10 @@ void GameScene::Update() {
 	  "up(%f,%f,%f)", viewProjection_.up.x, viewProjection_.up.y, viewProjection_.up.z);
 
 	debugText_->SetPos(50, 110);
-	debugText_->Printf(
-	  "fovAngleY(Degree):%f",MyMathUtility::GetDegree(viewProjection_.fovAngleY));
+	debugText_->Printf("fovAngleY(Degree):%f", MyMathUtility::GetDegree(viewProjection_.fovAngleY));
 
 	debugText_->SetPos(50, 130);
-	debugText_->Printf(
-	  "nearZ:%f",viewProjection_.nearZ);
+	debugText_->Printf("nearZ:%f", viewProjection_.nearZ);
 }
 
 void GameScene::Draw() {
