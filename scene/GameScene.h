@@ -16,7 +16,22 @@
 /// ゲームシーン
 /// </summary>
 class GameScene {
+  public:
+	  //パーツID
+	enum PartId {
 
+		kRoot,		//大元
+		kSpine,		//脊髄
+		kChest,		//胸
+		kHead,		//頭
+		kArmL,		//左腕
+		kArmR,		//右腕
+		kHip,		//尻
+		kLegL,		//左足
+		kLegR,		//右足
+					
+		kNumPartId	//パーツ数
+	};
   public: // メンバ関数
 	/// <summary>
 	/// コンストクラタ
