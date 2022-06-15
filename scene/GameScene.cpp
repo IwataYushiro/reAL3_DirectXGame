@@ -65,7 +65,7 @@ void GameScene::Initialize() {
 		worldTransform.translation_ = {translationValueX, translationValueY, translationValueZ};
 
 		//変換
-		worldTransform.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransform);
+		worldTransform.matWorld_ = MyMathUtility::MySynMatrix4WorldTransform(worldTransform);
 
 		//行列の転送
 		worldTransform.TransferMatrix();
@@ -93,17 +93,17 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 
 	////視点移動(ベクトルの加算)
-	// viewProjection_.eye += MyMathUtility::MyVector3ViewEye(input_);
+	// viewProjection_.eye += MyMathUtility::MyChanVector3ViewEye(input_);
 	////注視点移動(ベクトルの加算)
-	// viewProjection_.target += MyMathUtility::MyVector3ViewTarget(input_);
+	// viewProjection_.target += MyMathUtility::MyChanVector3ViewTarget(input_);
 	////上方向ベクトルを計算(半径1の円周上の座標)
-	// viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
+	// viewProjection_.up = MyMathUtility::MyChanVector3ViewUp(input_, viewAngle);
 
 	// FoV変更処理
 	viewProjection_.fovAngleY =
-	  MyMathUtility::MyProjectionFovAngleY(input_, viewProjection_.fovAngleY);
+	  MyMathUtility::MyChanProjectionFovAngleY(input_, viewProjection_.fovAngleY);
 	//クリップ距離変更処理
-	viewProjection_.nearZ = MyMathUtility::MyProfectionNearClipZ(input_, viewProjection_.nearZ);
+	viewProjection_.nearZ = MyMathUtility::MyChanProfectionNearClipZ(input_, viewProjection_.nearZ);
 
 	//行列の再計算
 	viewProjection_.UpdateMatrix();
