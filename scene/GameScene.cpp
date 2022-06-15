@@ -23,61 +23,14 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 
-	//乱数シード生成器
-	std::random_device seed_gen;
-	// メルセンヌ・ツイスターの乱数エンジン
-	std::mt19937_64 engine(seed_gen());
-	// 乱数範囲を指定(回転角)
-	std::uniform_real_distribution<float> scaleDistX(1.0f, 3.0f);
-	std::uniform_real_distribution<float> scaleDistY(1.0f, 3.0f);
-	std::uniform_real_distribution<float> scaleDistZ(1.0f, 3.0f);
-	// 乱数範囲を指定(回転角)
-	std::uniform_real_distribution<float> rotationDistX(0.0f, MyMathUtility::PI);
-	std::uniform_real_distribution<float> rotationDistY(0.0f, MyMathUtility::PI);
-	std::uniform_real_distribution<float> rotationDistZ(0.0f, MyMathUtility::PI);
-	// 乱数範囲を指定(座標)
-	std::uniform_real_distribution<float> translationDistX(-10.0f, 10.0f);
-	std::uniform_real_distribution<float> translationDistY(-10.0f, 10.0f);
-	std::uniform_real_distribution<float> translationDistZ(-10.0f, 10.0f);
+	//ワールドトランスフォームの初期化
+	//親(0番)
+	worldTransforms_[0].Initialize();
+	//子(1番)
+	worldTransforms_[1].Initialize();
+	worldTransforms_[1].translation_ = {0.0f, 4.5f, 0.0f};
+	worldTransforms_[1].parent_ = &worldTransforms_[0];
 
-	// X,Y,Z軸周りのスケーリングを設定
-	for (WorldTransform& worldTransform : worldTransforms_) {
-		//ワールドトランスフォームの初期化
-		worldTransform.Initialize();
-
-		//乱数エンジンを渡し、指定範囲からランダムな数値を得る(拡大)
-		float scaleValueX = scaleDistX(engine);
-		float scaleValueY = scaleDistY(engine);
-		float scaleValueZ = scaleDistZ(engine);
-		//乱数エンジンを渡し、指定範囲からランダムな数値を得る(回転角)
-		float rotationValueX = rotationDistX(engine);
-		float rotationValueY = rotationDistY(engine);
-		float rotationValueZ = rotationDistZ(engine);
-		//乱数エンジンを渡し、指定範囲からランダムな数値を得る(座標)
-		float translationValueX = translationDistX(engine);
-		float translationValueY = translationDistY(engine);
-		float translationValueZ = translationDistZ(engine);
-
-		worldTransform.scale_ = {scaleValueX, scaleValueY, scaleValueZ};
-		// X,Y,Z軸周りの回転角を設定
-		worldTransform.rotation_ = {rotationValueX, rotationValueY, rotationValueZ};
-		// X,Y,Z軸周りの平行移動を設定
-		worldTransform.translation_ = {translationValueX, translationValueY, translationValueZ};
-
-		//変換
-		worldTransform.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransform);
-
-		//行列の転送
-		worldTransform.TransferMatrix();
-	}
-	//カメラ垂直方向視野角を設定
-	viewProjection_.fovAngleY = MyMathUtility::GetRadian(90.0f);
-	//アスペクト比を設定
-	viewProjection_.aspectRatio = 1.0f;
-	//ニアクリップ距離を設定
-	viewProjection_.nearZ = 52.0f;
-	//ファークリップ距離を設定
-	viewProjection_.farZ = 53.0f;
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -92,21 +45,18 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	////視点移動(ベクトルの加算)
-	// viewProjection_.eye += MyMathUtility::MyVector3ViewEye(input_);
-	////注視点移動(ベクトルの加算)
-	// viewProjection_.target += MyMathUtility::MyVector3ViewTarget(input_);
-	////上方向ベクトルを計算(半径1の円周上の座標)
-	// viewProjection_.up = MyMathUtility::MyVector3ViewUp(input_, viewAngle);
+	//キャラクター移動処理
+	Vector3 move = MyMathUtility::MyVector3Zero();	
+	if (input_->PushKey(DIK_RIGHT)) {
+		move.x += 0.5f;
+	}
+	else if(input_->PushKey(DIK_LEFT)) {
+		move.x -= 0.5f;
+	}
 
-	// FoV変更処理
-	viewProjection_.fovAngleY =
-	  MyMathUtility::MyProjectionFovAngleY(input_, viewProjection_.fovAngleY);
-	//クリップ距離変更処理
-	viewProjection_.nearZ = MyMathUtility::MyProfectionNearClipZ(input_, viewProjection_.nearZ);
-
-	//行列の再計算
-	viewProjection_.UpdateMatrix();
+	worldTransforms_[0].translation_ += move;
+	worldTransforms_[0].matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransforms_[0]);
+	worldTransforms_[0].TransferMatrix();
 
 	//デバック用表示
 	debugText_->SetPos(50, 50);
@@ -127,6 +77,11 @@ void GameScene::Update() {
 
 	debugText_->SetPos(50, 130);
 	debugText_->Printf("nearZ:%f", viewProjection_.nearZ);
+
+	debugText_->SetPos(50, 150);
+	debugText_->Printf(
+	  "pos(%f,%f,%f)", worldTransforms_[0].translation_.x, worldTransforms_[0].translation_.y,
+	  worldTransforms_[0].translation_.z);
 }
 
 void GameScene::Draw() {
@@ -156,9 +111,9 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	// 3Dモデル描画
-	for (WorldTransform& worldTransform : worldTransforms_) {
-		model_->Draw(worldTransform, viewProjection_, textureHandle_);
-	}
+	model_->Draw(worldTransforms_[0], viewProjection_, textureHandle_);
+	model_->Draw(worldTransforms_[1], viewProjection_, textureHandle_);
+
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
 
 	for (int i = 0; i < 12; i++) {
