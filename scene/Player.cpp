@@ -19,6 +19,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
 	worldTransform_.Initialize();
 }
+
 void Player::Update() {
 	Vector3 move = {0.0f, 0.0f, 0.0f};
 	float speed = 0.1f;
