@@ -81,13 +81,6 @@ void GameScene::Draw() {
 	// 3Dモデル描画
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
-	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
-
-	for (int i = 0; i < 12; i++) {
-		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeVertex_[edgeList_[i][0]], cubeVertex_[edgeList_[i][1]], color_);
-	}
-
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
