@@ -26,9 +26,19 @@ void Player::Update() {
 
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
 	if (input_->PushKey(DIK_LEFT)) {
+		move.x = -moveSpeed;
+	}
+	if (input_->PushKey(DIK_RIGHT)) {
 		move.x = moveSpeed;
 	}
-	matTrans = MyMathUtility::MyGenMatrix4Translation(worldTransform_.translation_);
+	if (input_->PushKey(DIK_UP)) {
+		move.y = moveSpeed;
+	}
+	if (input_->PushKey(DIK_DOWN)) {
+		move.y = -moveSpeed;
+	}
+	worldTransform_.translation_ += move;
+
 	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
 	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
 
