@@ -6,11 +6,11 @@
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Model.h"
-#include "math/MyMathUtility.h"
 #include "SafeDelete.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "math/MyMathUtility.h"
 
 /// <summary>
 /// ゲームシーン
@@ -60,6 +60,6 @@ class GameScene {
 	DebugCamera* debugCamera_ = nullptr;
 
 	/// <summary>
-  /// ゲームシーン用
-  /// </summary>
-	};
+	/// ゲームシーン用
+	/// </summary>
+};
