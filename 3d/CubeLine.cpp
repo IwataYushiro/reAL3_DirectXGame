@@ -1,4 +1,5 @@
 #include "CubeLine.h"
+#include "PrimitiveDrawer.h"
 
 void CubeLine::Initialize() {
 	Vector3 cubeVertex_[8] = 
@@ -29,4 +30,11 @@ void CubeLine::Initialize() {
     };
 
     Vector4 color = {0xFF, 0xFF, 0xFF, 0xFF};
+}
+
+void CubeLine::DrawCube3D(int size) {
+
+    PrimitiveDrawer::GetInstance()->DrawLine3d(
+	  cubeVertex_[edgeList_[size][0]],
+	  cubeVertex_[edgeList_[size][1]], color);
 }

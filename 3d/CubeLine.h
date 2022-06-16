@@ -2,10 +2,13 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
-struct CubeLine {
+class CubeLine {
+  public:
     //‰Šú‰»
 	void Initialize();
-	
+	//•`‰æ
+	void DrawCube3D(int size);
+    private:
 	Vector3 cubeVertex_[8] = {
 	  {0.0f, 5.0f, 0.0f},
       {0.0f, 0.0f, 0.0f},

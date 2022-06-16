@@ -28,7 +28,8 @@ void GameScene::Initialize() {
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1260, 720);
 	//3Dキューブ用のインスタンスを生成
-	cubeLine_.Initialize();
+	cubeLine_ = new CubeLine();
+	cubeLine_->Initialize();
 	//軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	//軸方向表示が参照するビュープロジェクションを指定する(アドレス無し)
@@ -74,12 +75,9 @@ void GameScene::Draw() {
 	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
 
 	for (int i = 0; i < 12; i++) {
-		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeLine_.cubeVertex_[cubeLine_.edgeList_[i][0]],
-		  cubeLine_.cubeVertex_[cubeLine_.edgeList_[i][1]], cubeLine_.color);
+		cubeLine_->DrawCube3D(i);
 	}
 	
-
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
