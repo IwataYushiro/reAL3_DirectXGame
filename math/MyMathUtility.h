@@ -9,7 +9,7 @@ namespace MyMathUtility {
 const float PI = 3.141592654f;
 
 // 零ベクトルを返す
-const Vector3 MyVector3Zero();
+const Vector3 MySetVector3Zero();
 // 2ベクトルが一致しているか調べる
 bool MyVector3Equal(const Vector3& v1, const Vector3& v2);
 // ノルム(長さ)を求める
@@ -29,26 +29,26 @@ const Vector3 operator*(float s, const Vector3& v);
 const Vector3 operator/(const Vector3& v, float s);
 
 // 単位行列を求める
-Matrix4 MyMatrix4Identity();
+Matrix4 MySetMatrix4Identity();
 // 転置行列を求める
-Matrix4 MyMatrix4Transpose(const Matrix4& m);
+Matrix4 MySetMatrix4Transpose(const Matrix4& m);
 
 // 拡大縮小行列の作成
-Matrix4 MyMatrix4Scaling(Vector3 scale);
+Matrix4 MyGenMatrix4Scaling(Vector3 scale);
 
 // 回転行列の作成
-Matrix4 MyMatrix4RotationX(float angle);
-Matrix4 MyMatrix4RotationY(float angle);
-Matrix4 MyMatrix4RotationZ(float angle);
+Matrix4 MyGenMatrix4RotationX(float angle);
+Matrix4 MyGenMatrix4RotationY(float angle);
+Matrix4 MyGenMatrix4RotationZ(float angle);
 
 //合成済み回転行列の作成
-Matrix4 MyMatrix4Rotation(Vector3 rotation);
+Matrix4 MySynMatrix4Rotation(Vector3 rotation);
 
 // 平行移動行列の作成
-Matrix4 MyMatrix4Translation(Vector3 translation);
+Matrix4 MyGenMatrix4Translation(Vector3 translation);
 
-//ワールド行列の作成
-Matrix4 MyMatrix4WorldTransform(WorldTransform worldTransform);
+//合成済みワールド行列の作成
+Matrix4 MySynMatrix4WorldTransform(WorldTransform worldTransform);
 
 // ビュー行列の作成
 Matrix4 MyMatrix4LookAtLH(const Vector3& eye, const Vector3& target, const Vector3& up);

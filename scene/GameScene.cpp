@@ -31,7 +31,7 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 
 	//変換
-	worldTransform_.matWorld_ = MyMathUtility::MyMatrix4WorldTransform(worldTransform_);
+	worldTransform_.matWorld_ = MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
 
 	//行列の転送
 	worldTransform_.TransferMatrix();
