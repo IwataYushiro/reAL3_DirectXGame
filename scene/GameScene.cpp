@@ -10,6 +10,8 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete debugCamera_;
+	//自キャラの解放
+	delete player_;
 }
 
 void GameScene::Initialize() {
@@ -22,7 +24,10 @@ void GameScene::Initialize() {
 	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
-
+	//自キャラの生成
+	player_ = new Player();
+	//自キャラの初期化
+	player_->Initialize(model_,textureHandle_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -37,15 +42,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	//キャラクター移動処理
-	Vector3 move = MyMathUtility::MySetVector3Zero();	
-	if (input_->PushKey(DIK_RIGHT)) {
-		move.x = 0.3f;
-	}
-	else if(input_->PushKey(DIK_LEFT)) {
-		move.x = -0.3f;
-	}
-
+	player_->Update();
 	//デバック用表示
 	debugText_->SetPos(50, 50);
 	debugText_->Printf(
@@ -95,18 +92,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	// 3Dモデル描画
-	for (size_t i = 0; i < PartId::kNumPartId; i++) {
-		if (i == PartId::kRoot)  continue;
-		if (i == PartId::kSpine) continue;
-		
-	}
-	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
-
-	for (int i = 0; i < 12; i++) {
-		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeVertex_[edgeList_[i][0]], cubeVertex_[edgeList_[i][1]], color_);
-	}
-
+	player_->Draw(viewProjection_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
