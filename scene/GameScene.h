@@ -59,9 +59,9 @@ class GameScene {
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
-	CubeLine* cubeLine_=nullptr;
+	CubeLine* cubeLine_ = nullptr;
 
 	/// <summary>
-  /// ゲームシーン用
-  /// </summary>
-	};
+	/// ゲームシーン用
+	/// </summary>
+};

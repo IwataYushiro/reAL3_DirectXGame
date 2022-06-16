@@ -27,7 +27,7 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1260, 720);
-	//3Dキューブ用のインスタンスを生成
+	// 3Dキューブ用のインスタンスを生成
 	cubeLine_ = new CubeLine();
 	cubeLine_->Initialize();
 	//軸方向表示の表示を有効にする
@@ -77,7 +77,7 @@ void GameScene::Draw() {
 	for (int i = 0; i < 12; i++) {
 		cubeLine_->DrawCube3D(i);
 	}
-	
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
