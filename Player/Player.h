@@ -18,7 +18,7 @@ class Player {
 
 	//XV
 	void Update();
-
+	
 	//•`‰æ
 	void Draw(ViewProjection& viewProjection);
 

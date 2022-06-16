@@ -21,9 +21,11 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 }
 
 void Player::Update() {
+	
 	Vector3 move = MyMathUtility::MySetVector3Zero();
 	float moveSpeed = 0.3f;
 
+	//キーボード入力による移動処理
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
 	if (input_->PushKey(DIK_LEFT)) {
 		move.x = -moveSpeed;
@@ -37,8 +39,19 @@ void Player::Update() {
 	if (input_->PushKey(DIK_DOWN)) {
 		move.y = -moveSpeed;
 	}
-	worldTransform_.translation_ += move;
 
+	worldTransform_.translation_ += move;
+	
+	//移動限界座標
+	const float kMoveLimitX = 30.0f;
+	const float kMoveLimitY = 20.0f;
+	//範囲を超えない処理
+	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
+	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
+	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
+	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+	
+	//行列更新
 	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
 	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
 
