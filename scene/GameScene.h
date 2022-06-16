@@ -58,6 +58,7 @@ class GameScene {
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 
+	//頂点データ
 	Vector3 cubeVertex_[8] = {
 	  {0.0f, 5.0f, 0.0f},
       {0.0f, 0.0f, 0.0f},
@@ -68,7 +69,7 @@ class GameScene {
       {5.0f, 0.0f, 5.0f},
       {5.0f, 5.0f, 5.0f}
     };
-
+	//始点、終点のリスト
 	int edgeList_[12][2] = {
 	  {0, 1},
       {1, 2},
