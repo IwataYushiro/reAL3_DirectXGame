@@ -20,10 +20,10 @@ class Player {
 	void Update();
 
 	//ƒvƒŒƒCƒ„[‚ÌˆÚ“®ˆ—
-	void PlayerMove();
+	void Move();
 
 	//ˆÚ“®ˆ—§ŒÀ
-	void PlayerMoveLimit();
+	void MoveLimit();
 
 	//•`‰æ
 	void Draw(ViewProjection& viewProjection);

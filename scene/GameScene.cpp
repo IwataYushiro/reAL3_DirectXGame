@@ -64,6 +64,7 @@ void GameScene::Update() {
 		//ビュープロジェクション行列を転送
 		viewProjection_.TransferMatrix();
 	}
+
 	//デバック用表示
 	debugText_->SetPos(50, 50);
 	debugText_->Printf(

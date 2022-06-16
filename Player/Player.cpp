@@ -23,9 +23,9 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 void Player::Update() {
 
 	//à⁄ìÆèàóù
-	PlayerMove();
+	Move();
 	//à⁄ìÆêßå¿
-	PlayerMoveLimit();
+	MoveLimit();
 
 	worldTransform_.TransferMatrix();
 
@@ -39,7 +39,7 @@ void Player::Draw(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
 
-void Player::PlayerMove() {
+void Player::Move() {
 
 	Vector3 move = MyMathUtility::MySetVector3Zero();
 	float moveSpeed = 0.3f;
@@ -62,7 +62,7 @@ void Player::PlayerMove() {
 	worldTransform_.translation_ += move;
 }
 
-void Player::PlayerMoveLimit() {
+void Player::MoveLimit() {
 	//à⁄ìÆå¿äEç¿ïW
 	const float kMoveLimitX = 30.0f;
 	const float kMoveLimitY = 18.0f;
