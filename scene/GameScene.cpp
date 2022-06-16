@@ -41,8 +41,29 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-
 	player_->Update();
+
+	#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_C) && !isDebugCameraActive_) {
+		isDebugCameraActive_ = true;
+	}
+	
+#endif // _DEBUG
+
+	if (isDebugCameraActive_) {
+		//デバッグカメラの更新
+		debugCamera_->Update();
+		//ビュープロジェクション行列をコピー
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		////ビュープロジェクション行列を転送
+		viewProjection_.TransferMatrix();
+	} else {
+		////ビュープロジェクション行列を再計算
+		viewProjection_.UpdateMatrix();
+		//ビュープロジェクション行列を転送
+		viewProjection_.TransferMatrix();
+	}
 	//デバック用表示
 	debugText_->SetPos(50, 50);
 	debugText_->Printf(

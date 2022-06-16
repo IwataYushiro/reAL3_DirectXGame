@@ -61,6 +61,8 @@ class GameScene {
 
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
+	//デバッグカメラ有効化
+	bool isDebugCameraActive_ = false;
 
 	/// <summary>
 	/// ゲームシーン用
