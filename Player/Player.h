@@ -18,7 +18,13 @@ class Player {
 
 	//更新
 	void Update();
-	
+
+	//プレイヤーの移動処理
+	void PlayerMove();
+
+	//移動処理制限
+	void PlayerMoveLimit();
+
 	//描画
 	void Draw(ViewProjection& viewProjection);
 

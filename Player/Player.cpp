@@ -21,7 +21,26 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 }
 
 void Player::Update() {
-	
+
+	//移動処理
+	PlayerMove();
+	//移動制限
+	PlayerMoveLimit();
+
+	worldTransform_.TransferMatrix();
+
+	debugText_->SetPos(50, 150);
+	debugText_->Printf(
+	  "move:(%f,%f,%f)", worldTransform_.translation_.x, worldTransform_.translation_.y,
+	  worldTransform_.translation_.z);
+}
+
+void Player::Draw(ViewProjection& viewProjection) {
+	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+}
+
+void Player::PlayerMove() {
+
 	Vector3 move = MyMathUtility::MySetVector3Zero();
 	float moveSpeed = 0.3f;
 
@@ -41,28 +60,19 @@ void Player::Update() {
 	}
 
 	worldTransform_.translation_ += move;
-	
+}
+
+void Player::PlayerMoveLimit() {
 	//移動限界座標
 	const float kMoveLimitX = 30.0f;
-	const float kMoveLimitY = 20.0f;
+	const float kMoveLimitY = 18.0f;
 	//範囲を超えない処理
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
 	worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
-	
+
 	//行列更新
 	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
 	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
-
-	worldTransform_.TransferMatrix();
-
-	debugText_->SetPos(50, 150);
-	debugText_->Printf(
-	  "move:(%f,%f,%f)", worldTransform_.translation_.x, worldTransform_.translation_.y,
-	  worldTransform_.translation_.z);
-}
-
-void Player::Draw(ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
