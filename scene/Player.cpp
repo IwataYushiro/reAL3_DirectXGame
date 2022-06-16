@@ -21,30 +21,16 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 }
 
 void Player::Update() {
-	Vector3 move = {0.0f, 0.0f, 0.0f};
-	float speed = 0.1f;
+	Vector3 move = MyMathUtility::MySetVector3Zero();
+	float moveSpeed = 0.3f;
 
-	Matrix4 matTrans = MathUtility::Matrix4Identity();
-
+	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
 	if (input_->PushKey(DIK_LEFT)) {
-		move.x -= speed;
-	} else if (input_->PushKey(DIK_RIGHT)) {
-		move.x += speed;
-	} else if (input_->PushKey(DIK_UP)) {
-		move.y += speed;
-	} else if (input_->PushKey(DIK_DOWN)) {
-		move.y -= speed;
+		move.x = moveSpeed;
 	}
-
-	worldTransform_.translation_.x += move.x;
-	worldTransform_.translation_.y += move.y;
-	worldTransform_.translation_.z += move.z;
-
-	matTrans = MathUtility::Matrix4Translation(
-	  worldTransform_.translation_.x, worldTransform_.translation_.y,
-	  worldTransform_.translation_.z);
-	worldTransform_.matWorld_ = MathUtility::Matrix4Identity();
-	worldTransform_.matWorld_.operator*=(matTrans);
+	matTrans = MyMathUtility::MyGenMatrix4Translation(worldTransform_.translation_);
+	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
+	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
 
 	worldTransform_.TransferMatrix();
 

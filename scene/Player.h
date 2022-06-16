@@ -2,6 +2,7 @@
 
 #include "DebugText.h"
 #include "Model.h"
+#include "MyMathUtility.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Input.h"
