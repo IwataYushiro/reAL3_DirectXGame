@@ -162,12 +162,6 @@ void GameScene::Draw() {
 		if (i == PartId::kSpine) continue;
 		model_->Draw(worldTransforms_[i], viewProjection_, textureHandle_);
 	}
-	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
-
-	for (int i = 0; i < 12; i++) {
-		PrimitiveDrawer::GetInstance()->DrawLine3d(
-		  cubeVertex_[edgeList_[i][0]], cubeVertex_[edgeList_[i][1]], color_);
-	}
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
