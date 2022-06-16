@@ -27,7 +27,7 @@ void GameScene::Initialize() {
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラの初期化
-	player_->Initialize(model_,textureHandle_);
+	player_->Initialize(model_, textureHandle_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -62,7 +62,6 @@ void GameScene::Update() {
 
 	debugText_->SetPos(50, 130);
 	debugText_->Printf("nearZ:%f", viewProjection_.nearZ);
-
 }
 
 void GameScene::Draw() {

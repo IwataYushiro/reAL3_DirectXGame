@@ -1,11 +1,11 @@
 #pragma once
 
 #include "DebugText.h"
+#include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
-#include "WorldTransform.h"
 #include "ViewProjection.h"
-#include "Input.h"
+#include "WorldTransform.h"
 #include <cassert>
 
 class Player {
