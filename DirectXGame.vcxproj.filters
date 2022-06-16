@@ -52,6 +52,12 @@
     <Filter Include="ソース ファイル\3D">
       <UniqueIdentifier>{ece54b9f-9042-458b-8dd9-3eb77b24fdd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Player">
+      <UniqueIdentifier>{8eb76b19-07c1-4956-8078-c4fa7b03a5cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Player">
+      <UniqueIdentifier>{aeb90401-b259-4121-86a5-42937e5f2b84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,8 +84,8 @@
     <ClCompile Include="3d\WorldTransform.cpp">
       <Filter>ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="scene\Player.cpp">
-      <Filter>ソース ファイル\scene</Filter>
+    <ClCompile Include="Player\Player.cpp">
+      <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,8 +173,8 @@
     <ClInclude Include="math\MyMathUtility.h">
       <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
-    <ClInclude Include="scene\Player.h">
-      <Filter>ヘッダー ファイル\scene</Filter>
+    <ClInclude Include="Player\Player.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
