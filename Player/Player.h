@@ -22,6 +22,9 @@ class Player {
 	//プレイヤーの移動処理
 	void Move();
 
+	//プレイヤーの旋回処理
+	void Rotate();
+	
 	//移動処理制限
 	void MoveLimit();
 

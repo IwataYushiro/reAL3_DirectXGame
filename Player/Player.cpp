@@ -24,6 +24,8 @@ void Player::Update() {
 
 	//ˆÚ“®ˆ—
 	Move();
+	//ù‰ñˆ—
+	Rotate();
 	//ˆÚ“®§ŒÀ
 	MoveLimit();
 
@@ -31,7 +33,7 @@ void Player::Update() {
 
 	debugText_->SetPos(50, 150);
 	debugText_->Printf(
-	  "move:(%f,%f,%f)", worldTransform_.translation_.x, worldTransform_.translation_.y,
+	  "move:( %f , %f , %f)", worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z);
 }
 
@@ -62,6 +64,20 @@ void Player::Move() {
 	worldTransform_.translation_ += move;
 }
 
+void Player::Rotate() {
+
+	Vector3 angle = MyMathUtility::MySetVector3Zero();
+	float angleSpeed = 0.1f;
+
+	if (input_->PushKey(DIK_A)) {
+		angle.y -= angleSpeed;
+	}
+	if (input_->PushKey(DIK_D)) {
+		angle.y += angleSpeed;
+	}
+
+	worldTransform_.rotation_ += angle;
+}
 void Player::MoveLimit() {
 	//ˆÚ“®ŒÀŠEÀ•W
 	const float kMoveLimitX = 30.0f;

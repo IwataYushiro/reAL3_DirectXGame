@@ -21,7 +21,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
 	//ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("02-01/mario.jpg");
+	textureHandle_ = TextureManager::Load("texture/player.png");
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//自キャラの生成
