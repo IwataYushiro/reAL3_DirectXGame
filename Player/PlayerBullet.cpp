@@ -1,6 +1,14 @@
 #include "PlayerBullet.h"
 
-
 PlayerBullet::PlayerBullet() {}
 
 PlayerBullet::~PlayerBullet() {}
+
+//èâä˙âª
+void PlayerBullet::Initialize(Model* model, const Vector3& position) {}
+
+//çXêV
+void PlayerBullet::Update() {}
+
+//ï`âÊ
+void PlayerBullet::Draw(const ViewProjection& viewProjection) {}
