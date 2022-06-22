@@ -60,5 +60,5 @@ struct WorldTransform {
 	/// </summary>
 	void TransferMatrix();
 	//プレイヤー操作
-	void PlayerUpdate(WorldTransform worldTransform[], size_t pointNum);
+	void PlayerUpdate(WorldTransform worldTransform);
 };
