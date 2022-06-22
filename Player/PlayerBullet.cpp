@@ -11,7 +11,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 
 	model_ = model;
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("texture/player.png");
+	textureHandle_ = TextureManager::Load("texture/playerbullet.png");
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット

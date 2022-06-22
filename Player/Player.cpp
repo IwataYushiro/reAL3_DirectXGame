@@ -26,6 +26,14 @@ void Player::Update() {
 	Move();
 	//ù‰ñˆ—
 	Rotate();
+	//UŒ‚ˆ—
+	Attack(); 
+	
+	//’eXV
+	if (bullet_) {
+		bullet_->Update();
+	}
+
 	//ˆÚ“®§ŒÀ
 	MoveLimit();
 
@@ -39,6 +47,11 @@ void Player::Update() {
 
 void Player::Draw(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+
+	//’e•`‰æ
+	if (bullet_) {
+		bullet_->Draw(viewProjection);
+	}
 }
 
 //ˆÚ“®ˆ—
