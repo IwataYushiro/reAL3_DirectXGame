@@ -8,6 +8,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <cassert>
+#include <memory>
 
 class Player {
   public:
@@ -37,7 +38,7 @@ class Player {
 
   private:
 	//弾
-	PlayerBullet* bullet_ = nullptr;  
+	std::unique_ptr<PlayerBullet> bullet_;  
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル

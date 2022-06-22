@@ -99,12 +99,15 @@ void Player::Attack() {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
 
+		//Ž©ƒLƒƒƒ‰‚ÌÀ•W‚ðƒRƒs[
+		Vector3 position = worldTransform_.translation_;
+
 		//’e‚ð¶¬‚µ‰Šú‰»
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTransform_.translation_);
+		newBullet->Initialize(model_, position);
 
 		//’e‚ð“o˜^
-		bullet_ = newBullet;
+		bullet_.reset(newBullet);
 	}
 }
 
