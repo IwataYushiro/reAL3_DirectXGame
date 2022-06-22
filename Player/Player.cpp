@@ -41,6 +41,7 @@ void Player::Draw(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
 
+//ˆÚ“®ˆ—
 void Player::Move() {
 
 	Vector3 move = MyMathUtility::MySetVector3Zero();
@@ -64,6 +65,7 @@ void Player::Move() {
 	worldTransform_.translation_ += move;
 }
 
+//ù‰ñˆ—
 void Player::Rotate() {
 
 	Vector3 angle = MyMathUtility::MySetVector3Zero();
@@ -78,6 +80,21 @@ void Player::Rotate() {
 
 	worldTransform_.rotation_ += angle;
 }
+
+//UŒ‚ˆ—
+void Player::Attack() {
+
+	if (input_->TriggerKey(DIK_SPACE)) {
+
+		//’e‚ğ¶¬‚µ‰Šú‰»
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_);
+
+		//’e‚ğ“o˜^
+		bullet_ = newBullet;
+	}
+}
+
 void Player::MoveLimit() {
 	//ˆÚ“®ŒÀŠEÀ•W
 	const float kMoveLimitX = 30.0f;

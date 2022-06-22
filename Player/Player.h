@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
+#include "PlayerBullet.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <cassert>
@@ -25,6 +26,9 @@ class Player {
 	//プレイヤーの旋回処理
 	void Rotate();
 	
+	//プレイヤーの攻撃処理
+	void Attack();
+
 	//移動処理制限
 	void MoveLimit();
 
@@ -32,6 +36,8 @@ class Player {
 	void Draw(ViewProjection& viewProjection);
 
   private:
+	//弾
+	PlayerBullet* bullet_ = nullptr;  
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
