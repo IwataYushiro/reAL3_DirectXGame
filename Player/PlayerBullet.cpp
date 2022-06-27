@@ -5,7 +5,7 @@ PlayerBullet::PlayerBullet() {}
 PlayerBullet::~PlayerBullet() {}
 
 //初期化
-void PlayerBullet::Initialize(Model* model, const Vector3& position) {
+void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 	// NULLポインタチェック
 	assert(model);
 
@@ -16,10 +16,12 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position) {
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
+	velocity_ = velocity;
 }
 
 //更新
 void PlayerBullet::Update() { 
+	worldTransform_.translation_ += velocity_;
 	worldTransform_.PlayerUpdate(worldTransform_); 
 }
 

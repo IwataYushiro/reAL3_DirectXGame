@@ -98,13 +98,16 @@ void Player::Rotate() {
 void Player::Attack() {
 
 	if (input_->TriggerKey(DIK_SPACE)) {
+		//弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity(0, 0, kBulletSpeed);
 
 		//自キャラの座標をコピー
 		Vector3 position = worldTransform_.translation_;
 
 		//弾を生成し初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(model_, position);
+		newBullet->Initialize(model_, position, velocity);
 
 		//弾を登録
 		bullets_.push_back(std::move(newBullet));
