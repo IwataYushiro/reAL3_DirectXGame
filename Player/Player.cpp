@@ -21,6 +21,10 @@ void Player::Initialize(Model* model, uint32_t textureHandle) {
 }
 
 void Player::Update() {
+	//€–Sƒtƒ‰ƒO‚Ì—§‚Á‚½’e‚ğíœ
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		return bullet->IsDead(); 
+		});
 
 	//ˆÚ“®ˆ—
 	Move();

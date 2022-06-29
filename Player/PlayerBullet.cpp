@@ -20,16 +20,17 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 }
 
 //更新
-void PlayerBullet::Update() { 
+void PlayerBullet::Update() {
 	//座標を移動させる
 	worldTransform_.translation_ += velocity_;
 	//行列更新
-	worldTransform_.PlayerUpdate(worldTransform_); 
+	worldTransform_.PlayerUpdate(worldTransform_);
 
 	//時間経過で死亡
-	if (--deathTimer_<=0) {
+	if (--deathTimer_ <= 0) {
 		isDead_ = true;
 	}
+
 }
 
 //描画
