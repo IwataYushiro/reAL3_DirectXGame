@@ -6,7 +6,7 @@ Enemy::Enemy() {}
 Enemy::~Enemy() {}
 
 // 初期化
-  void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+  void Enemy::Initialize(Model* model,const Vector3& velocity) {
 	// NULLポインタチェック
 	assert(model);
 
@@ -16,7 +16,7 @@ Enemy::~Enemy() {}
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
-	worldTransform_.translation_ = position;
+	worldTransform_.Initialize();
 	velocity_ = velocity;
 }
 

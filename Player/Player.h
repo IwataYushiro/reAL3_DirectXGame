@@ -17,7 +17,7 @@ class Player {
 	~Player();
 
 	//‰Šú‰»
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Model* model);
 
 	//XV
 	void Update();

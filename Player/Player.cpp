@@ -4,13 +4,15 @@ Player::Player() {}
 
 Player::~Player() {}
 
-void Player::Initialize(Model* model, uint32_t textureHandle) {
+void Player::Initialize(Model* model) {
 	// NULLポインタチェック
 	assert(model);
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
-	textureHandle_ = textureHandle;
+	
+	//ファイル名を指定してテクスチャを読み込む
+	textureHandle_ = TextureManager::Load("texture/player.png");
 
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();

@@ -12,6 +12,8 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	//自キャラの解放
 	delete player_;
+	//敵キャラの解放
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -20,14 +22,18 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
-	//ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("texture/player.png");
+	
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//自キャラの生成
 	player_ = new Player();
+	//敵キャラの生成
+	enemy_ = new Enemy();
+
 	//自キャラの初期化
-	player_->Initialize(model_, textureHandle_);
+	player_->Initialize(model_);
+	//敵キャラの初期化
+	enemy_->Initialize(model_, enemy_->GetVelocity());
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
@@ -41,8 +47,10 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	//自キャラの更新処理
 	player_->Update();
-
+	//敵キャラの更新処理
+	enemy_->Update();
 	#ifdef _DEBUG
 	if (input_->TriggerKey(DIK_C) && !isDebugCameraActive_) {
 		isDebugCameraActive_ = true;
@@ -114,6 +122,8 @@ void GameScene::Draw() {
 	/// </summary>
 	// 3Dモデル描画
 	player_->Draw(viewProjection_);
+
+	enemy_->Draw(viewProjection_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion

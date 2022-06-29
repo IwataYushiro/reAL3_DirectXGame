@@ -4,6 +4,7 @@
 #include "DebugCamera.h"
 #include "DebugText.h"
 #include "DirectXCommon.h"
+#include "Enemy.h"
 #include "Input.h"
 #include "Model.h"
 #include "Player.h"
@@ -58,7 +59,8 @@ class GameScene {
 	float viewAngle = 0.0f;
 	//自キャラ
 	Player* player_ = nullptr;
-
+	//敵キャラ
+	Enemy* enemy_ = nullptr;
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 	//デバッグカメラ有効化
