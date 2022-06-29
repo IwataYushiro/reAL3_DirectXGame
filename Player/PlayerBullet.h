@@ -27,4 +27,11 @@ class PlayerBullet {
 	uint32_t textureHandle_ = 0u;
 	//‘¬“x
 	Vector3 velocity_;
+	//Žõ–½<frm>
+	static const int32_t kLifeTime = 60 * 5;
+	//Ž€–SŽžŠÔ
+	int32_t deathTimer_ = kLifeTime;
+	//Ž€–Sƒtƒ‰ƒO
+	bool isDead_ = false;
+
 };

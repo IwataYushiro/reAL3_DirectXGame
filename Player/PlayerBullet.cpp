@@ -25,6 +25,11 @@ void PlayerBullet::Update() {
 	worldTransform_.translation_ += velocity_;
 	//行列更新
 	worldTransform_.PlayerUpdate(worldTransform_); 
+
+	//時間経過で死亡
+	if (--deathTimer_<=0) {
+		isDead_ = true;
+	}
 }
 
 //描画
