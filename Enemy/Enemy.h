@@ -29,7 +29,7 @@ class Enemy {
 	uint32_t textureHandle_ = 0u;
 
 	//速度
-	Vector3 velocity_;
+	Vector3 velocity_ = {0.1f,0.1f,0.0f};
 
 	public: //アクセッサ、インライン関数
 	

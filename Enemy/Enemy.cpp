@@ -16,7 +16,7 @@ Enemy::~Enemy() {}
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
-	worldTransform_.Initialize();
+	worldTransform_.translation_ = {15.0f, 15.0f, 0.0f};
 	velocity_ = velocity;
 }
 
