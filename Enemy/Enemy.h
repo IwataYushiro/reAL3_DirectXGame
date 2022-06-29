@@ -27,6 +27,9 @@ class Enemy {
 	Model* model_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+	//速度
+	Vector3 velocity_;
+
 };
 
 Enemy::Enemy() {}
