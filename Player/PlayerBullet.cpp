@@ -21,7 +21,9 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 
 //更新
 void PlayerBullet::Update() { 
+	//座標を移動させる
 	worldTransform_.translation_ += velocity_;
+	//行列更新
 	worldTransform_.PlayerUpdate(worldTransform_); 
 }
 

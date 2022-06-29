@@ -102,6 +102,7 @@ void Player::Attack() {
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
 
+		velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
 		//自キャラの座標をコピー
 		Vector3 position = worldTransform_.translation_;
 

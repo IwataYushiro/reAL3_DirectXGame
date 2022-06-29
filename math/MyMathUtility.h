@@ -80,7 +80,7 @@ Vector3 MyVector3Transform(const Vector3& v, const Matrix4& m);
 // 座標変換（w除算あり）
 Vector3 MyVector3TransformCoord(const Vector3& v, const Matrix4& m);
 // ベクトル変換
-Vector3 MyVector3TransformNormal(const Vector3& v, const Matrix4& m);
+Vector3 MyVector3TransformNormal(Vector3 vector, Matrix4 matrix);
 
 // 2項演算子オーバーロード
 Matrix4 operator*(const Matrix4& m1, const Matrix4& m2);

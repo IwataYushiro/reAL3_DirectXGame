@@ -209,3 +209,21 @@ float MyMathUtility::MyChanProfectionNearClipZ(Input* key, float nearZ) {
 
 	return nearZ;
 }
+
+// ƒxƒNƒgƒ‹•ÏŠ·
+Vector3 MyMathUtility::MyVector3TransformNormal(Vector3 vector,Matrix4 matrix) {
+
+	Matrix4 matVec = MyMathUtility::MySetMatrix4Identity();
+	matVec.m[0][0] = vector.x;
+	matVec.m[0][1] = vector.y;
+	matVec.m[0][2] = vector.z;
+	matVec.m[0][3] = 0.0f;
+
+	matVec *= matrix;
+	
+	vector.x = matVec.m[0][0];
+	vector.y = matVec.m[0][1];
+	vector.z = matVec.m[0][2];
+
+	return vector;
+}
