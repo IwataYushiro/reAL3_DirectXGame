@@ -25,7 +25,7 @@ void Enemy::Update() {
 	//座標を移動させる
 	worldTransform_.translation_ -= velocity_;
 	//行列更新
-	worldTransform_.PlayerUpdate(worldTransform_);
+	worldTransform_.Update(worldTransform_);
 
 }
 
