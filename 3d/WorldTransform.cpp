@@ -1,7 +1,7 @@
 #include "WorldTransform.h"
 #include "MyMathUtility.h"
 
-void WorldTransform::PlayerUpdate(WorldTransform worldTransform) {
+void WorldTransform::Update(WorldTransform worldTransform) {
 	worldTransform.matWorld_ =
 	  MyMathUtility::MySynMatrix4WorldTransform(worldTransform);
 	

@@ -59,6 +59,7 @@ struct WorldTransform {
 	/// 行列を転送する
 	/// </summary>
 	void TransferMatrix();
-	//プレイヤー操作
-	void PlayerUpdate(WorldTransform worldTransform);
+
+	//1frameにおける更新処理
+	void Update(WorldTransform worldTransform);
 };
