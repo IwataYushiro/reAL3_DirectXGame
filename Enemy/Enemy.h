@@ -11,7 +11,7 @@ class Enemy {
 	~Enemy();
 
 	//初期化
-	void Initialize(Model* model, const Vector3& velocity);
+	void Initialize(Model* model);
 
 	//更新
 	void Update();
@@ -28,10 +28,4 @@ class Enemy {
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
-	//速度
-	Vector3 velocity_ = {0.1f,0.1f,0.0f};
-
-	public: //アクセッサ、インライン関数
-	
-	Vector3	GetVelocity() { return velocity_; }
 };

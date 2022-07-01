@@ -33,7 +33,7 @@ void GameScene::Initialize() {
 	//自キャラの初期化
 	player_->Initialize(model_);
 	//敵キャラの初期化
-	enemy_->Initialize(model_, enemy_->GetVelocity());
+	enemy_->Initialize(model_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//デバッグカメラの生成
