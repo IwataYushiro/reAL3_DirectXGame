@@ -4,7 +4,6 @@
 #include <cassert>
 
 //敵
-
 class Enemy {
   public:
 	Enemy();
@@ -20,12 +19,19 @@ class Enemy {
 	void Draw(const ViewProjection& viewProjection);
 
   private:
-
-	  //ワールド変換データ
+	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 
+	//行動フェーズ
+	enum class Phase {
+		Approach, //接近
+		Leave,    //離脱
+	};
+
+	//フェーズ
+	Phase phase_ = Phase::Approach;
 };
