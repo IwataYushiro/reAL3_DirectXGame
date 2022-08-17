@@ -18,6 +18,12 @@ class Enemy {
 	//描画
 	void Draw(const ViewProjection& viewProjection);
 
+	//状態変化用の更新関数
+	//接近
+	void UpdateApproach();
+	//離脱
+	void UpdateLeave();
+
   private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
