@@ -1,7 +1,11 @@
 #pragma once
+#include "EnemyBullet.h"
 #include "Model.h"
+#include "MyMathUtility.h"
 #include "WorldTransform.h"
 #include <cassert>
+#include <list>
+#include <memory>
 
 //敵
 class Enemy {
@@ -14,6 +18,8 @@ class Enemy {
 
 	//更新
 	void Update();
+	//弾発射
+	void Fire();
 
 	//描画
 	void Draw(const ViewProjection& viewProjection);
@@ -27,6 +33,8 @@ class Enemy {
   private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
+	//弾
+	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル

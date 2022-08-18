@@ -25,32 +25,64 @@ void Enemy::Update() {
 	case Enemy::Phase::Approach:
 
 		UpdateApproach();
+		
 		break;
 
 	case Enemy::Phase::Leave:
 		UpdateLeave();
 		break;
 	}
+	//攻撃
+	Fire();
+
+	//弾更新
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+		bullet->Update();
+	}
 
 	//行列更新
 	worldTransform_.Update(worldTransform_);
+}
+
+//弾発射
+void Enemy::Fire() {
+	//弾の速度
+	const float kBulletSpeed = -1.0f;
+	Vector3 velocity(0, 0.1f, kBulletSpeed);
+
+	//ベクトルと行列で掛け算
+	velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
+	//自キャラの座標をコピー
+	Vector3 position = worldTransform_.translation_;
+
+	//弾を生成し初期化
+	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
+	newBullet->Initialize(model_, position, velocity);
+
+	//弾を登録
+	enemyBullets_.push_back(std::move(newBullet));
 }
 
 //描画
 void Enemy::Draw(const ViewProjection& viewProjection) {
 	//モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+
+	//弾描画
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+		bullet->Draw(viewProjection);
+	}
 }
 
 //状態変化用の更新関数
 //接近
 void Enemy::UpdateApproach() {
 	//速度
-	Vector3 velocity_;
+	Vector3 velocity;
 
 	//移動
-	velocity_ = {0.0f, 0.0f, -0.1f};
-	worldTransform_.translation_ += velocity_;
+	velocity = {0.0f, 0.0f, -0.1f};
+	worldTransform_.translation_ += velocity;
 
 	//指定の位置に到達したら離脱
 	if (worldTransform_.translation_.z < 0.0f) {
@@ -61,9 +93,9 @@ void Enemy::UpdateApproach() {
 //離脱
 void Enemy::UpdateLeave() {
 	//速度
-	Vector3 velocity_;
+	Vector3 velocity;
 
 	//移動
-	velocity_ = {0.1f, 0.1f, 0.0f};
-	worldTransform_.translation_ += velocity_;
+	velocity = {0.1f, 0.1f, 0.0f};
+	worldTransform_.translation_ += velocity;
 }

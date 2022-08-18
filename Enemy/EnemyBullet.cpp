@@ -23,6 +23,11 @@ void EnemyBullet::Update() {
 	worldTransform_.translation_ += velocity_;
 	//ワールド行列更新
 	worldTransform_.Update(worldTransform_);
+
+	//時間経過で死亡
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
 }
 
 //描画
