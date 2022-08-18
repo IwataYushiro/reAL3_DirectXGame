@@ -1,7 +1,7 @@
 #include "EnemyBullet.h"
 
 //初期化
-void EnemyBullet::Initialize(Model* model, const Vector3& position) {
+void EnemyBullet::Initialize(Model* model, const Vector3& position,const Vector3& velocity) {
 
 	//NULLポインタチェック
 	assert(model);
@@ -14,11 +14,13 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position) {
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
 	worldTransform_.translation_ = position;
+	velocity_ = velocity;
 }
 
 //更新
 void EnemyBullet::Update() {
-
+	//座標移動
+	worldTransform_.translation_ += velocity_;
 	//ワールド行列更新
 	worldTransform_.Update(worldTransform_);
 }
