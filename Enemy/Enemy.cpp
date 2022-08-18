@@ -1,9 +1,4 @@
 #include "Enemy.h"
-
-Enemy::Enemy() {}
-
-Enemy::~Enemy() {}
-
 // 初期化
 void Enemy::Initialize(Model* model) {
 	// NULLポインタチェック
@@ -16,6 +11,16 @@ void Enemy::Initialize(Model* model) {
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
 	worldTransform_.translation_ = {1.0f, 1.0f, 30.0f};
+
+	//初期フェーズ
+	phase_ = Phase::Approach;
+	//接近フェーズ初期化
+	InitializeApproach();
+}
+// 接近フェーズ初期化
+void Enemy::InitializeApproach() {
+	//発射タイマー初期化
+	fireTimer = kFireInterval;
 }
 
 //更新
@@ -25,16 +30,12 @@ void Enemy::Update() {
 	case Enemy::Phase::Approach:
 
 		UpdateApproach();
-		
 		break;
 
 	case Enemy::Phase::Leave:
 		UpdateLeave();
 		break;
 	}
-	//攻撃
-	Fire();
-
 	//弾更新
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		bullet->Update();
@@ -83,6 +84,16 @@ void Enemy::UpdateApproach() {
 	//移動
 	velocity = {0.0f, 0.0f, -0.1f};
 	worldTransform_.translation_ += velocity;
+
+	//発射タイマーカウントダウン
+	fireTimer--;
+	//指定時間に達した
+	if (fireTimer <= 0) {
+		//弾発射
+		Fire();
+		//発射タイマー初期化
+		fireTimer = kFireInterval;
+	}
 
 	//指定の位置に到達したら離脱
 	if (worldTransform_.translation_.z < 0.0f) {

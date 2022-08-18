@@ -10,12 +10,12 @@
 //敵
 class Enemy {
   public:
-	Enemy();
-	~Enemy();
-
+	  //弾発射間隔
+	static const int kFireInterval = 60;
 	//初期化
 	void Initialize(Model* model);
-
+	//接近フェーズ初期化
+	void InitializeApproach();
 	//更新
 	void Update();
 	//弾発射
@@ -47,5 +47,7 @@ class Enemy {
 	};
 
 	//フェーズ
-	Phase phase_ = Phase::Approach;
+	Phase phase_;
+	//弾発射タイマー
+	int32_t fireTimer = 0;
 };
