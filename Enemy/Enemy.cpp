@@ -110,3 +110,17 @@ void Enemy::UpdateLeave() {
 	velocity = {0.1f, 0.1f, 0.0f};
 	worldTransform_.translation_ += velocity;
 }
+
+//ワールド座標を取得
+Vector3 Enemy::GetWorldPosition() {
+
+	//ワールド座標を取得
+	Vector3 worldPos;
+
+	//ワールド行列の平行移動成分を取得
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}

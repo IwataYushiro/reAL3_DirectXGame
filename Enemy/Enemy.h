@@ -22,7 +22,8 @@ class Enemy {
 	void Update();
 	//’e”­Ë
 	void Fire();
-
+	//ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	Vector3 GetWorldPosition();
 	//•`‰æ
 	void Draw(const ViewProjection& viewProjection);
 

@@ -137,3 +137,17 @@ void Player::MoveLimit() {
 	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
 	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
 }
+
+//ワールド座標を取得
+Vector3 Player::GetWorldPosition() {
+
+	//ワールド座標を取得
+	Vector3 worldPos;
+
+	//ワールド行列の平行移動成分を取得
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}

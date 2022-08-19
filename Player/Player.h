@@ -34,6 +34,9 @@ class Player {
 	//ˆÚ“®ˆ—§ŒÀ
 	void MoveLimit();
 
+	//ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	Vector3 GetWorldPosition();
+	
 	//•`‰æ
 	void Draw(ViewProjection& viewProjection);
 
