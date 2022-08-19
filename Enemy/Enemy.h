@@ -6,6 +6,8 @@
 #include <cassert>
 #include <list>
 #include <memory>
+//自機クラスの前方宣言
+class Player;
 
 //敵
 class Enemy {
@@ -30,7 +32,11 @@ class Enemy {
 	//離脱
 	void UpdateLeave();
 
+	
   private:
+	  //自機
+	Player* player_ = nullptr;
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//弾
@@ -50,4 +56,8 @@ class Enemy {
 	Phase phase_;
 	//弾発射タイマー
 	int32_t fireTimer = 0;
+
+	public:
+	void SetPlayer(Player* player) { player_ = player; }
+
 };

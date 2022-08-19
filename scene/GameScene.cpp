@@ -36,6 +36,8 @@ void GameScene::Initialize() {
 	enemy_->Initialize(model_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+	//敵に自機のアドレスを渡す
+	enemy_->SetPlayer(player_);
 	//デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1260, 720);
 	//軸方向表示の表示を有効にする
