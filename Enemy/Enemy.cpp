@@ -51,14 +51,25 @@ void Enemy::Fire() {
 	const float kBulletSpeed = -1.0f;
 	Vector3 velocity(0, 0.1f, kBulletSpeed);
 
-	//ベクトルと行列で掛け算
-	velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
-	//自キャラの座標をコピー
-	Vector3 position = worldTransform_.translation_;
+	//自機のワールド座標を取得
+	SetPlayer(player_);
+	
+	//敵のワールド座標を取得
+	GetWorldPosition();
+	//敵→自機の差分ベクトルを求める
+	
+	// ベクトルの正規化
+	MyMathUtility::MyVector3Normalize();
+	// ベクトルの長さを速さに合わせる
+	
+	////ベクトルと行列で掛け算
+	//velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
+	////敵キャラの座標をコピー
+	//Vector3 position = worldTransform_.translation_;
 
 	//弾を生成し初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-	newBullet->Initialize(model_, position, velocity);
+	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 	//弾を登録
 	enemyBullets_.push_back(std::move(newBullet));
