@@ -53,7 +53,7 @@ void Enemy::Fire() {
 
 	//ベクトルと行列で掛け算
 	velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
-	//自キャラの座標をコピー
+	//敵キャラの座標をコピー
 	Vector3 position = worldTransform_.translation_;
 
 	//弾を生成し初期化
