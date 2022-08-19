@@ -35,9 +35,7 @@ class Enemy {
 
 	
   private:
-	  //自機
-	Player* player_ = nullptr;
-
+	 
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//弾
@@ -57,6 +55,9 @@ class Enemy {
 	Phase phase_;
 	//弾発射タイマー
 	int32_t fireTimer = 0;
+
+ //自機
+	Player* player_ = nullptr;
 
 	public:
 	void SetPlayer(Player* player) { player_ = player; }

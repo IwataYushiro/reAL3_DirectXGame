@@ -7,6 +7,23 @@ const Vector3 MyMathUtility::MySetVector3Zero() {
 
 	return v;
 }
+
+// ƒmƒ‹ƒ€(’·‚³)‚ğ‹‚ß‚é
+float MyMathUtility::MyVector3Length(const Vector3& v)
+{
+	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+//³‹K‰»‚·‚é
+Vector3& MyMathUtility::MyVector3Normalize(Vector3& v) 
+{ 
+	float len = MyVector3Length(v);
+	if (len!=0) 
+	{
+		return v /= len;
+	}
+
+	return v;
+}
 //“x‚ğ‹‚ß‚é
 float MyMathUtility::GetDegree(float r) {
 	r = (r * 180.0f) / MyMathUtility::PI;

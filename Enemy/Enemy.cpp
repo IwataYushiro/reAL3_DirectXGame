@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Player.h"
 // 初期化
 void Enemy::Initialize(Model* model) {
 	// NULLポインタチェック
@@ -47,19 +48,21 @@ void Enemy::Update() {
 
 //弾発射
 void Enemy::Fire() {
+
+	assert(player_);
+
 	//弾の速度
 	const float kBulletSpeed = -1.0f;
 	Vector3 velocity(0, 0.1f, kBulletSpeed);
 
 	//自機のワールド座標を取得
-	SetPlayer(player_);
-	
+	player_->GetWorldPosition();
 	//敵のワールド座標を取得
 	GetWorldPosition();
 	//敵→自機の差分ベクトルを求める
-	
+	velocity = GetWorldPosition() -= player_->GetWorldPosition();
 	// ベクトルの正規化
-	MyMathUtility::MyVector3Normalize();
+	MyMathUtility::MyVector3Normalize(velocity);
 	// ベクトルの長さを速さに合わせる
 	
 	////ベクトルと行列で掛け算
