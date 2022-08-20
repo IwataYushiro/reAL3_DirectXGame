@@ -46,9 +46,9 @@ class GameScene {
 	/// </summary>
 	void Draw();
 
-  /// <summary>
-  /// 衝突判定と応答
-  /// </summary>
+	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
 	void ChackAllCollisions();
 
   private: // メンバ変数
@@ -69,8 +69,8 @@ class GameScene {
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
 	//天球データ
-	std::unique_ptr<Skydome> skydome_;
-	Model* modelskydome_ = nullptr;
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;

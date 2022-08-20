@@ -15,7 +15,8 @@ GameScene::~GameScene() {
 	//敵キャラの解放
 	delete enemy_;
 	//天球データ解放
-	delete modelskydome_;
+	delete skydome_;
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -27,17 +28,20 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
-	modelskydome_ = Model::CreateFromOBJ("skydome", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	//自キャラの生成
 	player_ = new Player();
 	//敵キャラの生成
 	enemy_ = new Enemy();
 	//天球データ生成
-	skydome_->Initialize(modelskydome_);
+	skydome_ = new Skydome();
+	
 	//自キャラの初期化
 	player_->Initialize(model_);
 	//敵キャラの初期化
 	enemy_->Initialize(model_);
+	//天球データ初期化
+	skydome_->Initialize(modelSkydome_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	//敵に自機のアドレスを渡す
