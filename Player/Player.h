@@ -40,6 +40,8 @@ class Player {
 	//描画
 	void Draw(ViewProjection& viewProjection);
 
+	//衝突を検出したら呼び出されるコールバック関数
+	void OnCollision();
   private:
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;

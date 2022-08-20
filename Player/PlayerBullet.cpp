@@ -38,3 +38,6 @@ void PlayerBullet::Draw(const ViewProjection& viewProjection) {
 	//モデルの描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
+
+//衝突を検出したら呼び出されるコールバック関数
+void PlayerBullet::OnCollision() { isDead_ = true; }
