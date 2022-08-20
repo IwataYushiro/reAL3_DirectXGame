@@ -9,10 +9,12 @@
 #include "Model.h"
 #include "Player.h"
 #include "SafeDelete.h"
+#include "Skydome/Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "math/MyMathUtility.h"
+#include <memory>
 
 /// <summary>
 /// ゲームシーン
@@ -66,6 +68,10 @@ class GameScene {
 	Player* player_ = nullptr;
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
+	//天球データ
+	std::unique_ptr<Skydome> skydome_;
+	Model* modelskydome_ = nullptr;
+
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 	//デバッグカメラ有効化
