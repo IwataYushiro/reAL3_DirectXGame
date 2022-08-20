@@ -22,7 +22,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
-	
+
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//自キャラの生成
@@ -53,11 +53,13 @@ void GameScene::Update() {
 	player_->Update();
 	//敵キャラの更新処理
 	enemy_->Update();
-	#ifdef _DEBUG
+	//当たり判定
+	ChackAllCollisions();
+#ifdef _DEBUG
 	if (input_->TriggerKey(DIK_C) && !isDebugCameraActive_) {
 		isDebugCameraActive_ = true;
 	}
-	
+
 #endif // _DEBUG
 
 	if (isDebugCameraActive_) {
@@ -143,6 +145,58 @@ void GameScene::Draw() {
 	//
 	// スプライト描画後処理
 	Sprite::PostDraw();
+
+#pragma endregion
+}
+
+//衝突判定と応答
+void GameScene::ChackAllCollisions() {
+
+	//判定対象A,Bの座標
+	Vector3 posA, posB;
+	// A,Bの座標の距離用
+	Vector3 posAB;
+	//判定対象A,Bの半径
+	float radiusA = 1.0f;
+	float radiusB = 1.0f;
+	float radiiusAB;
+
+	//自機弾リストを取得
+	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
+
+	//敵弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetEnemyBullets();
+
+#pragma region 自機と敵弾の当たり判定
+	//自機の座標
+	posA = player_->GetWorldPosition();
+
+	//自機と全ての敵弾の当たり判定
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
+		//敵弾の座標
+		posB = bullet->GetWorldPosition();
+		//座標A,Bの距離を求める
+		posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
+		posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
+		posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
+		radiiusAB = (radiusA + radiusB) * (radiusA + radiusB);
+
+		//球と球の交差判定
+		if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
+			//自キャラの衝突時コールバック関数を呼び出す
+			player_->OnCollision();
+			//敵弾の衝突時コールバック関数を呼び出す
+			bullet->OnCollision();
+		}
+	}
+
+#pragma endregion
+
+#pragma region 自弾と敵の当たり判定
+
+#pragma endregion
+
+#pragma region 自弾のと敵弾の当たり判定
 
 #pragma endregion
 }

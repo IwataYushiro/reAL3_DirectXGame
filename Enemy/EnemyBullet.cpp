@@ -38,3 +38,17 @@ void EnemyBullet::Draw(const ViewProjection& viewProjection) {
 
 //衝突を検出したら呼び出されるコールバック関数
 void EnemyBullet::OnCollision() { isDead_ = true; }
+
+//ワールド座標を取得
+Vector3 EnemyBullet::GetWorldPosition() {
+
+	//ワールド座標を取得
+	Vector3 worldPos;
+
+	//ワールド行列の平行移動成分を取得
+	worldPos.x = worldTransform_.translation_.x;
+	worldPos.y = worldTransform_.translation_.y;
+	worldPos.z = worldTransform_.translation_.z;
+
+	return worldPos;
+}

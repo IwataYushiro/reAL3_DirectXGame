@@ -11,7 +11,7 @@ void Enemy::Initialize(Model* model) {
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
-	worldTransform_.translation_ = {1.0f, 1.0f, 30.0f};
+	worldTransform_.translation_ = {1.0f, 1.0f, 80.0f};
 
 	//初期フェーズ
 	phase_ = Phase::Approach;
@@ -115,7 +115,7 @@ void Enemy::UpdateApproach() {
 	}
 
 	//指定の位置に到達したら離脱
-	if (worldTransform_.translation_.z < 0.0f) {
+	if (worldTransform_.translation_.z < -5.0f) {
 		phase_ = Phase::Leave;
 	}
 }
