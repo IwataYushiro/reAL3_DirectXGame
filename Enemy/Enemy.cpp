@@ -53,18 +53,19 @@ void Enemy::Fire() {
 
 	//弾の速度
 	const float kBulletSpeed = -1.0f;
-	Vector3 velocity(0, 0.1f, kBulletSpeed);
+	Vector3 velocity;
 
 	//自機のワールド座標を取得
 	player_->GetWorldPosition();
 	//敵のワールド座標を取得
 	GetWorldPosition();
 	//敵→自機の差分ベクトルを求める
-	velocity = GetWorldPosition() -= player_->GetWorldPosition();
+	velocity = player_->GetWorldPosition() -= GetWorldPosition();
 	// ベクトルの正規化
 	MyMathUtility::MyVector3Normalize(velocity);
 	// ベクトルの長さを速さに合わせる
-	
+	velocity.z=kBulletSpeed;
+
 	////ベクトルと行列で掛け算
 	//velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
 	////敵キャラの座標をコピー
