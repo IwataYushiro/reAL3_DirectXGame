@@ -25,6 +25,9 @@ void Enemy::InitializeApproach() {
 
 //更新
 void Enemy::Update() {
+	//死亡フラグの立った弾を削除
+	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
+
 	//座標を移動させる
 	switch (phase_) {
 	case Enemy::Phase::Approach:
@@ -48,7 +51,7 @@ void Enemy::Update() {
 //弾発射
 void Enemy::Fire() {
 	//弾の速度
-	const float kBulletSpeed = -1.0f;
+	const float kBulletSpeed = 1.0f;
 	Vector3 velocity(0, 0.1f, kBulletSpeed);
 
 	//ベクトルと行列で掛け算

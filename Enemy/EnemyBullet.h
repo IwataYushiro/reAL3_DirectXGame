@@ -30,4 +30,7 @@ class EnemyBullet {
 	int32_t deathTimer_ = kLifeTime;
 	//死亡フラグ
 	bool isDead_ = false;
+
+	public: //アクセッサ、インライン関数
+	bool IsDead() const { return isDead_; }
 };
