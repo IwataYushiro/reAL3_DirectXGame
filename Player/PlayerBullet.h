@@ -34,6 +34,6 @@ class PlayerBullet {
 	//死亡フラグ
 	bool isDead_ = false;
 
-	public://アクセッサ、インライン関数
+  public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
 };

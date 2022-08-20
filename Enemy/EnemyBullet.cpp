@@ -1,9 +1,9 @@
 #include "EnemyBullet.h"
 
 //初期化
-void EnemyBullet::Initialize(Model* model, const Vector3& position,const Vector3& velocity) {
+void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
 
-	//NULLポインタチェック
+	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
@@ -34,5 +34,4 @@ void EnemyBullet::Update() {
 void EnemyBullet::Draw(const ViewProjection& viewProjection) {
 	//モデル描画
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-
 }

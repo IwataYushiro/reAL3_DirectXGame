@@ -26,6 +26,10 @@ void Enemy::InitializeApproach() {
 
 //更新
 void Enemy::Update() {
+
+	//死亡フラグの立った弾を削除
+	enemyBullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) { return bullet->IsDead(); });
+
 	//座標を移動させる
 	switch (phase_) {
 	case Enemy::Phase::Approach:
@@ -64,12 +68,12 @@ void Enemy::Fire() {
 	// ベクトルの正規化
 	MyMathUtility::MyVector3Normalize(velocity);
 	// ベクトルの長さを速さに合わせる
-	velocity.z=kBulletSpeed;
+	velocity.z = kBulletSpeed;
 
 	////ベクトルと行列で掛け算
-	//velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
+	// velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
 	////敵キャラの座標をコピー
-	//Vector3 position = worldTransform_.translation_;
+	// Vector3 position = worldTransform_.translation_;
 
 	//弾を生成し初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();

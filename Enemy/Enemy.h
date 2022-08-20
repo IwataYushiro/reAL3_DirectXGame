@@ -12,7 +12,7 @@ class Player;
 //“G
 class Enemy {
   public:
-	  //’e”­ËŠÔŠu
+	//’e”­ËŠÔŠu
 	static const int kFireInterval = 60;
 	//‰Šú‰»
 	void Initialize(Model* model);
@@ -33,9 +33,7 @@ class Enemy {
 	//—£’E
 	void UpdateLeave();
 
-	
   private:
-	 
 	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
 	WorldTransform worldTransform_;
 	//’e
@@ -56,10 +54,9 @@ class Enemy {
 	//’e”­Ëƒ^ƒCƒ}[
 	int32_t fireTimer = 0;
 
- //©‹@
+	//©‹@
 	Player* player_ = nullptr;
 
-	public:
+  public:
 	void SetPlayer(Player* player) { player_ = player; }
-
 };

@@ -10,7 +10,7 @@ void Player::Initialize(Model* model) {
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
-	
+
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("texture/player.png");
 
@@ -24,9 +24,7 @@ void Player::Initialize(Model* model) {
 
 void Player::Update() {
 	//死亡フラグの立った弾を削除
-	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-		return bullet->IsDead(); 
-		});
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
 
 	//移動処理
 	Move();

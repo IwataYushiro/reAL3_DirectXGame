@@ -27,7 +27,7 @@ class Player {
 
 	//プレイヤーの旋回処理
 	void Rotate();
-	
+
 	//プレイヤーの攻撃処理
 	void Attack();
 
@@ -36,13 +36,13 @@ class Player {
 
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
-	
+
 	//描画
 	void Draw(ViewProjection& viewProjection);
 
   private:
 	//弾
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;  
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
