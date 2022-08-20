@@ -45,6 +45,9 @@ class Player {
   private:
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	//弾リストを取得
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル

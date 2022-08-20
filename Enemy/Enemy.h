@@ -40,6 +40,9 @@ class Enemy {
 	WorldTransform worldTransform_;
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+	//弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>& GetEnemyBullets() { return enemyBullets_; }
+
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル
