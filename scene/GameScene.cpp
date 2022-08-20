@@ -210,13 +210,36 @@ void GameScene::ChackAllCollisions() {
 		if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
 			//敵キャラの衝突時コールバック関数を呼び出す
 			enemy_->OnCollision();
-			//敵弾の衝突時コールバック関数を呼び出す
+			//自機弾の衝突時コールバック関数を呼び出す
 			bullet->OnCollision();
 		}
 	}
 #pragma endregion
 
-#pragma region 自弾のと敵弾の当たり判定
+#pragma region 自弾と敵弾の当たり判定
+	for (const std::unique_ptr<PlayerBullet>& pBullet : playerBullets) {
 
+		//自機弾の座標
+		posA = pBullet->GetWorldPosition();
+
+		for (const std::unique_ptr<EnemyBullet>& eBullet : enemyBullets) {
+
+			//敵弾の座標
+			posB = eBullet->GetWorldPosition();
+			//座標A,Bの距離を求める
+			posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
+			posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
+			posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
+			radiiusAB = (radiusA + radiusB) * (radiusA + radiusB);
+
+			//球と球の交差判定
+			if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
+				//自機弾の衝突時コールバック関数を呼び出す
+				pBullet->OnCollision();
+				//敵弾の衝突時コールバック関数を呼び出す
+				eBullet->OnCollision();
+			}
+		}
+	}
 #pragma endregion
 }
