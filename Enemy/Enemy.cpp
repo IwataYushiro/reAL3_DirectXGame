@@ -11,6 +11,7 @@ void Enemy::Initialize(Model* model) {
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
+	worldTransform_.scale_ = {3.0f, 3.0f, 3.0f};
 	worldTransform_.translation_ = {1.0f, 1.0f, 80.0f};
 
 	//初期フェーズ
@@ -35,6 +36,11 @@ void Enemy::Update() {
 	case Enemy::Phase::Approach:
 
 		UpdateApproach();
+		break;
+
+	case Enemy::Phase::Attack:
+
+		UpdateAttack();
 		break;
 
 	case Enemy::Phase::Leave:
@@ -115,9 +121,42 @@ void Enemy::UpdateApproach() {
 	}
 
 	//指定の位置に到達したら離脱
-	if (worldTransform_.translation_.z < -5.0f) {
-		phase_ = Phase::Leave;
+	if (worldTransform_.translation_.z < 50.0f) {
+		phase_ = Phase::Attack;
 	}
+}
+//攻撃
+void Enemy::UpdateAttack() {
+
+	//速度
+	Vector3 velocity;
+
+	//移動
+	velocity = {0.1f, 0.0f, 0.0f};
+	worldTransform_.translation_ += velocity;
+
+	//指定の位置に到達したら左へ
+	if (worldTransform_.translation_.x >= 30.0f) {
+		worldTransform_.translation_.x = -worldTransform_.translation_.x;
+
+	}
+	/*if (worldTransform_.translation_.x >= 30.0f ) {
+		velocity.x = velocity.x * -1.0f;
+	}*/
+
+	
+	
+	
+	//発射タイマーカウントダウン
+	fireTimer--;
+	//指定時間に達した
+	if (fireTimer <= 0) {
+		//弾発射
+		Fire();
+		//発射タイマー初期化
+		fireTimer = kFireInterval;
+	}
+
 }
 
 //離脱
@@ -144,4 +183,4 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 //衝突を検出したら呼び出されるコールバック関数
-void Enemy::OnCollision() { }
+void Enemy::OnCollision() {}

@@ -30,6 +30,8 @@ class Enemy {
 	//状態変化用の更新関数
 	//接近
 	void UpdateApproach();
+	//攻撃
+	void UpdateAttack();
 	//離脱
 	void UpdateLeave();
 
@@ -53,6 +55,7 @@ class Enemy {
 	//行動フェーズ
 	enum class Phase {
 		Approach, //接近
+		Attack,	  //攻撃
 		Leave,    //離脱
 	};
 
