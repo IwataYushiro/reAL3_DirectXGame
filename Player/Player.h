@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
+#include "Option.h"
 #include "PlayerBullet.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"

@@ -20,6 +20,7 @@ void Player::Initialize(Model* model) {
 
 	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
 	worldTransform_.Initialize();
+	
 }
 
 void Player::Update() {
@@ -56,6 +57,7 @@ void Player::Draw(ViewProjection& viewProjection) {
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection);
 	}
+	
 }
 
 //ˆÚ“®ˆ—
