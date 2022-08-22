@@ -26,12 +26,15 @@ void Player::Initialize(Model* model) {
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
-
+	//ここでオプション初期化
+	option_->Initialize(model_, worldTransform_.translation_);
 	
 	
 }
 
 void Player::Update() {
+	
+	
 	//死亡フラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
 
@@ -41,6 +44,7 @@ void Player::Update() {
 	Rotate();
 	//攻撃処理
 	Attack();
+	
 	//オプションの更新処理
 	option_->Update();
 	//弾更新
@@ -91,13 +95,9 @@ void Player::Move() {
 	if (input_->PushKey(DIK_DOWN)) {
 		move.y = -moveSpeed;
 	}
-	//自キャラの座標をコピー
-	Vector3 position = worldTransform_.translation_;
-
+	
 	worldTransform_.translation_ += move;
 	
-	//オプション初期化
-	option_->Initialize(model_, worldTransform_.translation_, move);
 }
 
 //旋回処理

@@ -2,7 +2,7 @@
 #include "Player.h"
 
 //初期化
-void Option::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+void Option::Initialize(Model* model, const Vector3& position) {
 	// NULLポインタチェック
 	assert(model);
 
@@ -20,14 +20,15 @@ void Option::Initialize(Model* model, const Vector3& position, const Vector3& ve
 	worldTransform_.Initialize();
 	////引数で受け取った初期座標をセット
 	worldTransform_.translation_ = {position.x + 4.0f, position.y + 4.0f, 0.0f};
-	velocity_ = velocity;
+	
 }
 
 //更新
 void Option::Update() {	
 	//移動
-	//座標を移動させる
-	worldTransform_.translation_ += velocity_;
+	Move();
+	//回転
+	Rotate();  
 	//行列更新
 	worldTransform_.Update(worldTransform_);
 }
@@ -64,4 +65,15 @@ void Option::Move() {
 //オプションの旋回処理
 void Option::Rotate() {
 
+	Vector3 angle = MyMathUtility::MySetVector3Zero();
+	float angleSpeed = 0.1f;
+
+	if (input_->PushKey(DIK_A)) {
+		angle.y -= angleSpeed;
+	}
+	if (input_->PushKey(DIK_D)) {
+		angle.y += angleSpeed;
+	}
+
+	worldTransform_.rotation_ += angle;
 }

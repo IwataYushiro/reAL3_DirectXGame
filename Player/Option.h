@@ -12,7 +12,7 @@ class Player;
 class Option {
   public:
 	//‰Šú‰»
-	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
+	void Initialize(Model* model, const Vector3& position);
 
 	//XV
 	void Update();
