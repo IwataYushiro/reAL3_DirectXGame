@@ -1,6 +1,7 @@
 #pragma once
 #include "DebugText.h"
 #include "Input.h"
+#include "OptionBullet.h"
 #include "Model.h"
 #include "MyMathUtility.h"
 #include "WorldTransform.h"
@@ -33,7 +34,9 @@ class Option {
 	Vector3 GetWorldPosition();
 
   private:
-	  
+	//弾
+	std::list<std::unique_ptr<OptionBullet>> optionBullets_;
+
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 

@@ -114,6 +114,9 @@
     <ClCompile Include="Player\Option.cpp">
       <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Player\OptionBullet.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -216,6 +219,9 @@
       <Filter>ヘッダー ファイル\Skydome</Filter>
     </ClInclude>
     <ClInclude Include="Player\Option.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\OptionBullet.h">
       <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>

@@ -29,6 +29,8 @@ void Option::Update() {
 	Move();
 	//‰ñ“]
 	Rotate();  
+	//UŒ‚
+	
 	//s—ñXV
 	worldTransform_.Update(worldTransform_);
 }
