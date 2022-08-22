@@ -2,7 +2,10 @@
 
 Player::Player() {}
 
-Player::~Player() {}
+Player::~Player() {
+	//オプションの解放
+	delete option_;
+}
 
 void Player::Initialize(Model* model) {
 	// NULLポインタチェック
@@ -10,6 +13,9 @@ void Player::Initialize(Model* model) {
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
+
+	//オプションの生成
+	option_ = new Option();
 
 	//ファイル名を指定してテクスチャを読み込む
 	textureHandle_ = TextureManager::Load("texture/player.png");
@@ -20,6 +26,8 @@ void Player::Initialize(Model* model) {
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
+
+	
 	
 }
 
@@ -33,7 +41,8 @@ void Player::Update() {
 	Rotate();
 	//攻撃処理
 	Attack();
-
+	//オプションの更新処理
+	option_->Update();
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
@@ -57,7 +66,9 @@ void Player::Draw(ViewProjection& viewProjection) {
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection);
 	}
-	
+
+	//オプション描画
+	option_->Draw(viewProjection);
 }
 
 //移動処理
@@ -80,8 +91,13 @@ void Player::Move() {
 	if (input_->PushKey(DIK_DOWN)) {
 		move.y = -moveSpeed;
 	}
+	//自キャラの座標をコピー
+	Vector3 position = worldTransform_.translation_;
 
 	worldTransform_.translation_ += move;
+	
+	//オプション初期化
+	option_->Initialize(model_, worldTransform_.translation_, move);
 }
 
 //旋回処理

@@ -66,8 +66,7 @@ class GameScene {
 	float viewAngle = 0.0f;
 	//自キャラ
 	Player* player_ = nullptr;
-	//オプション
-	Option* option_ = nullptr;
+	
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
 	//天球データ

@@ -12,8 +12,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	//自キャラの解放
 	delete player_;
-	//オプションの解放
-	delete option_;
+	
 	//敵キャラの解放
 	delete enemy_;
 	//天球データ解放
@@ -33,8 +32,7 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	//自キャラの生成
 	player_ = new Player();
-	//オプションの生成
-	option_ = new Option();
+	
 	//敵キャラの生成
 	enemy_ = new Enemy();
 
@@ -43,8 +41,7 @@ void GameScene::Initialize() {
 	
 	//自キャラの初期化
 	player_->Initialize(model_);
-	//オプション初期化
-	option_->Initialize(model_);
+	
 	//敵キャラの初期化
 	enemy_->Initialize(model_);
 	//天球データ初期化
@@ -68,8 +65,6 @@ void GameScene::Update() {
 	skydome_->Update();
 	//自キャラの更新処理
 	player_->Update();
-	//オプションの更新処理
-	//option_->Update();
 	//敵キャラの更新処理
 	enemy_->Update();
 	
@@ -148,8 +143,6 @@ void GameScene::Draw() {
 	skydome_->Draw(viewProjection_);
 
 	player_->Draw(viewProjection_);
-
-	option_->Draw(viewProjection_);
 
 	enemy_->Draw(viewProjection_);
 	// 3Dオブジェクト描画後処理

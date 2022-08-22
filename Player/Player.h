@@ -50,7 +50,8 @@ class Player {
   private:
 	//弾
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-	
+	//オプション
+	Option* option_ = nullptr;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
