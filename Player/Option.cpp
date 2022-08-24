@@ -59,7 +59,7 @@ void Option::Draw(ViewProjection& viewProjection)
 void Option::Move() {
 	Vector3 move = MyMathUtility::MySetVector3Zero();
 	float moveSpeed = 0.3f;
-
+	float angleCount = 0.0f;
 	//キーボード入力による移動処理
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
 	if (input_->PushKey(DIK_LEFT)) {
@@ -74,7 +74,7 @@ void Option::Move() {
 	if (input_->PushKey(DIK_DOWN)) {
 		move.y = -moveSpeed;
 	}
-
+	
 	worldTransform_.translation_ += move;
 }
 
