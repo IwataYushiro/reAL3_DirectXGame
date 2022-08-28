@@ -38,8 +38,10 @@ const Vector3 operator/(const Vector3& v, float s);
 Matrix4 MySetMatrix4Identity();
 // “]’us—ñ‚ğ‹‚ß‚é
 Matrix4 MyMatrix4Transpose(const Matrix4& m);
+//‹ts—ñ‚ğ‹‚ß‚é
+Matrix4 MyMatrix4Inverse(const Matrix4& m, float* det = nullptr);
 
-// Šg‘åk¬s—ñ‚Ìì¬
+  // Šg‘åk¬s—ñ‚Ìì¬
 Matrix4 MyGenMatrix4Scaling(Vector3 scale);
 
 // ‰ñ“]s—ñ‚Ìì¬

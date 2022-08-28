@@ -16,13 +16,14 @@ class Option {
 	void Initialize(Model* model, const Vector3& position);
 
 	//更新
-	void Update();
-
+	void Update(ViewProjection& viewprojection);
+	//3Dレティクル
+	void Reticle3D();
 	//描画
 	void Draw(ViewProjection& viewProjection);
 
 	//オプションの移動処理
-	void Move();
+	void Move(ViewProjection& viewprojection);
 
 	//オプションの旋回処理
 	void Rotate();
@@ -39,6 +40,8 @@ class Option {
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;
+	//3Dレティクル用
+	WorldTransform worldTransform3DReticle_;
 
 	//モデル
 	Model* model_ = nullptr;
@@ -49,7 +52,7 @@ class Option {
 	Vector3 velocity_;
 	//プレイヤーのデータ
 	Player* player_ = nullptr;
-
+	
 	//インプット
 	Input* input_ = nullptr;
 	

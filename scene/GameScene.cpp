@@ -64,7 +64,7 @@ void GameScene::Update() {
 	//天球データの更新処理
 	skydome_->Update();
 	//自キャラの更新処理
-	player_->Update();
+	player_->Update(viewProjection_);
 	//敵キャラの更新処理
 	enemy_->Update();
 	

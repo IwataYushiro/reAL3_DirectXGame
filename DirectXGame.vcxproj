@@ -101,7 +101,6 @@
     <ClCompile Include="Enemy\Enemy.cpp" />
     <ClCompile Include="Enemy\EnemyBullet.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\mathUtility.cpp" />
     <ClCompile Include="math\MyMathUtility.cpp" />
     <ClCompile Include="Player\Option.cpp" />
     <ClCompile Include="Player\OptionBullet.cpp" />

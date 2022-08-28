@@ -21,7 +21,7 @@ class Player {
 	void Initialize(Model* model);
 
 	//更新
-	void Update();
+	void Update(ViewProjection& viewprojection);
 
 	//プレイヤーの移動処理
 	void Move();

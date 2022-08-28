@@ -1,6 +1,6 @@
 #include "Option.h"
 #include "Player.h"
-
+#include <WinApp.h>
 //初期化
 void Option::Initialize(Model* model, const Vector3& position) {
 	// NULLポインタチェック
@@ -18,19 +18,23 @@ void Option::Initialize(Model* model, const Vector3& position) {
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
+	//3Dレティクル初期化
+	worldTransform3DReticle_.Initialize();
 	////引数で受け取った初期座標をセット
 	worldTransform_.translation_ = {position.x + 4.0f, position.y + 4.0f, 0.0f};
 	
 }
 
 //更新
-void Option::Update() {	
+void Option::Update(ViewProjection& viewprojection) {	
 
 	//死亡フラグの立った弾を削除
 	optionBullets_.remove_if([](std::unique_ptr<OptionBullet>& bullet) { return bullet->IsDead(); });
 
 	//移動
-	Move();
+	Move(viewprojection);
+	//3Dレティクル
+	Reticle3D();
 	//回転
 	Rotate();  
 	//攻撃
@@ -48,7 +52,7 @@ void Option::Update() {
 void Option::Draw(ViewProjection& viewProjection) 
 {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-
+	model_->Draw(worldTransform3DReticle_, viewProjection, textureHandle_);
 	//弾描画
 	for (std::unique_ptr<OptionBullet>& bullet : optionBullets_) {
 		bullet->Draw(viewProjection);
@@ -56,28 +60,50 @@ void Option::Draw(ViewProjection& viewProjection)
 }
 
 //オプションの移動処理
-void Option::Move() {
-	Vector3 move = MyMathUtility::MySetVector3Zero();
-	float moveSpeed = 0.3f;
-	float angleCount = 0.0f;
-	//キーボード入力による移動処理
-	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
-	if (input_->PushKey(DIK_LEFT)) {
-		move.x = -moveSpeed;
-	}
-	if (input_->PushKey(DIK_RIGHT)) {
-		move.x = moveSpeed;
-	}
-	if (input_->PushKey(DIK_UP)) {
-		move.y = moveSpeed;
-	}
-	if (input_->PushKey(DIK_DOWN)) {
-		move.y = -moveSpeed;
-	}
-	
-	worldTransform_.translation_ += move;
-}
+void Option::Move(ViewProjection& viewprojection) { 
+	POINT mousePos;
+	//マウス座標を取得
+	GetCursorPos(&mousePos);
 
+	//クライアントエリア座標に変換
+	HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePos);
+
+	mousePos.x = worldTransform_.translation_.x;
+	mousePos.y = worldTransform_.translation_.y;
+
+	Matrix4 matVPV =
+	  MathUtility::Matrix4LookAtLH(viewprojection.eye, viewprojection.target, viewprojection.up);
+	//逆行列
+	Matrix4 matInverseVPV = MathUtility::Matrix4Inverse(matVPV);
+
+	Vector3 posNear = Vector3(worldTransform_.translation_.x, worldTransform_.translation_.y, 0.0f);
+	Vector3 posFar = Vector3(worldTransform_.translation_.x, worldTransform_.translation_.y, 1.0f);
+
+	posNear = MathUtility::Vector3TransformCoord(posNear, matInverseVPV);
+	posFar = MathUtility::Vector3TransformCoord(posFar, matInverseVPV);
+
+	//マウスレイ
+	Vector3 mouseDirection = posNear -= posFar;
+}
+//3Dレティクル処理
+void Option::Reticle3D() {
+	//オプションから3Dレティクルの距離
+	const float kDistanseOptionTo3DReticle = 50.0f;
+	//オプションから3Dレティクルへのオフセット
+	Vector3 offset = {0.0f, 0.0f, 1.0f};
+	//ワールド行列の回転を反映
+	offset = MyMathUtility::MyVector3TransformNormal(offset, worldTransform_.matWorld_);
+	//長さを整える
+	offset = MyMathUtility::MyVector3Normalize(offset) *= kDistanseOptionTo3DReticle;
+	//3Dレティクルの座標を決定
+	worldTransform3DReticle_.translation_ = {
+	  worldTransform_.translation_.x, worldTransform_.translation_.y,
+	  worldTransform_.translation_.z + kDistanseOptionTo3DReticle};
+
+	worldTransform3DReticle_.Update(worldTransform3DReticle_);
+	
+}
 //オプションの旋回処理
 void Option::Rotate() {
 

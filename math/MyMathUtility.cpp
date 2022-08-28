@@ -43,7 +43,9 @@ Matrix4 MyMathUtility::MySetMatrix4Identity() {
 	return m;
 }
 
-// 拡大縮小行列の作成
+//逆行列を求める
+
+  // 拡大縮小行列の作成
 Matrix4 MyMathUtility::MyGenMatrix4Scaling(Vector3 scale) {
 
 	//スケーリング行列を宣言

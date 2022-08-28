@@ -32,7 +32,7 @@ void Player::Initialize(Model* model) {
 	
 }
 
-void Player::Update() {
+void Player::Update(ViewProjection& viewprojection) {
 	
 	
 	//死亡フラグの立った弾を削除
@@ -46,7 +46,7 @@ void Player::Update() {
 	Attack();
 	
 	//オプションの更新処理
-	option_->Update();
+	option_->Update(viewprojection);
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
