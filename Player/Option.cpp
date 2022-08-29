@@ -31,10 +31,11 @@ void Option::Update(ViewProjection& viewprojection) {
 	//死亡フラグの立った弾を削除
 	optionBullets_.remove_if([](std::unique_ptr<OptionBullet>& bullet) { return bullet->IsDead(); });
 
-	//移動
-	Move(viewprojection);
 	//3Dレティクル
 	Reticle3D();
+	//移動
+	Move(viewprojection);
+	
 	//回転
 	Rotate();  
 	//攻撃
@@ -59,6 +60,23 @@ void Option::Draw(ViewProjection& viewProjection)
 	}
 }
 
+// 3Dレティクル処理
+void Option::Reticle3D() {
+	//オプションから3Dレティクルの距離
+	const float kDistanseOptionTo3DReticle = 50.0f;
+	//オプションから3Dレティクルへのオフセット
+	Vector3 offset = {0.0f, 0.0f, 1.0f};
+	//ワールド行列の回転を反映
+	offset = MyMathUtility::MyVector3TransformNormal(offset, worldTransform_.matWorld_);
+	//長さを整える
+	offset = MyMathUtility::MyVector3Normalize(offset) *= kDistanseOptionTo3DReticle;
+	// 3Dレティクルの座標を決定
+	worldTransform3DReticle_.translation_ = {
+	  worldTransform_.translation_.x, worldTransform_.translation_.y,
+	  worldTransform_.translation_.z + kDistanseOptionTo3DReticle};
+
+	
+}
 //オプションの移動処理
 void Option::Move(ViewProjection& viewprojection) { 
 	POINT mousePos;
@@ -85,25 +103,14 @@ void Option::Move(ViewProjection& viewprojection) {
 
 	//マウスレイ
 	Vector3 mouseDirection = posNear -= posFar;
-}
-//3Dレティクル処理
-void Option::Reticle3D() {
-	//オプションから3Dレティクルの距離
-	const float kDistanseOptionTo3DReticle = 50.0f;
-	//オプションから3Dレティクルへのオフセット
-	Vector3 offset = {0.0f, 0.0f, 1.0f};
-	//ワールド行列の回転を反映
-	offset = MyMathUtility::MyVector3TransformNormal(offset, worldTransform_.matWorld_);
-	//長さを整える
-	offset = MyMathUtility::MyVector3Normalize(offset) *= kDistanseOptionTo3DReticle;
-	//3Dレティクルの座標を決定
-	worldTransform3DReticle_.translation_ = {
-	  worldTransform_.translation_.x, worldTransform_.translation_.y,
-	  worldTransform_.translation_.z + kDistanseOptionTo3DReticle};
-
+	mouseDirection = MyMathUtility::MyVector3Normalize(mouseDirection);
+	//カメラから照準オブジェクトの距離
+	const float kDistancTestObject = 50.0f;
+	worldTransform3DReticle_.translation_.z = posNear.z - mouseDirection.z + kDistancTestObject;
 	worldTransform3DReticle_.Update(worldTransform3DReticle_);
-	
+	worldTransform3DReticle_.TransferMatrix();
 }
+
 //オプションの旋回処理
 void Option::Rotate() {
 
