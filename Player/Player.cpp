@@ -28,51 +28,62 @@ void Player::Initialize(Model* model) {
 	worldTransform_.Initialize();
 	//ここでオプション初期化
 	option_->Initialize(model_, worldTransform_.translation_);
-	
-	
+}
+void Player::Reset() {
+	worldTransform_.translation_ = MyMathUtility::MySetVector3Zero();
+	worldTransform_.rotation_ = MyMathUtility::MySetVector3Zero();
+
+	life_ = 5;
+	isDead_ = false;
+	option_->Reset(worldTransform_.translation_);
+	//弾リセット
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+		bullet->Reset();
+	}
 }
 
 void Player::Update(ViewProjection& viewprojection) {
-	
-	
-	//死亡フラグの立った弾を削除
-	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
-	
-	//移動処理
-	Move();
-	//旋回処理
-	Rotate();
-	//攻撃処理
-	Attack();
-	
-	//オプションの更新処理
-	option_->Update(viewprojection);
-	//弾更新
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-		bullet->Update();
+
+	if (!isDead_) {
+		//死亡フラグの立った弾を削除
+		bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
+
+		//移動処理
+		Move();
+		//旋回処理
+		Rotate();
+		//攻撃処理
+		Attack();
+
+		//オプションの更新処理
+		option_->Update(viewprojection);
+		//弾更新
+		for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+			bullet->Update();
+		}
+
+		//移動制限
+		MoveLimit();
+
+		worldTransform_.TransferMatrix();
 	}
-
-	//移動制限
-	MoveLimit();
-
-	worldTransform_.TransferMatrix();
-
-	debugText_->SetPos(50, 150);
-	debugText_->Printf(
-	  "move:( %f , %f , %f)", worldTransform_.translation_.x, worldTransform_.translation_.y,
-	  worldTransform_.translation_.z);
+	debugText_->SetScale(1.0f);
+	debugText_->SetPos(50, 50);
+	debugText_->Printf("life:(%d)", life_);
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	if (!isDead_) {
+		model_->Draw(worldTransform_, viewProjection, textureHandle_);
 
-	//弾描画
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-		bullet->Draw(viewProjection);
+		//弾描画
+		for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+			bullet->Draw(viewProjection);
+		}
+
+		//オプション描画
+		option_->Draw(viewProjection);
 	}
-
-	//オプション描画
-	option_->Draw(viewProjection);
 }
 
 //移動処理
@@ -83,21 +94,20 @@ void Player::Move() {
 
 	//キーボード入力による移動処理
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
-	if (input_->PushKey(DIK_LEFT)) {
+	if (input_->PushKey(DIK_A)) {
 		move.x = -moveSpeed;
 	}
-	if (input_->PushKey(DIK_RIGHT)) {
+	if (input_->PushKey(DIK_D)) {
 		move.x = moveSpeed;
 	}
-	if (input_->PushKey(DIK_UP)) {
+	if (input_->PushKey(DIK_W)) {
 		move.y = moveSpeed;
 	}
-	if (input_->PushKey(DIK_DOWN)) {
+	if (input_->PushKey(DIK_S)) {
 		move.y = -moveSpeed;
 	}
-	
+
 	worldTransform_.translation_ += move;
-	
 }
 
 //旋回処理
@@ -106,10 +116,10 @@ void Player::Rotate() {
 	Vector3 angle = MyMathUtility::MySetVector3Zero();
 	float angleSpeed = 0.1f;
 
-	if (input_->PushKey(DIK_A)) {
+	if (input_->PushKey(DIK_Q)) {
 		angle.y -= angleSpeed;
 	}
-	if (input_->PushKey(DIK_D)) {
+	if (input_->PushKey(DIK_E)) {
 		angle.y += angleSpeed;
 	}
 
@@ -119,7 +129,7 @@ void Player::Rotate() {
 //攻撃処理
 void Player::Attack() {
 
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->IsTriggerMouse(0)) {
 		//弾の速度
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity(0, 0, kBulletSpeed);
@@ -168,6 +178,10 @@ Vector3 Player::GetWorldPosition() {
 	return worldPos;
 }
 
-
 //衝突を検出したら呼び出されるコールバック関数
-void Player::OnCollision() {}
+void Player::OnCollision() {
+	life_--;
+	if (life_ <= 0) {
+		isDead_ = true;
+	}
+}

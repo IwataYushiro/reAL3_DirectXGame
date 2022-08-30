@@ -11,6 +11,8 @@ class PlayerBullet {
 
 	//初期化
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
+	//リセット処理
+	void Reset();
 
 	//更新
 	void Update();

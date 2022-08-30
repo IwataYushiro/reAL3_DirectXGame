@@ -14,6 +14,8 @@ void OptionBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	velocity_ = velocity;
 }
 
+void OptionBullet::Reset() { isDead_ = true; }
+
 //XV
 void OptionBullet::Update() {
 	//À•W‚ğˆÚ“®‚³‚¹‚é

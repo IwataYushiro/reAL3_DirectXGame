@@ -19,6 +19,7 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	velocity_ = velocity;
 }
 
+void PlayerBullet::Reset() { isDead_ = true; }
 //XV
 void PlayerBullet::Update() {
 	//À•W‚ğˆÚ“®‚³‚¹‚é
@@ -30,7 +31,6 @@ void PlayerBullet::Update() {
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
 	}
-
 }
 
 //•`‰æ

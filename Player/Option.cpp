@@ -18,26 +18,31 @@ void Option::Initialize(Model* model, const Vector3& position) {
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
-	//3Dレティクル初期化
+	// 3Dレティクル初期化
 	worldTransform3DReticle_.Initialize();
 	////引数で受け取った初期座標をセット
 	worldTransform_.translation_ = {position.x + 4.0f, position.y + 4.0f, 0.0f};
-	
+}
+void Option::Reset(const Vector3& position) {
+	worldTransform_.translation_ = MyMathUtility::MySetVector3Zero();
+
+	//弾リセット
+	for (std::unique_ptr<OptionBullet>& bullet : optionBullets_) {
+		bullet->Reset();
+	}
 }
 
 //更新
-void Option::Update(ViewProjection& viewprojection) {	
+void Option::Update(ViewProjection& viewprojection) {
 
 	//死亡フラグの立った弾を削除
-	optionBullets_.remove_if([](std::unique_ptr<OptionBullet>& bullet) { return bullet->IsDead(); });
+	optionBullets_.remove_if(
+	  [](std::unique_ptr<OptionBullet>& bullet) { return bullet->IsDead(); });
 
-	//3Dレティクル
+	// 3Dレティクル
 	Reticle3D();
 	//移動
 	Move(viewprojection);
-	
-	//回転
-	Rotate();  
 	//攻撃
 	Attack();
 	//弾更新
@@ -50,8 +55,7 @@ void Option::Update(ViewProjection& viewprojection) {
 }
 
 //描画
-void Option::Draw(ViewProjection& viewProjection) 
-{
+void Option::Draw(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 	model_->Draw(worldTransform3DReticle_, viewProjection, textureHandle_);
 	//弾描画
@@ -74,41 +78,28 @@ void Option::Reticle3D() {
 	worldTransform3DReticle_.translation_ = {
 	  worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z + kDistanseOptionTo3DReticle};
-
-	
 }
 //オプションの移動処理
-void Option::Move(ViewProjection& viewprojection) { 
-	POINT mousePos;
-	//マウス座標を取得
-	GetCursorPos(&mousePos);
+void Option::Move(ViewProjection& viewprojection) {
+	Vector3 move = MyMathUtility::MySetVector3Zero();
+	float moveSpeed = 0.3f;
 
-	//クライアントエリア座標に変換
-	HWND hwnd = WinApp::GetInstance()->GetHwnd();
-	ScreenToClient(hwnd, &mousePos);
+	//キーボード入力による移動処理
+	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
+	if (input_->PushKey(DIK_LEFT)) {
+		move.x = -moveSpeed;
+	}
+	if (input_->PushKey(DIK_RIGHT)) {
+		move.x = moveSpeed;
+	}
+	if (input_->PushKey(DIK_UP)) {
+		move.y = moveSpeed;
+	}
+	if (input_->PushKey(DIK_DOWN)) {
+		move.y = -moveSpeed;
+	}
 
-	mousePos.x = worldTransform_.translation_.x;
-	mousePos.y = worldTransform_.translation_.y;
-
-	Matrix4 matVPV =
-	  MathUtility::Matrix4LookAtLH(viewprojection.eye, viewprojection.target, viewprojection.up);
-	//逆行列
-	Matrix4 matInverseVPV = MathUtility::Matrix4Inverse(matVPV);
-
-	Vector3 posNear = Vector3(worldTransform_.translation_.x, worldTransform_.translation_.y, 0.0f);
-	Vector3 posFar = Vector3(worldTransform_.translation_.x, worldTransform_.translation_.y, 1.0f);
-
-	posNear = MathUtility::Vector3TransformCoord(posNear, matInverseVPV);
-	posFar = MathUtility::Vector3TransformCoord(posFar, matInverseVPV);
-
-	//マウスレイ
-	Vector3 mouseDirection = posNear -= posFar;
-	mouseDirection = MyMathUtility::MyVector3Normalize(mouseDirection);
-	//カメラから照準オブジェクトの距離
-	const float kDistancTestObject = 50.0f;
-	worldTransform3DReticle_.translation_.z = posNear.z - mouseDirection.z + kDistancTestObject;
-	worldTransform3DReticle_.Update(worldTransform3DReticle_);
-	worldTransform3DReticle_.TransferMatrix();
+	worldTransform_.translation_ += move;
 }
 
 //オプションの旋回処理

@@ -21,6 +21,14 @@
 /// </summary>
 class GameScene {
   public: // メンバ関数
+	  enum Scene {//シーンID
+		  title,
+		  howtoplay,
+		  stage1,
+		  clear,
+		  gameover,
+	}; 
+
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -78,6 +86,7 @@ class GameScene {
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
 
+	int scene_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

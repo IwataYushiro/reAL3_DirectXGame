@@ -16,7 +16,7 @@ void EnemyBullet::Initialize(Model* model, const Vector3& position, const Vector
 	worldTransform_.translation_ = position;
 	velocity_ = velocity;
 }
-
+void EnemyBullet::Reset() { isDead_ = true; }
 //XV
 void EnemyBullet::Update() {
 	//À•WˆÚ“®

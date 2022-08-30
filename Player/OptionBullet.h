@@ -8,7 +8,8 @@ class OptionBullet {
   public:
 	//初期化
 	void Initialize(Model* model, const Vector3& position, const Vector3& velocity);
-
+	//リセット
+	void Reset();
 	//更新
 	void Update();
 
@@ -22,7 +23,6 @@ class OptionBullet {
 	Vector3 GetWorldPosition();
 
   private:
-	
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
@@ -40,5 +40,4 @@ class OptionBullet {
 
   public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
-  
 };

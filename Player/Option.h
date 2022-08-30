@@ -1,9 +1,9 @@
 #pragma once
 #include "DebugText.h"
 #include "Input.h"
-#include "OptionBullet.h"
 #include "Model.h"
 #include "MyMathUtility.h"
+#include "OptionBullet.h"
 #include "WorldTransform.h"
 #include <cassert>
 
@@ -14,10 +14,12 @@ class Option {
   public:
 	//初期化
 	void Initialize(Model* model, const Vector3& position);
+	//リセット処理
+	void Reset(const Vector3& position);
 
 	//更新
 	void Update(ViewProjection& viewprojection);
-	//3Dレティクル
+	// 3Dレティクル
 	void Reticle3D();
 	//描画
 	void Draw(ViewProjection& viewProjection);
@@ -34,13 +36,16 @@ class Option {
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 
+	//弾リストを取得
+	const std::list<std::unique_ptr<OptionBullet>>& GetOptionBullets() { return optionBullets_; }
+
   private:
 	//弾
 	std::list<std::unique_ptr<OptionBullet>> optionBullets_;
 
 	//ワールド変換データ
 	WorldTransform worldTransform_;
-	//3Dレティクル用
+	// 3Dレティクル用
 	WorldTransform worldTransform3DReticle_;
 
 	//モデル
@@ -52,11 +57,10 @@ class Option {
 	Vector3 velocity_;
 	//プレイヤーのデータ
 	Player* player_ = nullptr;
-	
+
 	//インプット
 	Input* input_ = nullptr;
-	
+
 	//デバッグテキスト
 	DebugText* debugText_ = nullptr;
-
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include "DebugText.h"
 #include "EnemyBullet.h"
 #include "Model.h"
 #include "MyMathUtility.h"
@@ -18,6 +19,9 @@ class Enemy {
 	void Initialize(Model* model);
 	//接近フェーズ初期化
 	void InitializeApproach();
+	//リセット処理
+	void Reset();
+
 	//更新
 	void Update();
 	//弾発射
@@ -36,8 +40,9 @@ class Enemy {
 	void UpdateLeave();
 
 	//衝突を検出したら呼び出されるコールバック関数
-	void OnCollision();
-	
+	void OnCollisionPlayer();
+	void OnCollisionOption();
+
 	//弾リストを取得
 	const std::list<std::unique_ptr<EnemyBullet>>& GetEnemyBullets() { return enemyBullets_; }
 
@@ -46,7 +51,8 @@ class Enemy {
 	WorldTransform worldTransform_;
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
-	
+	//デバックテキスト
+	DebugText* debugText_ = nullptr;
 	//モデル
 	Model* model_ = nullptr;
 	//テクスチャハンドル
@@ -55,7 +61,7 @@ class Enemy {
 	//行動フェーズ
 	enum class Phase {
 		Approach, //接近
-		Attack,	  //攻撃
+		Attack,   //攻撃
 		Leave,    //離脱
 	};
 
@@ -66,7 +72,13 @@ class Enemy {
 
 	//自機
 	Player* player_ = nullptr;
+	//死亡フラグとライフ
+	bool isDead_ = false;
+	int life_ = 15;
+	//反転フラグ
+	bool isReverse_ = false;
 
   public:
+	bool IsDead() const { return isDead_; }
 	void SetPlayer(Player* player) { player_ = player; }
 };

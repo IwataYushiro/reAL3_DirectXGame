@@ -19,6 +19,8 @@ class Player {
 
 	//初期化
 	void Initialize(Model* model);
+	//リセット処理
+	void Reset();
 
 	//更新
 	void Update(ViewProjection& viewprojection);
@@ -43,7 +45,7 @@ class Player {
 
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
-	
+
 	//弾リストを取得
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
@@ -62,4 +64,11 @@ class Player {
 	Input* input_ = nullptr;
 	//デバッグテキスト
 	DebugText* debugText_ = nullptr;
+	//死亡フラグとライフ
+	bool isDead_ = false;
+	int life_ = 5;
+
+  public: //アクセッサ、インライン関数
+	bool IsDead() const { return isDead_; }
+	Option* GetOption() const { return option_; }
 };
