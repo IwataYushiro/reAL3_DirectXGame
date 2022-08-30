@@ -40,7 +40,7 @@ void Option::Update(ViewProjection& viewprojection) {
 	  [](std::unique_ptr<OptionBullet>& bullet) { return bullet->IsDead(); });
 
 	// 3Dレティクル
-	Reticle3D();
+	//Reticle3D();
 	//移動
 	Move(viewprojection);
 	//攻撃
@@ -57,7 +57,6 @@ void Option::Update(ViewProjection& viewprojection) {
 //描画
 void Option::Draw(ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
-	model_->Draw(worldTransform3DReticle_, viewProjection, textureHandle_);
 	//弾描画
 	for (std::unique_ptr<OptionBullet>& bullet : optionBullets_) {
 		bullet->Draw(viewProjection);
@@ -79,11 +78,12 @@ void Option::Reticle3D() {
 	  worldTransform_.translation_.x, worldTransform_.translation_.y,
 	  worldTransform_.translation_.z + kDistanseOptionTo3DReticle};
 }
+
 //オプションの移動処理
 void Option::Move(ViewProjection& viewprojection) {
-	Vector3 move = MyMathUtility::MySetVector3Zero();
+	 Vector3 move = MyMathUtility::MySetVector3Zero();
 	float moveSpeed = 0.3f;
-
+/*
 	//キーボード入力による移動処理
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
 	if (input_->PushKey(DIK_LEFT)) {
@@ -98,8 +98,11 @@ void Option::Move(ViewProjection& viewprojection) {
 	if (input_->PushKey(DIK_DOWN)) {
 		move.y = -moveSpeed;
 	}
-
-	worldTransform_.translation_ += move;
+*/
+	//マウス操作(正直よく分からん)
+	move.x = input_->GetMousePosition().x / 20.0f - 30.0f;
+	move.y = -input_->GetMousePosition().y / 20.0f + 20.0f;
+	worldTransform_.translation_ = move;
 }
 
 //オプションの旋回処理
@@ -120,7 +123,7 @@ void Option::Rotate() {
 
 //オプションの攻撃処理
 void Option::Attack() {
-	if (input_->TriggerKey(DIK_SPACE)) {
+	if (input_->IsTriggerMouse(0)) {
 
 		//弾の速度
 		const float kBulletSpeed = 1.0f;
