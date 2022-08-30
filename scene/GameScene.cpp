@@ -134,6 +134,7 @@ void GameScene::Update() {
 		break;
 
 	case gameover:
+		
 		debugText_->Print(" GAME OVER", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
 		if (input_->TriggerKey(DIK_SPACE)) {
