@@ -62,8 +62,11 @@ class Enemy {
 	//デバックテキスト
 	DebugText* debugText_ = nullptr;
 	//モデル
-	Model* model_ = nullptr;
-	Model* modelDead_ = nullptr;
+	Model* modelStage1_ = nullptr;
+	Model* modelDeadStage1_ = nullptr;
+
+	Model* modelStage2_ = nullptr;
+	Model* modelDeadStage2_ = nullptr;
 	Model* modelBullet_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;

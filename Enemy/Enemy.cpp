@@ -4,23 +4,29 @@
 // 初期化
 Enemy::~Enemy() {
 	delete modelBullet_;
-	delete modelDead_;
+	delete modelDeadStage1_;
+	delete modelStage2_;
+	delete modelDeadStage2_;
 }
 
 void Enemy::Initialize(Model* model) {
 	// NULLポインタチェック
 	assert(model);
 
-	model_ = model;
-	modelBullet_ = Model::CreateFromOBJ("enemybullet", true);
-	modelDead_ = Model::CreateFromOBJ("enemy1dead", true);
+	modelStage1_ = model;
+	modelDeadStage1_ = Model::CreateFromOBJ("enemy1dead", true);
 
+	modelStage2_ = Model::CreateFromOBJ("enemy2", true);
+	modelDeadStage2_ = Model::CreateFromOBJ("enemy2dead", true);
+
+	modelBullet_ = Model::CreateFromOBJ("enemybullet", true);
 	//シングルトンインスタンスを取得
 	debugText_ = DebugText::GetInstance();
 
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
+	isReverse_ = false;
 	//初期ステージ
 	Stage1Parameter();
 }
@@ -40,6 +46,8 @@ void Enemy::Stage1Parameter() {
 
 	life_ = 20;
 	isDead_ = false;
+
+	isReverse_ = false;
 	//弾リセット
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		bullet->Reset();
@@ -54,6 +62,8 @@ void Enemy::Stage2Parameter() {
 
 	life_ = 40;
 	isDead_ = false;
+
+	isReverse_ = false;
 	//弾リセット
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		bullet->Reset();
@@ -65,7 +75,8 @@ void Enemy::Reset() { Stage1Parameter(); }
 
 //更新
 void Enemy::Update() {
-
+	//テキストサイズ
+debugText_->SetScale(1.0f);
 	if (!isDead_) {
 		//死亡フラグの立った弾を削除
 		enemyBullets_.remove_if(
@@ -86,11 +97,15 @@ void Enemy::Update() {
 		case Enemy::Phase::ApproachStage2:
 
 			UpdateApproachStage2();
+			debugText_->SetPos(50, 150);
+			debugText_->Printf("!DANGER! pos.z < 0 = DEATH!:(%f)", worldTransform_.translation_.z);
 			break;
 
 		case Enemy::Phase::AttackStage2:
 
 			UpdateAttackStage2();
+			debugText_->SetPos(50, 150);
+			debugText_->Printf("!DANGER! pos.z < 0 = DEATH!:(%f)", worldTransform_.translation_.z);
 			break;
 		}
 		//弾更新
@@ -98,7 +113,7 @@ void Enemy::Update() {
 			bullet->Update();
 		}
 		//ライフ表示
-		debugText_->SetScale(1.0f);
+		
 		debugText_->SetPos(50, 100);
 		debugText_->Printf("enemy life:(%d)", life_);
 	} else {
@@ -133,11 +148,6 @@ void Enemy::Fire() {
 	// ベクトルの長さを速さに合わせる
 	velocity.z = kBulletSpeed;
 
-	////ベクトルと行列で掛け算
-	// velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
-	////敵キャラの座標をコピー
-	// Vector3 position = worldTransform_.translation_;
-
 	//弾を生成し初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
 	newBullet->Initialize(modelBullet_, worldTransform_.translation_, velocity);
@@ -150,7 +160,7 @@ void Enemy::Fire() {
 void Enemy::DrawStage1(const ViewProjection& viewProjection) {
 	if (!isDead_) {
 		//モデルの描画
-		model_->Draw(worldTransform_, viewProjection);
+		modelStage1_->Draw(worldTransform_, viewProjection);
 
 		//弾描画
 		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
@@ -158,14 +168,14 @@ void Enemy::DrawStage1(const ViewProjection& viewProjection) {
 		}
 	} else {
 		//モデルの描画
-		modelDead_->Draw(worldTransform_, viewProjection);
+		modelDeadStage1_->Draw(worldTransform_, viewProjection);
 	}
 }
 
 void Enemy::DrawStage2(const ViewProjection& viewProjection) {
 	if (!isDead_) {
 		//モデルの描画
-		model_->Draw(worldTransform_, viewProjection);
+		modelStage2_->Draw(worldTransform_, viewProjection);
 
 		//弾描画
 		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
@@ -173,7 +183,7 @@ void Enemy::DrawStage2(const ViewProjection& viewProjection) {
 		}
 	} else {
 		//モデルの描画
-		modelDead_->Draw(worldTransform_, viewProjection);
+		modelDeadStage2_->Draw(worldTransform_, viewProjection);
 	}
 }
 
@@ -217,7 +227,7 @@ void Enemy::UpdateApproachStage2() {
 		//発射タイマー初期化
 		fireTimer = kFireInterval;
 	}
-	if (worldTransform_.translation_.z < 70.0f) {
+	if (worldTransform_.translation_.z < 80.0f) {
 		phase_ = Phase::AttackStage2;
 	}
 }
@@ -264,11 +274,14 @@ void Enemy::UpdateAttackStage2() {
 
 	//速度
 	Vector3 velocity;
+	//反転速度
+	Vector3 velocityReverse;
 	
 	//移動
-	velocity = {0.2f, 0.2f, -0.1f};
+	velocity = {0.2f, 0.2f, -0.03f};
+	velocityReverse = {-0.2f, -0.2f, -0.03f};
 	if (isReverse_) {
-		worldTransform_.translation_ -= velocity;
+		worldTransform_.translation_ += velocityReverse;
 	} else {
 		worldTransform_.translation_ += velocity;
 	}

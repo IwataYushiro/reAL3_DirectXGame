@@ -29,6 +29,7 @@ void Player::Initialize(Model* model) {
 	//‚±‚±‚ÅƒIƒvƒVƒ‡ƒ“‰Šú‰»
 	option_->Initialize(modelOption_, worldTransform_.translation_);
 }
+
 void Player::Reset() {
 	worldTransform_.translation_ = MyMathUtility::MySetVector3Zero();
 	worldTransform_.rotation_ = MyMathUtility::MySetVector3Zero();

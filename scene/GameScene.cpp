@@ -86,11 +86,14 @@ void GameScene::Update() {
 		//天球データの更新処理
 		skydome_->Update();
 
+		//遊び方説明
 		debugText_->Print("WASD move player", 200, 200, 2.0f);
-		debugText_->Print("MOUSE move option", 200, 250, 2.0f);
-		debugText_->Print("MOUSE LEFT shot", 200, 300, 2.0f);
+		debugText_->Print("QE rotate player", 200, 250, 2.0f);
+		debugText_->Print("MOUSE move option", 200, 300, 2.0f);
+		debugText_->Print("MOUSE LEFT shot", 200, 350, 2.0f);
 
 		debugText_->Print(" SPACE game start", 200, 450, 2.0f);
+
 		if (input_->TriggerKey(DIK_SPACE)) {
 			player_->Reset();
 			enemy_->Reset();
@@ -116,10 +119,15 @@ void GameScene::Update() {
 			}
 		}
 		if (enemy_->IsDead()) {
+
+			//敵が死んだらステージクリア
 			debugText_->Print("STAGE CLEAR", 300, 300, 3.0f);
 			debugText_->Print(" SPACE next stage", 300, 400, 2.0f);
 			debugText_->Print(" ESC title", 300, 450, 2.0f);
+			
 			if (input_->TriggerKey(DIK_SPACE)) {
+				//プレイヤー情報リセット
+				player_->Reset();
 				//次のステージの敵パラメータ
 				enemy_->Stage2Parameter();
 				scene_ = stage2;
@@ -139,6 +147,7 @@ void GameScene::Update() {
 
 		//敵キャラの更新処理
 		enemy_->Update();
+
 		if (!enemy_->IsDead()) {
 
 			//天球データの更新処理
@@ -150,11 +159,19 @@ void GameScene::Update() {
 				scene_ = gameover;
 				break;
 			}
+			if (enemy_->GetWorldPosition().z <= -30.0f) {
+				scene_ = gameover;
+				break;
+			}
 		}
+
 		if (enemy_->IsDead()) {
+			//クリアテキスト
 			debugText_->Print("STAGE CLEAR", 300, 300, 3.0f);
 			debugText_->Print(" SPACE next stage", 300, 400, 2.0f);
 			debugText_->Print(" ESC title", 300, 450, 2.0f);
+
+			//次の指示
 			if (input_->TriggerKey(DIK_SPACE)) {
 				scene_ = clear;
 				break;
@@ -171,6 +188,7 @@ void GameScene::Update() {
 	case clear:
 		debugText_->Print(" GAME CLEAR", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
+		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = title;
 			break;
@@ -181,6 +199,7 @@ void GameScene::Update() {
 
 		debugText_->Print(" GAME OVER", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
+		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = title;
 			break;
