@@ -12,6 +12,8 @@ class Player;
 //オプション(ガンダムでいうファンネルみたいな)
 class Option {
   public:
+	  //デストラクタ
+	~Option();
 	//初期化
 	void Initialize(Model* model, const Vector3& position);
 	//リセット処理
@@ -50,6 +52,7 @@ class Option {
 
 	//モデル
 	Model* model_ = nullptr;
+	Model* modelBullet_ = nullptr;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;

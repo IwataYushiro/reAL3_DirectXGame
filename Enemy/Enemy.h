@@ -21,7 +21,8 @@ class Enemy {
 	void InitializeApproach();
 	//リセット処理
 	void Reset();
-
+	//パラメータ
+	void Stage1Parameter();
 	//更新
 	void Update();
 	//弾発射

@@ -5,8 +5,7 @@ void OptionBullet::Initialize(Model* model, const Vector3& position, const Vecto
 	assert(model);
 
 	model_ = model;
-	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("texture/optionbullet.png");
+
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	//引数で受け取った初期座標をセット
@@ -32,7 +31,7 @@ void OptionBullet::Update() {
 //描画
 void OptionBullet::Draw(const ViewProjection& viewProjection) {
 	//モデルの描画
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection);
 }
 
 //衝突を検出したら呼び出されるコールバック関数

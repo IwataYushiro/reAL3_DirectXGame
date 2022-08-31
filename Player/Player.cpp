@@ -5,6 +5,7 @@ Player::Player() {}
 Player::~Player() {
 	//オプションの解放
 	delete option_;
+	delete modelOption_;
 }
 
 void Player::Initialize(Model* model) {
@@ -13,7 +14,7 @@ void Player::Initialize(Model* model) {
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
-
+	modelOption_ = Model::CreateFromOBJ("option", true);
 	//オプションの生成
 	option_ = new Option();
 
@@ -27,7 +28,7 @@ void Player::Initialize(Model* model) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	//ここでオプション初期化
-	option_->Initialize(model_, worldTransform_.translation_);
+	option_->Initialize(modelOption_, worldTransform_.translation_);
 }
 void Player::Reset() {
 	worldTransform_.translation_ = MyMathUtility::MySetVector3Zero();

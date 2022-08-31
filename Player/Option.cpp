@@ -1,6 +1,8 @@
 #include "Option.h"
 #include "Player.h"
 #include <WinApp.h>
+
+Option::~Option() { delete modelBullet_; }
 //初期化
 void Option::Initialize(Model* model, const Vector3& position) {
 	// NULLポインタチェック
@@ -8,13 +10,10 @@ void Option::Initialize(Model* model, const Vector3& position) {
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
-
+	modelBullet_ = Model::CreateFromOBJ("optionbullet", true);
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
-
-	//ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("texture/option.png");
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
@@ -56,7 +55,7 @@ void Option::Update(ViewProjection& viewprojection) {
 
 //描画
 void Option::Draw(ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection, textureHandle_);
+	model_->Draw(worldTransform_, viewProjection);
 	//弾描画
 	for (std::unique_ptr<OptionBullet>& bullet : optionBullets_) {
 		bullet->Draw(viewProjection);
@@ -135,7 +134,7 @@ void Option::Attack() {
 
 		//弾を生成し初期化
 		std::unique_ptr<OptionBullet> newBullet = std::make_unique<OptionBullet>();
-		newBullet->Initialize(model_, position, velocity);
+		newBullet->Initialize(modelBullet_, position, velocity);
 
 		//弾を登録
 		optionBullets_.push_back(std::move(newBullet));

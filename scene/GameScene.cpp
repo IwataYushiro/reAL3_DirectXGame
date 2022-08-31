@@ -29,6 +29,7 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
+	//天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	//自キャラの生成
 	player_ = new Player();
