@@ -55,6 +55,7 @@ void GameScene::Initialize() {
 	skydome_->Initialize(modelSkydome_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+	scene_ = title;
 	//敵に自機のアドレスを渡す
 	enemy_->SetPlayer(player_);
 	//デバッグカメラの生成
@@ -99,6 +100,43 @@ void GameScene::Update() {
 		break;
 
 	case stage1:
+
+		//敵キャラの更新処理
+		enemy_->Update();
+		if (!enemy_->IsDead()) {
+
+			//天球データの更新処理
+			skydome_->Update();
+			//自キャラの更新処理
+			player_->Update(viewProjection_);
+
+			if (player_->IsDead()) {
+				scene_ = gameover;
+				break;
+			}
+		}
+		if (enemy_->IsDead()) {
+			debugText_->Print("STAGE CLEAR", 300, 300, 3.0f);
+			debugText_->Print(" SPACE next stage", 300, 400, 2.0f);
+			debugText_->Print(" ESC title", 300, 450, 2.0f);
+			if (input_->TriggerKey(DIK_SPACE)) {
+				//次のステージの敵パラメータ
+				enemy_->Stage2Parameter();
+				scene_ = stage2;
+				break;
+			}
+			if (input_->TriggerKey(DIK_ESCAPE)) {
+				scene_ = title;
+				break;
+			}
+		}
+
+		//当たり判定
+		ChackAllCollisions();
+		break;
+
+	case stage2:
+
 		//敵キャラの更新処理
 		enemy_->Update();
 		if (!enemy_->IsDead()) {
@@ -130,7 +168,6 @@ void GameScene::Update() {
 		//当たり判定
 		ChackAllCollisions();
 		break;
-
 	case clear:
 		debugText_->Print(" GAME CLEAR", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
@@ -141,7 +178,7 @@ void GameScene::Update() {
 		break;
 
 	case gameover:
-		
+
 		debugText_->Print(" GAME OVER", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
 		if (input_->TriggerKey(DIK_SPACE)) {
@@ -186,18 +223,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
-	switch (scene_) {
-	case title:
-		break;
-	case howtoplay:
-		break;
-	case stage1:
-		break;
-	case clear:
-		break;
-	case gameover:
-		break;
-	}
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -224,7 +250,15 @@ void GameScene::Draw() {
 
 		player_->Draw(viewProjection_);
 
-		enemy_->Draw(viewProjection_);
+		enemy_->DrawStage1(viewProjection_);
+		break;
+	case stage2:
+		// 3Dモデル描画
+		skydome_->Draw(viewProjection_);
+
+		player_->Draw(viewProjection_);
+
+		enemy_->DrawStage2(viewProjection_);
 		break;
 	case clear:
 		break;
@@ -243,19 +277,6 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	switch (scene_) {
-	case title:
-		break;
-	case howtoplay:
-		break;
-	case stage1:
-		break;
-	case clear:
-		break;
-	case gameover:
-		break;
-	}
-
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
 	//

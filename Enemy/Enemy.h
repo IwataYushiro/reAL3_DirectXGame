@@ -1,6 +1,7 @@
 #pragma once
 #include "DebugText.h"
 #include "EnemyBullet.h"
+#include "GlobalScene.h"
 #include "Model.h"
 #include "MyMathUtility.h"
 #include "WorldTransform.h"
@@ -9,7 +10,8 @@
 #include <memory>
 //自機クラスの前方宣言
 class Player;
-
+//ゲームシーンも
+class GameScene;
 //敵
 class Enemy {
   public:
@@ -24,6 +26,7 @@ class Enemy {
 	void Reset();
 	//パラメータ
 	void Stage1Parameter();
+	void Stage2Parameter();
 	//更新
 	void Update();
 	//弾発射
@@ -31,13 +34,16 @@ class Enemy {
 	//ワールド座標を取得
 	Vector3 GetWorldPosition();
 	//描画
-	void Draw(const ViewProjection& viewProjection);
+	void DrawStage1(const ViewProjection& viewProjection);
+	void DrawStage2(const ViewProjection& viewProjection);
 
 	//状態変化用の更新関数
 	//接近
-	void UpdateApproach();
+	void UpdateApproachStage1();
+	void UpdateApproachStage2();
 	//攻撃
-	void UpdateAttack();
+	void UpdateAttackStage1();
+	void UpdateAttackStage2();
 	//離脱
 	void UpdateLeave();
 
@@ -64,8 +70,15 @@ class Enemy {
 
 	//行動フェーズ
 	enum class Phase {
-		Approach, //接近
-		Attack,   //攻撃
+		//ここからステージ1
+		ApproachStage1, //接近
+		AttackStage1,   //攻撃
+		
+		//ここからステージ2
+		ApproachStage2,  //接近
+		AttackStage2,    //攻撃
+
+		//全体
 		Leave,    //離脱
 	};
 
@@ -76,6 +89,9 @@ class Enemy {
 
 	//自機
 	Player* player_ = nullptr;
+	//ゲームシーン
+	GameScene* gameScene_ = nullptr;
+
 	//死亡フラグとライフ
 	bool isDead_ = false;
 	int life_ = 15;

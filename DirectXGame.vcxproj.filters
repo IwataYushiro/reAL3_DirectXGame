@@ -233,6 +233,9 @@
     <ClInclude Include="Camera\RailCamera.h">
       <Filter>ヘッダー ファイル\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Camera\GlobalScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">

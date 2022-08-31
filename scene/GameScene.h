@@ -5,6 +5,7 @@
 #include "DebugText.h"
 #include "DirectXCommon.h"
 #include "Enemy.h"
+#include "GlobalScene.h"
 #include "Input.h"
 #include "Model.h"
 #include "Player.h"
@@ -21,14 +22,6 @@
 /// </summary>
 class GameScene {
   public: // メンバ関数
-	  enum Scene {//シーンID
-		  title,
-		  howtoplay,
-		  stage1,
-		  clear,
-		  gameover,
-	}; 
-
 	/// <summary>
 	/// コンストクラタ
 	/// </summary>
@@ -59,6 +52,8 @@ class GameScene {
 	/// </summary>
 	void ChackAllCollisions();
 
+	size_t GetScene() { return scene_; }
+
   private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -87,8 +82,7 @@ class GameScene {
 	DebugCamera* debugCamera_ = nullptr;
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
-
-	int scene_;
+	size_t scene_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

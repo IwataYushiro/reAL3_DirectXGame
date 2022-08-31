@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "GameScene.h"
 #include "Player.h"
 // 初期化
 Enemy::~Enemy() {
@@ -20,13 +21,8 @@ void Enemy::Initialize(Model* model) {
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 
-	//引数で受け取った初期座標をセット
-	worldTransform_.translation_ = {1.0f, 1.0f, 80.0f};
-
-	//初期フェーズ
-	phase_ = Phase::Approach;
-	//接近フェーズ初期化
-	InitializeApproach();
+	//初期ステージ
+	Stage1Parameter();
 }
 
 // 接近フェーズ初期化
@@ -35,19 +31,37 @@ void Enemy::InitializeApproach() {
 	fireTimer = kFireInterval;
 }
 
-//リセット
-void Enemy::Reset() {
+//パラメータ
+void Enemy::Stage1Parameter() {
 	worldTransform_.translation_ = {1.0f, 1.0f, 80.0f};
 	//初期フェーズ
-	phase_ = Phase::Approach;
+	phase_ = Phase::ApproachStage1;
+	InitializeApproach();
 
-	life_ = 15;
+	life_ = 20;
 	isDead_ = false;
 	//弾リセット
 	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 		bullet->Reset();
 	}
 }
+
+void Enemy::Stage2Parameter() {
+	worldTransform_.translation_ = {5.0f, 5.0f, 100.0f};
+	//初期フェーズ
+	phase_ = Phase::ApproachStage2;
+	InitializeApproach();
+
+	life_ = 40;
+	isDead_ = false;
+	//弾リセット
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+		bullet->Reset();
+	}
+}
+
+//リセット
+void Enemy::Reset() { Stage1Parameter(); }
 
 //更新
 void Enemy::Update() {
@@ -59,14 +73,24 @@ void Enemy::Update() {
 
 		//座標を移動させる
 		switch (phase_) {
-		case Enemy::Phase::Approach:
+		case Enemy::Phase::ApproachStage1:
 
-			UpdateApproach();
+			UpdateApproachStage1();
 			break;
 
-		case Enemy::Phase::Attack:
+		case Enemy::Phase::AttackStage1:
 
-			UpdateAttack();
+			UpdateAttackStage1();
+			break;
+			//ステージ2
+		case Enemy::Phase::ApproachStage2:
+
+			UpdateApproachStage2();
+			break;
+
+		case Enemy::Phase::AttackStage2:
+
+			UpdateAttackStage2();
 			break;
 		}
 		//弾更新
@@ -123,7 +147,22 @@ void Enemy::Fire() {
 }
 
 //描画
-void Enemy::Draw(const ViewProjection& viewProjection) {
+void Enemy::DrawStage1(const ViewProjection& viewProjection) {
+	if (!isDead_) {
+		//モデルの描画
+		model_->Draw(worldTransform_, viewProjection);
+
+		//弾描画
+		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+			bullet->Draw(viewProjection);
+		}
+	} else {
+		//モデルの描画
+		modelDead_->Draw(worldTransform_, viewProjection);
+	}
+}
+
+void Enemy::DrawStage2(const ViewProjection& viewProjection) {
 	if (!isDead_) {
 		//モデルの描画
 		model_->Draw(worldTransform_, viewProjection);
@@ -140,10 +179,9 @@ void Enemy::Draw(const ViewProjection& viewProjection) {
 
 //状態変化用の更新関数
 //接近
-void Enemy::UpdateApproach() {
+void Enemy::UpdateApproachStage1() {
 	//速度
 	Vector3 velocity;
-
 	//移動
 	velocity = {0.0f, 0.0f, -0.1f};
 	worldTransform_.translation_ += velocity;
@@ -160,17 +198,75 @@ void Enemy::UpdateApproach() {
 
 	//指定の位置に到達したら離脱
 	if (worldTransform_.translation_.z < 50.0f) {
-		phase_ = Phase::Attack;
+		phase_ = Phase::AttackStage1;
 	}
 }
+void Enemy::UpdateApproachStage2() {
+	//速度
+	Vector3 velocity;
+	//移動
+	velocity = {0.0f, 0.0f, -0.3f};
+	worldTransform_.translation_ += velocity;
+
+	//発射タイマーカウントダウン
+	fireTimer--;
+	//指定時間に達した
+	if (fireTimer <= 0) {
+		//弾発射
+		Fire();
+		//発射タイマー初期化
+		fireTimer = kFireInterval;
+	}
+	if (worldTransform_.translation_.z < 70.0f) {
+		phase_ = Phase::AttackStage2;
+	}
+}
+
 //攻撃
-void Enemy::UpdateAttack() {
+void Enemy::UpdateAttackStage1() {
 
 	//速度
 	Vector3 velocity;
+		//移動
+		velocity = {0.1f, 0.0f, 0.0f};
+		if (isReverse_) {
+			worldTransform_.translation_ -= velocity;
+		} else {
+			worldTransform_.translation_ += velocity;
+		}
 
+		//指定の位置に到達したら反転
+		if (worldTransform_.translation_.x >= 30.0f) {
+			isReverse_ = true;
+		}
+		if (worldTransform_.translation_.x <= -30.0f) {
+			isReverse_ = false;
+		}
+
+		//発射タイマーカウントダウン
+		fireTimer--;
+		//指定時間に達した
+		if (fireTimer <= 0) {
+			//弾発射
+			Fire();
+			//発射タイマー初期化
+			fireTimer = kFireInterval;
+		}
+		//死んだら
+		if (life_ <= 0) {
+			phase_ = Phase::Leave;
+			life_ = 0;
+			isDead_ = true;
+		}
+}
+
+void Enemy::UpdateAttackStage2() {
+
+	//速度
+	Vector3 velocity;
+	
 	//移動
-	velocity = {0.1f, 0.0f, 0.0f};
+	velocity = {0.2f, 0.2f, -0.1f};
 	if (isReverse_) {
 		worldTransform_.translation_ -= velocity;
 	} else {
@@ -178,10 +274,10 @@ void Enemy::UpdateAttack() {
 	}
 
 	//指定の位置に到達したら反転
-	if (worldTransform_.translation_.x >= 30.0f) {
+	if (worldTransform_.translation_.x >= 20.0f || worldTransform_.translation_.y >= 10.0f) {
 		isReverse_ = true;
 	}
-	if (worldTransform_.translation_.x <= -30.0f) {
+	if (worldTransform_.translation_.x <= -20.0f || worldTransform_.translation_.y <= -10.0f) {
 		isReverse_ = false;
 	}
 
