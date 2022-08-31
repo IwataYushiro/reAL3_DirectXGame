@@ -5,6 +5,7 @@ Player::Player() {}
 Player::~Player() {
 	//オプションの解放
 	delete option_;
+	delete modelBullet_;
 	delete modelOption_;
 }
 
@@ -14,12 +15,10 @@ void Player::Initialize(Model* model) {
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
+	modelBullet_ = Model::CreateFromOBJ("playerbullet", true);
 	modelOption_ = Model::CreateFromOBJ("option", true);
 	//オプションの生成
 	option_ = new Option();
-
-	//ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("texture/player.png");
 
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
@@ -75,7 +74,7 @@ void Player::Update(ViewProjection& viewprojection) {
 
 void Player::Draw(ViewProjection& viewProjection) {
 	if (!isDead_) {
-		model_->Draw(worldTransform_, viewProjection, textureHandle_);
+		model_->Draw(worldTransform_, viewProjection);
 
 		//弾描画
 		for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
@@ -141,7 +140,7 @@ void Player::Attack() {
 
 		//弾を生成し初期化
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(model_, position, velocity);
+		newBullet->Initialize(modelBullet_, position, velocity);
 
 		//弾を登録
 		bullets_.push_back(std::move(newBullet));

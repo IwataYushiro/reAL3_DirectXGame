@@ -13,6 +13,7 @@ class Player;
 //敵
 class Enemy {
   public:
+	~Enemy();
 	//弾発射間隔
 	static const int kFireInterval = 60;
 	//初期化
@@ -56,6 +57,7 @@ class Enemy {
 	DebugText* debugText_ = nullptr;
 	//モデル
 	Model* model_ = nullptr;
+	Model* modelBullet_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 

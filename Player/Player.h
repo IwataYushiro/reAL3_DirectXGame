@@ -58,6 +58,7 @@ class Player {
 	WorldTransform worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
+	Model* modelBullet_ = nullptr;
 	Model* modelOption_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;

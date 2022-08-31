@@ -10,9 +10,10 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete debugCamera_;
+
 	//自キャラの解放
 	delete player_;
-
+	delete modelPlayer_;
 	//敵キャラの解放
 	delete enemy_;
 	//天球データ解放
@@ -29,6 +30,8 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
+	//プレイヤー
+	modelPlayer_ = Model::CreateFromOBJ("player", true);
 	//天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	//自キャラの生成
@@ -41,7 +44,7 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 
 	//自キャラの初期化
-	player_->Initialize(model_);
+	player_->Initialize(modelPlayer_);
 
 	//敵キャラの初期化
 	enemy_->Initialize(model_);
@@ -146,7 +149,7 @@ void GameScene::Update() {
 	}
 
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_C) && !isDebugCameraActive_) {
+	if (input_->TriggerKey(DIK_P) && !isDebugCameraActive_) {
 		isDebugCameraActive_ = true;
 	}
 

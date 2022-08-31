@@ -1,11 +1,14 @@
 #include "Enemy.h"
 #include "Player.h"
 // 初期化
+Enemy::~Enemy() { delete modelBullet_; }
+
 void Enemy::Initialize(Model* model) {
 	// NULLポインタチェック
 	assert(model);
 
 	model_ = model;
+	modelBullet_ = Model::CreateFromOBJ("enemybullet", true);
 	//テクスチャ読み込み
 	textureHandle_ = TextureManager::Load("texture/enemy.png");
 
@@ -109,7 +112,7 @@ void Enemy::Fire() {
 
 	//弾を生成し初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+	newBullet->Initialize(modelBullet_, worldTransform_.translation_, velocity);
 
 	//弾を登録
 	enemyBullets_.push_back(std::move(newBullet));
