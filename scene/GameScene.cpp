@@ -16,6 +16,7 @@ GameScene::~GameScene() {
 	delete modelPlayer_;
 	//敵キャラの解放
 	delete enemy_;
+	delete modelEnemy1_;
 	//天球データ解放
 	delete skydome_;
 	delete modelSkydome_;
@@ -32,6 +33,8 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 	//プレイヤー
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
+	//敵(1面)
+	modelEnemy1_ = Model::CreateFromOBJ("enemy1", true);
 	//天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	//自キャラの生成
@@ -47,7 +50,7 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_);
 
 	//敵キャラの初期化
-	enemy_->Initialize(model_);
+	enemy_->Initialize(modelEnemy1_);
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	//ビュープロジェクションの初期化
@@ -96,14 +99,14 @@ void GameScene::Update() {
 		break;
 
 	case stage1:
+		//敵キャラの更新処理
+		enemy_->Update();
 		if (!enemy_->IsDead()) {
 
 			//天球データの更新処理
 			skydome_->Update();
 			//自キャラの更新処理
 			player_->Update(viewProjection_);
-			//敵キャラの更新処理
-			enemy_->Update();
 
 			if (player_->IsDead()) {
 				scene_ = gameover;
@@ -314,7 +317,7 @@ void GameScene::ChackAllCollisions() {
 
 #pragma region 自弾と敵の当たり判定
 	//それぞれの半径
-	radiusA = 5.0f;
+	radiusA = 3.0f;
 	radiusB = 1.0f;
 
 	//敵の座標
@@ -373,7 +376,7 @@ void GameScene::ChackAllCollisions() {
 
 #pragma region オプション弾と敵の当たり判定
 	//それぞれの半径
-	radiusA = 5.0f;
+	radiusA = 3.0f;
 	radiusB = 1.0f;
 
 	//敵の座標

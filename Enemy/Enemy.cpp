@@ -1,7 +1,10 @@
 #include "Enemy.h"
 #include "Player.h"
 // 初期化
-Enemy::~Enemy() { delete modelBullet_; }
+Enemy::~Enemy() {
+	delete modelBullet_;
+	delete modelDead_;
+}
 
 void Enemy::Initialize(Model* model) {
 	// NULLポインタチェック
@@ -9,8 +12,7 @@ void Enemy::Initialize(Model* model) {
 
 	model_ = model;
 	modelBullet_ = Model::CreateFromOBJ("enemybullet", true);
-	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("texture/enemy.png");
+	modelDead_ = Model::CreateFromOBJ("enemy1dead", true);
 
 	//シングルトンインスタンスを取得
 	debugText_ = DebugText::GetInstance();
@@ -19,7 +21,6 @@ void Enemy::Initialize(Model* model) {
 	worldTransform_.Initialize();
 
 	//引数で受け取った初期座標をセット
-	worldTransform_.scale_ = {5.0f, 5.0f, 5.0f};
 	worldTransform_.translation_ = {1.0f, 1.0f, 80.0f};
 
 	//初期フェーズ
@@ -67,22 +68,25 @@ void Enemy::Update() {
 
 			UpdateAttack();
 			break;
-
-		case Enemy::Phase::Leave:
-			UpdateLeave();
-			break;
 		}
 		//弾更新
 		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 			bullet->Update();
 		}
-
-		//行列更新
-		worldTransform_.Update(worldTransform_);
+		//ライフ表示
+		debugText_->SetScale(1.0f);
+		debugText_->SetPos(50, 100);
+		debugText_->Printf("enemy life:(%d)", life_);
+	} else {
+		//座標を移動させる
+		switch (phase_) {
+		case Enemy::Phase::Leave:
+			UpdateLeave();
+			break;
+		}
 	}
-	debugText_->SetScale(1.0f);
-	debugText_->SetPos(50, 100);
-	debugText_->Printf("enemy life:(%d)", life_);
+	//行列更新
+	worldTransform_.Update(worldTransform_);
 }
 
 //弾発射
@@ -122,12 +126,15 @@ void Enemy::Fire() {
 void Enemy::Draw(const ViewProjection& viewProjection) {
 	if (!isDead_) {
 		//モデルの描画
-		model_->Draw(worldTransform_, viewProjection, textureHandle_);
+		model_->Draw(worldTransform_, viewProjection);
 
 		//弾描画
 		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
 			bullet->Draw(viewProjection);
 		}
+	} else {
+		//モデルの描画
+		modelDead_->Draw(worldTransform_, viewProjection);
 	}
 }
 
@@ -187,6 +194,12 @@ void Enemy::UpdateAttack() {
 		//発射タイマー初期化
 		fireTimer = kFireInterval;
 	}
+	//死んだら
+	if (life_ <= 0) {
+		phase_ = Phase::Leave;
+		life_ = 0;
+		isDead_ = true;
+	}
 }
 
 //離脱
@@ -195,7 +208,7 @@ void Enemy::UpdateLeave() {
 	Vector3 velocity;
 
 	//移動
-	velocity = {0.1f, 0.1f, 0.0f};
+	velocity = {0.0f, 0.0f, 0.01f};
 	worldTransform_.translation_ += velocity;
 }
 
@@ -213,16 +226,6 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 //衝突を検出したら呼び出されるコールバック関数
-void Enemy::OnCollisionPlayer() {
-	life_ -= 2;
-	if (life_ <= 0) {
-		isDead_ = true;
-	}
-}
+void Enemy::OnCollisionPlayer() { life_ -= 2; }
 
-void Enemy::OnCollisionOption() {
-	life_--;
-	if (life_ <= 0) {
-		isDead_ = true;
-	}
-}
+void Enemy::OnCollisionOption() { life_--; }

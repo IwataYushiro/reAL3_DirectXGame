@@ -77,6 +77,8 @@ class GameScene {
 	Model* modelPlayer_ = nullptr;
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
+	Model* modelEnemy1_ = nullptr;
+
 	//天球データ
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
