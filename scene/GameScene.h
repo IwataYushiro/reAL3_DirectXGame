@@ -83,9 +83,6 @@ class GameScene {
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
 	size_t scene_;
-
-	// BGM
-	uint32_t titleBgm_ = 0u;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

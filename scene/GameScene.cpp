@@ -9,7 +9,6 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
-	delete debugCamera_;
 	// BGM解放
 
 	//自キャラの解放
@@ -62,20 +61,11 @@ void GameScene::Initialize() {
 	scene_ = title;
 	//敵に自機のアドレスを渡す
 	enemy_->SetPlayer(player_);
-	//デバッグカメラの生成
-	debugCamera_ = new DebugCamera(1260, 720);
-	//軸方向表示の表示を有効にする
-	AxisIndicator::GetInstance()->SetVisible(true);
-	//軸方向表示が参照するビュープロジェクションを指定する(アドレス無し)
-	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewProjection_);
-	//ライン描画が参照するビュープロジェクションを指定する(アドレス無し)
-	PrimitiveDrawer::GetInstance()->SetViewProjection(&debugCamera_->GetViewProjection());
 }
 
 void GameScene::Update() {
 	switch (scene_) {
 	case title:
-		// BGM再生
 		//天球データの更新処理
 		skydome_->Update();
 
@@ -289,28 +279,6 @@ void GameScene::Update() {
 			break;
 		}
 		break;
-	}
-
-#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_P) && !isDebugCameraActive_) {
-		isDebugCameraActive_ = true;
-	}
-
-#endif // _DEBUG
-
-	if (isDebugCameraActive_) {
-		//デバッグカメラの更新
-		debugCamera_->Update();
-		//ビュープロジェクション行列をコピー
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		////ビュープロジェクション行列を転送
-		viewProjection_.TransferMatrix();
-	} else {
-		////ビュープロジェクション行列を再計算
-		viewProjection_.UpdateMatrix();
-		//ビュープロジェクション行列を転送
-		viewProjection_.TransferMatrix();
 	}
 }
 
