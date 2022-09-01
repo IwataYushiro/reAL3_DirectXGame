@@ -9,4 +9,3 @@ enum Scene { //ƒV[ƒ“ID
 	trueend,
 	gameover,
 };
-

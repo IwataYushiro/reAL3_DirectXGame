@@ -23,7 +23,7 @@ class Enemy {
 	static const int kFireIntervalStage3 = 30;
 	//初期化
 	void Initialize(Model* model);
-	
+
 	//リセット処理
 	void Reset();
 	void EndingPosition();
@@ -92,17 +92,17 @@ class Enemy {
 		//ここからステージ1
 		ApproachStage1, //接近
 		AttackStage1,   //攻撃
-		
+
 		//ここからステージ2
-		ApproachStage2,  //接近
-		AttackStage2,    //攻撃
+		ApproachStage2, //接近
+		AttackStage2,   //攻撃
 
 		//ここからステージ3
 		ApproachStage3, //接近
 		AttackStage3,   //攻撃
-		SaveStage3,	//ステージ3限定
+		SaveStage3,     //ステージ3限定
 		//全体
-		Leave,    //離脱
+		Leave, //離脱
 		//エンディング
 		end,
 	};

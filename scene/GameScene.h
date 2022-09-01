@@ -8,13 +8,13 @@
 #include "GlobalScene.h"
 #include "Input.h"
 #include "Model.h"
+#include "MyMathUtility.h"
 #include "Player.h"
 #include "SafeDelete.h"
 #include "Skydome/Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "MyMathUtility.h"
 #include <memory>
 
 /// <summary>
@@ -84,7 +84,7 @@ class GameScene {
 	bool isDebugCameraActive_ = false;
 	size_t scene_;
 
-	//BGM
+	// BGM
 	uint32_t titleBgm_ = 0u;
 	/// <summary>
 	/// ゲームシーン用

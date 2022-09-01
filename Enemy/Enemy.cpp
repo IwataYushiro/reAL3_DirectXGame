@@ -66,7 +66,6 @@ void Enemy::Stage2Parameter() {
 	//発射タイマー初期化
 	fireTimer = kFireIntervalStage2;
 
-
 	life_ = 60;
 	isDead_ = false;
 
@@ -84,7 +83,6 @@ void Enemy::Stage3Parameter() {
 	//発射タイマー初期化
 	fireTimer = kFireIntervalStage3;
 
-
 	life_ = 100;
 	isDead_ = false;
 
@@ -98,16 +96,16 @@ void Enemy::Stage3Parameter() {
 void Enemy::Reset() { Stage1Parameter(); }
 
 //エンディング用のポジション
-void Enemy::EndingPosition() { 
+void Enemy::EndingPosition() {
 	worldTransform_.translation_ = {10.0f, -10.0f, -10.0f};
 	//回転速度
 	const float kRotSpeed = -0.05f;
 	worldTransform_.rotation_ = {0.0f, kRotSpeed, 0.0f};
-}  
+}
 //更新
 void Enemy::Update() {
 	//テキストサイズ
-debugText_->SetScale(1.0f);
+	debugText_->SetScale(1.0f);
 	if (!isDead_) {
 		//死亡フラグの立った弾を削除
 		enemyBullets_.remove_if(
@@ -139,19 +137,23 @@ debugText_->SetScale(1.0f);
 			debugText_->Printf("!DANGER! pos.z < 0 = DEATH!:(%f)", worldTransform_.translation_.z);
 			break;
 
-				//ステージ3
+			//ステージ3
 		case Enemy::Phase::ApproachStage3:
 
 			UpdateApproachStage3();
 			debugText_->SetPos(50, 150);
-			debugText_->Printf("!CHALLENGE! pos.z < 0 or life < 0 = clear!:(posz %f)", worldTransform_.translation_.z);
+			debugText_->Printf(
+			  "!CHALLENGE! pos.z < 0 or life < 0 = clear!:(posz %f)",
+			  worldTransform_.translation_.z);
 			break;
 
 		case Enemy::Phase::AttackStage3:
 
 			UpdateAttackStage3();
 			debugText_->SetPos(50, 150);
-			debugText_->Printf("!CHALLENGE! pos.z < 0 or life < 0 = clear!:(posz %f)", worldTransform_.translation_.z);
+			debugText_->Printf(
+			  "!CHALLENGE! pos.z < 0 or life < 0 = clear!:(posz %f)",
+			  worldTransform_.translation_.z);
 			break;
 		}
 		//弾更新
@@ -159,11 +161,10 @@ debugText_->SetScale(1.0f);
 			bullet->Update();
 		}
 		//ライフ表示
-		
+
 		debugText_->SetPos(50, 100);
 		debugText_->Printf("enemy life:(%d)", life_);
-	} 
-	else {
+	} else {
 		//座標を移動させる
 		switch (phase_) {
 		case Enemy::Phase::Leave:
@@ -325,37 +326,37 @@ void Enemy::UpdateAttackStage1() {
 
 	//速度
 	Vector3 velocity;
-		//移動
-		velocity = {0.1f, 0.0f, 0.0f};
-		if (isReverse_) {
-			worldTransform_.translation_ -= velocity;
-		} else {
-			worldTransform_.translation_ += velocity;
-		}
+	//移動
+	velocity = {0.1f, 0.0f, 0.0f};
+	if (isReverse_) {
+		worldTransform_.translation_ -= velocity;
+	} else {
+		worldTransform_.translation_ += velocity;
+	}
 
-		//指定の位置に到達したら反転
-		if (worldTransform_.translation_.x >= 30.0f) {
-			isReverse_ = true;
-		}
-		if (worldTransform_.translation_.x <= -30.0f) {
-			isReverse_ = false;
-		}
+	//指定の位置に到達したら反転
+	if (worldTransform_.translation_.x >= 30.0f) {
+		isReverse_ = true;
+	}
+	if (worldTransform_.translation_.x <= -30.0f) {
+		isReverse_ = false;
+	}
 
-		//発射タイマーカウントダウン
-		fireTimer--;
-		//指定時間に達した
-		if (fireTimer <= 0) {
-			//弾発射
-			Fire();
-			//発射タイマー初期化
-		    fireTimer = kFireIntervalStage1;
-		}
-		//死んだら
-		if (life_ <= 0) {
-			phase_ = Phase::Leave;
-			life_ = 0;
-			isDead_ = true;
-		}
+	//発射タイマーカウントダウン
+	fireTimer--;
+	//指定時間に達した
+	if (fireTimer <= 0) {
+		//弾発射
+		Fire();
+		//発射タイマー初期化
+		fireTimer = kFireIntervalStage1;
+	}
+	//死んだら
+	if (life_ <= 0) {
+		phase_ = Phase::Leave;
+		life_ = 0;
+		isDead_ = true;
+	}
 }
 
 void Enemy::UpdateAttackStage2() {
@@ -364,7 +365,7 @@ void Enemy::UpdateAttackStage2() {
 	Vector3 velocity;
 	//反転速度
 	Vector3 velocityReverse;
-	
+
 	//移動
 	velocity = {0.2f, 0.2f, -0.03f};
 	velocityReverse = {-0.2f, -0.2f, -0.03f};
@@ -412,8 +413,7 @@ void Enemy::UpdateAttackStage3() {
 
 	if (isReverse_) {
 		worldTransform_.translation_ += velocityReverse;
-	} 
-	else {
+	} else {
 		worldTransform_.translation_ += velocity;
 	}
 
