@@ -27,6 +27,7 @@ class Enemy {
 	//パラメータ
 	void Stage1Parameter();
 	void Stage2Parameter();
+	void Stage3Parameter();
 	//更新
 	void Update();
 	//弾発射
@@ -36,16 +37,22 @@ class Enemy {
 	//描画
 	void DrawStage1(const ViewProjection& viewProjection);
 	void DrawStage2(const ViewProjection& viewProjection);
+	void DrawStage3(const ViewProjection& viewProjection);
 
 	//状態変化用の更新関数
 	//接近
 	void UpdateApproachStage1();
 	void UpdateApproachStage2();
+	void UpdateApproachStage3();
 	//攻撃
 	void UpdateAttackStage1();
 	void UpdateAttackStage2();
+	void UpdateAttackStage3();
 	//離脱
 	void UpdateLeave();
+
+	//ステージ3限定離脱
+	void UpdateSaveStage3();
 
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollisionPlayer();
@@ -67,6 +74,10 @@ class Enemy {
 
 	Model* modelStage2_ = nullptr;
 	Model* modelDeadStage2_ = nullptr;
+
+	Model* modelStage3_ = nullptr;
+	Model* modelSaveStage3_ = nullptr;
+
 	Model* modelBullet_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
@@ -81,6 +92,10 @@ class Enemy {
 		ApproachStage2,  //接近
 		AttackStage2,    //攻撃
 
+		//ここからステージ3
+		ApproachStage3, //接近
+		AttackStage3,   //攻撃
+		SaveStage3,	//ステージ3限定
 		//全体
 		Leave,    //離脱
 	};
@@ -96,8 +111,9 @@ class Enemy {
 	GameScene* gameScene_ = nullptr;
 
 	//死亡フラグとライフ
-	bool isDead_ = false;
-	int life_ = 15;
+	bool isDead_;
+	int life_;
+
 	//反転フラグ
 	bool isReverse_ = false;
 

@@ -5,8 +5,12 @@
 Enemy::~Enemy() {
 	delete modelBullet_;
 	delete modelDeadStage1_;
+
 	delete modelStage2_;
 	delete modelDeadStage2_;
+
+	delete modelStage3_;
+	delete modelSaveStage3_;
 }
 
 void Enemy::Initialize(Model* model) {
@@ -18,6 +22,9 @@ void Enemy::Initialize(Model* model) {
 
 	modelStage2_ = Model::CreateFromOBJ("enemy2", true);
 	modelDeadStage2_ = Model::CreateFromOBJ("enemy2dead", true);
+
+	modelStage3_ = Model::CreateFromOBJ("enemy3", true);
+	modelSaveStage3_ = Model::CreateFromOBJ("enemy3save", true);
 
 	modelBullet_ = Model::CreateFromOBJ("enemybullet", true);
 	//シングルトンインスタンスを取得
@@ -39,12 +46,12 @@ void Enemy::InitializeApproach() {
 
 //パラメータ
 void Enemy::Stage1Parameter() {
-	worldTransform_.translation_ = {1.0f, 1.0f, 80.0f};
+	worldTransform_.translation_ = {-10.0f, -5.0f, 80.0f};
 	//初期フェーズ
 	phase_ = Phase::ApproachStage1;
 	InitializeApproach();
 
-	life_ = 20;
+	life_ = 40;
 	isDead_ = false;
 
 	isReverse_ = false;
@@ -60,7 +67,7 @@ void Enemy::Stage2Parameter() {
 	phase_ = Phase::ApproachStage2;
 	InitializeApproach();
 
-	life_ = 40;
+	life_ = 60;
 	isDead_ = false;
 
 	isReverse_ = false;
@@ -70,6 +77,21 @@ void Enemy::Stage2Parameter() {
 	}
 }
 
+void Enemy::Stage3Parameter() {
+	worldTransform_.translation_ = {0.0f, 10.0f, 100.0f};
+	//初期フェーズ
+	phase_ = Phase::ApproachStage3;
+	InitializeApproach();
+
+	life_ = 100;
+	isDead_ = false;
+
+	isReverse_ = false;
+	//弾リセット
+	for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+		bullet->Reset();
+	}
+}
 //リセット
 void Enemy::Reset() { Stage1Parameter(); }
 
@@ -107,6 +129,21 @@ debugText_->SetScale(1.0f);
 			debugText_->SetPos(50, 150);
 			debugText_->Printf("!DANGER! pos.z < 0 = DEATH!:(%f)", worldTransform_.translation_.z);
 			break;
+
+				//ステージ3
+		case Enemy::Phase::ApproachStage3:
+
+			UpdateApproachStage3();
+			debugText_->SetPos(50, 150);
+			debugText_->Printf("!CHALLENGE! pos.z < 0 or life < 0 = clear!:(posz %f)", worldTransform_.translation_.z);
+			break;
+
+		case Enemy::Phase::AttackStage3:
+
+			UpdateAttackStage3();
+			debugText_->SetPos(50, 150);
+			debugText_->Printf("!CHALLENGE! pos.z < 0 or life < 0 = clear!:(posz %f)", worldTransform_.translation_.z);
+			break;
 		}
 		//弾更新
 		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
@@ -116,11 +153,15 @@ debugText_->SetScale(1.0f);
 		
 		debugText_->SetPos(50, 100);
 		debugText_->Printf("enemy life:(%d)", life_);
-	} else {
+	} 
+	else {
 		//座標を移動させる
 		switch (phase_) {
 		case Enemy::Phase::Leave:
 			UpdateLeave();
+			break;
+		case Enemy::Phase::SaveStage3:
+			UpdateSaveStage3();
 			break;
 		}
 	}
@@ -187,6 +228,21 @@ void Enemy::DrawStage2(const ViewProjection& viewProjection) {
 	}
 }
 
+void Enemy::DrawStage3(const ViewProjection& viewProjection) {
+	if (!isDead_) {
+		//モデルの描画
+		modelStage3_->Draw(worldTransform_, viewProjection);
+
+		//弾描画
+		for (std::unique_ptr<EnemyBullet>& bullet : enemyBullets_) {
+			bullet->Draw(viewProjection);
+		}
+	} else {
+		//モデルの描画
+		modelSaveStage3_->Draw(worldTransform_, viewProjection);
+	}
+}
+
 //状態変化用の更新関数
 //接近
 void Enemy::UpdateApproachStage1() {
@@ -229,6 +285,26 @@ void Enemy::UpdateApproachStage2() {
 	}
 	if (worldTransform_.translation_.z < 80.0f) {
 		phase_ = Phase::AttackStage2;
+	}
+}
+void Enemy::UpdateApproachStage3() {
+	//速度
+	Vector3 velocity;
+	//移動
+	velocity = {0.0f, 0.0f, -0.1f};
+	worldTransform_.translation_ += velocity;
+
+	//発射タイマーカウントダウン
+	fireTimer--;
+	//指定時間に達した
+	if (fireTimer <= 0) {
+		//弾発射
+		Fire();
+		//発射タイマー初期化
+		fireTimer = kFireInterval;
+	}
+	if (worldTransform_.translation_.z < 70.0f) {
+		phase_ = Phase::AttackStage3;
 	}
 }
 
@@ -311,16 +387,72 @@ void Enemy::UpdateAttackStage2() {
 	}
 }
 
+void Enemy::UpdateAttackStage3() {
+
+	//速度
+	Vector3 velocity;
+	//反転速度
+	Vector3 velocityReverse;
+
+	//移動
+	velocity = {0.2f, 0.2f, -0.02f};
+	velocityReverse = {0.2f, -0.2f, -0.02f};
+
+	if (isReverse_) {
+		worldTransform_.translation_ += velocityReverse;
+	} 
+	else {
+		worldTransform_.translation_ += velocity;
+	}
+
+	//指定の位置に到達したら反転
+	if (worldTransform_.translation_.y >= 18.0f) {
+		isReverse_ = true;
+	}
+	if (worldTransform_.translation_.y <= -18.0f) {
+		isReverse_ = false;
+	}
+
+	if (worldTransform_.translation_.x >= 30.0f) {
+		worldTransform_.translation_.x = -30.0f;
+	}
+
+	//発射タイマーカウントダウン
+	fireTimer--;
+	//指定時間に達した
+	if (fireTimer <= 0) {
+		//弾発射
+		Fire();
+		//発射タイマー初期化
+		fireTimer = kFireInterval;
+	}
+	//死んだら
+	if (life_ <= 0) {
+		phase_ = Phase::SaveStage3;
+		life_ = 0;
+		isDead_ = true;
+	}
+}
 //離脱
 void Enemy::UpdateLeave() {
 	//速度
 	Vector3 velocity;
 
 	//移動
-	velocity = {0.0f, 0.0f, 0.01f};
+	velocity = {0.0f, 0.0f, 0.03f};
 	worldTransform_.translation_ += velocity;
 }
 
+//ステージ3限定離脱
+void Enemy::UpdateSaveStage3() {
+	//速度
+	Vector3 velocity;
+
+	//移動
+	velocity = {0.0f, 0.0f,-0.05f};
+	worldTransform_.translation_ += velocity;
+
+}
 //ワールド座標を取得
 Vector3 Enemy::GetWorldPosition() {
 

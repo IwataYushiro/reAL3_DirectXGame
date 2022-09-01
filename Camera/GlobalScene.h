@@ -4,6 +4,7 @@ enum Scene { //ƒV[ƒ“ID
 	howtoplay,
 	stage1,
 	stage2,
+	stage3,
 	clear,
 	gameover,
 };

@@ -10,6 +10,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete debugCamera_;
+	// BGM解放
 
 	//自キャラの解放
 	delete player_;
@@ -29,6 +30,8 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
+	// BGMロード
+
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//プレイヤー
@@ -37,6 +40,7 @@ void GameScene::Initialize() {
 	modelEnemy1_ = Model::CreateFromOBJ("enemy1", true);
 	//天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
 	//自キャラの生成
 	player_ = new Player();
 
@@ -71,11 +75,12 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	switch (scene_) {
 	case title:
+		// BGM再生
 		//天球データの更新処理
 		skydome_->Update();
 
 		debugText_->Print(" BIT SHOOTER", 200, 200, 3.0f);
-		debugText_->Print(" SPACE Start", 200, 350, 2.0f);
+		debugText_->Print(" SPACE start", 200, 350, 2.0f);
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = howtoplay;
 			break;
@@ -124,7 +129,7 @@ void GameScene::Update() {
 			debugText_->Print("STAGE CLEAR", 300, 300, 3.0f);
 			debugText_->Print(" SPACE next stage", 300, 400, 2.0f);
 			debugText_->Print(" ESC title", 300, 450, 2.0f);
-			
+
 			if (input_->TriggerKey(DIK_SPACE)) {
 				//プレイヤー情報リセット
 				player_->Reset();
@@ -173,6 +178,63 @@ void GameScene::Update() {
 
 			//次の指示
 			if (input_->TriggerKey(DIK_SPACE)) {
+				//プレイヤー情報リセット
+				player_->Reset();
+				//次のステージの敵パラメータ
+				enemy_->Stage3Parameter();
+				scene_ = stage3;
+				break;
+			}
+			if (input_->TriggerKey(DIK_ESCAPE)) {
+				scene_ = title;
+				break;
+			}
+		}
+
+		//当たり判定
+		ChackAllCollisions();
+		break;
+
+	case stage3:
+
+		//敵キャラの更新処理
+		enemy_->Update();
+
+		if (!enemy_->IsDead()) {
+
+			//天球データの更新処理
+			skydome_->Update();
+			//自キャラの更新処理
+			player_->Update(viewProjection_);
+
+			if (player_->IsDead()) {
+				scene_ = gameover;
+				break;
+			}
+
+			if (enemy_->GetWorldPosition().z <= -10.0f) {
+				//敵が奥に行ったらバッドエンド
+				//クリアテキスト
+				debugText_->Print("STAGE CLEAR...??", 300, 300, 3.0f);
+				debugText_->Print(" SPACE result", 300, 400, 2.0f);
+				debugText_->Print(" ESC title", 300, 450, 2.0f);
+
+				if (input_->TriggerKey(DIK_SPACE)) {
+					scene_ = clear;
+					break;
+				}
+			}
+		}
+		if (enemy_->IsDead()) {
+			//クリアテキスト
+			debugText_->Print("congratulation!!", 150, 150, 3.0f);
+
+			debugText_->Print("STAGE CLEAR!!", 300, 300, 3.0f);
+			debugText_->Print(" SPACE result", 300, 400, 2.0f);
+			debugText_->Print(" ESC title", 300, 450, 2.0f);
+
+			//次の指示
+			if (input_->TriggerKey(DIK_SPACE)) {
 				scene_ = clear;
 				break;
 			}
@@ -185,6 +247,7 @@ void GameScene::Update() {
 		//当たり判定
 		ChackAllCollisions();
 		break;
+
 	case clear:
 		debugText_->Print(" GAME CLEAR", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
@@ -279,8 +342,18 @@ void GameScene::Draw() {
 
 		enemy_->DrawStage2(viewProjection_);
 		break;
+	case stage3:
+		// 3Dモデル描画
+		skydome_->Draw(viewProjection_);
+
+		player_->Draw(viewProjection_);
+
+		enemy_->DrawStage3(viewProjection_);
+		break;
+
 	case clear:
 		break;
+	
 	case gameover:
 		break;
 	}
