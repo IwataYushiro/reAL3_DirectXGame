@@ -5,6 +5,7 @@ Player::Player() {}
 Player::~Player() {
 	//オプションの解放
 	delete option_;
+	delete modelDead_;
 	delete modelBullet_;
 	delete modelOption_;
 }
@@ -15,6 +16,7 @@ void Player::Initialize(Model* model) {
 
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
+	modelDead_ = Model::CreateFromOBJ("playerdead", true);
 	modelBullet_ = Model::CreateFromOBJ("playerbullet", true);
 	modelOption_ = Model::CreateFromOBJ("option", true);
 	//オプションの生成
@@ -42,6 +44,8 @@ void Player::Reset() {
 		bullet->Reset();
 	}
 }
+//ゲームオーバー座標
+void Player::Death() {}
 
 void Player::Update(ViewProjection& viewprojection) {
 
@@ -65,9 +69,9 @@ void Player::Update(ViewProjection& viewprojection) {
 
 		//移動制限
 		MoveLimit();
-
-		worldTransform_.TransferMatrix();
 	}
+
+	worldTransform_.TransferMatrix();
 	debugText_->SetScale(1.0f);
 	debugText_->SetPos(50, 50);
 	debugText_->Printf("life:(%d)", life_);
@@ -87,6 +91,9 @@ void Player::Draw(ViewProjection& viewProjection) {
 	}
 }
 
+void Player::DrawDead(ViewProjection& viewProjection) {
+	modelDead_->Draw(worldTransform_, viewProjection);
+}
 //移動処理
 void Player::Move() {
 

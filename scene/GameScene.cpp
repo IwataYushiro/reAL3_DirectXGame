@@ -353,8 +353,9 @@ void GameScene::Draw() {
 
 	case clear:
 		break;
-	
+
 	case gameover:
+		player_->DrawDead(viewProjection_);
 		break;
 	}
 

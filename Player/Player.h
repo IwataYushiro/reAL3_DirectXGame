@@ -21,7 +21,8 @@ class Player {
 	void Initialize(Model* model);
 	//リセット処理
 	void Reset();
-
+	//死んだら
+	void Death();
 	//更新
 	void Update(ViewProjection& viewprojection);
 
@@ -42,6 +43,7 @@ class Player {
 
 	//描画
 	void Draw(ViewProjection& viewProjection);
+	void DrawDead(ViewProjection& viewProjection);
 
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
@@ -58,6 +60,7 @@ class Player {
 	WorldTransform worldTransform_;
 	//モデル
 	Model* model_ = nullptr;
+	Model* modelDead_ = nullptr;
 	Model* modelBullet_ = nullptr;
 	Model* modelOption_ = nullptr;
 	//テクスチャハンドル
