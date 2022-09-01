@@ -28,6 +28,7 @@ void Enemy::Initialize(Model* model) {
 
 	modelBullet_ = Model::CreateFromOBJ("enemybullet", true);
 	//シングルトンインスタンスを取得
+	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
 	//ワールドトランスフォームの初期化
@@ -47,6 +48,7 @@ void Enemy::InitializeApproach() {
 //パラメータ
 void Enemy::Stage1Parameter() {
 	worldTransform_.translation_ = {-10.0f, -5.0f, 80.0f};
+	worldTransform_.rotation_ = MyMathUtility::MySetVector3Zero();
 	//初期フェーズ
 	phase_ = Phase::ApproachStage1;
 	InitializeApproach();
@@ -95,6 +97,13 @@ void Enemy::Stage3Parameter() {
 //リセット
 void Enemy::Reset() { Stage1Parameter(); }
 
+//エンディング用のポジション
+void Enemy::EndingPosition() { 
+	worldTransform_.translation_ = {10.0f, -10.0f, -10.0f};
+	//回転速度
+	const float kRotSpeed = -0.05f;
+	worldTransform_.rotation_ = {0.0f, kRotSpeed, 0.0f};
+}  
 //更新
 void Enemy::Update() {
 	//テキストサイズ
@@ -162,6 +171,9 @@ debugText_->SetScale(1.0f);
 			break;
 		case Enemy::Phase::SaveStage3:
 			UpdateSaveStage3();
+			break;
+		case Enemy::Phase::end:
+			EndingPosition();
 			break;
 		}
 	}
@@ -432,6 +444,9 @@ void Enemy::UpdateAttackStage3() {
 		life_ = 0;
 		isDead_ = true;
 	}
+	if (worldTransform_.translation_.z <= -10.0f) {
+		phase_ = Phase::end;
+	}
 }
 //離脱
 void Enemy::UpdateLeave() {
@@ -449,9 +464,11 @@ void Enemy::UpdateSaveStage3() {
 	Vector3 velocity;
 
 	//移動
-	velocity = {0.0f, 0.0f,-0.05f};
+	velocity = {0.0f, 0.0f, -0.05f};
 	worldTransform_.translation_ += velocity;
-
+	if (input_->TriggerKey(DIK_SPACE)) {
+		phase_ = Phase::end;
+	}
 }
 //ワールド座標を取得
 Vector3 Enemy::GetWorldPosition() {

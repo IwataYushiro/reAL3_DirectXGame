@@ -220,7 +220,8 @@ void GameScene::Update() {
 				debugText_->Print(" ESC title", 300, 450, 2.0f);
 
 				if (input_->TriggerKey(DIK_SPACE)) {
-					scene_ = clear;
+					enemy_->EndingPosition();
+					scene_ = normalend;
 					break;
 				}
 			}
@@ -235,7 +236,8 @@ void GameScene::Update() {
 
 			//次の指示
 			if (input_->TriggerKey(DIK_SPACE)) {
-				scene_ = clear;
+				enemy_->EndingPosition();
+				scene_ = trueend;
 				break;
 			}
 			if (input_->TriggerKey(DIK_ESCAPE)) {
@@ -248,8 +250,24 @@ void GameScene::Update() {
 		ChackAllCollisions();
 		break;
 
-	case clear:
-		debugText_->Print(" GAME CLEAR", 200, 200, 3.0f);
+	case normalend:
+		enemy_->Update();
+
+		debugText_->Print(" GAME CLEAR...?", 200, 200, 3.0f);
+		debugText_->Print(" SPACE title", 200, 350, 2.0f);
+
+		debugText_->Print(" HINT stage3 enemylife 0", 200, 500, 2.0f);
+		//スペースキーでタイトル
+		if (input_->TriggerKey(DIK_SPACE)) {
+			scene_ = title;
+			break;
+		}
+		break;
+
+	case trueend:
+		enemy_->Update();
+
+		debugText_->Print(" GAME CLEAR!", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
@@ -351,7 +369,12 @@ void GameScene::Draw() {
 		enemy_->DrawStage3(viewProjection_);
 		break;
 
-	case clear:
+	case normalend:
+		enemy_->DrawStage3(viewProjection_);
+		break;
+
+	case trueend:
+		enemy_->DrawStage3(viewProjection_);
 		break;
 
 	case gameover:

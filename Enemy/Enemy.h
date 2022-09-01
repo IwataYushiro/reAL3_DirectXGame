@@ -2,6 +2,7 @@
 #include "DebugText.h"
 #include "EnemyBullet.h"
 #include "GlobalScene.h"
+#include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
 #include "WorldTransform.h"
@@ -24,6 +25,7 @@ class Enemy {
 	void InitializeApproach();
 	//リセット処理
 	void Reset();
+	void EndingPosition();
 	//パラメータ
 	void Stage1Parameter();
 	void Stage2Parameter();
@@ -66,6 +68,8 @@ class Enemy {
 	WorldTransform worldTransform_;
 	//弾
 	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+	//インプット
+	Input* input_ = nullptr;
 	//デバックテキスト
 	DebugText* debugText_ = nullptr;
 	//モデル
@@ -98,6 +102,8 @@ class Enemy {
 		SaveStage3,	//ステージ3限定
 		//全体
 		Leave,    //離脱
+		//エンディング
+		end,
 	};
 
 	//フェーズ
