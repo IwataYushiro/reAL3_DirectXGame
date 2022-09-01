@@ -18,11 +18,12 @@ class Enemy {
   public:
 	~Enemy();
 	//弾発射間隔
-	static const int kFireInterval = 60;
+	static const int kFireIntervalStage1 = 40;
+	static const int kFireIntervalStage2 = 60;
+	static const int kFireIntervalStage3 = 30;
 	//初期化
 	void Initialize(Model* model);
-	//接近フェーズ初期化
-	void InitializeApproach();
+	
 	//リセット処理
 	void Reset();
 	void EndingPosition();

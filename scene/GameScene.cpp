@@ -79,6 +79,9 @@ void GameScene::Update() {
 		//天球データの更新処理
 		skydome_->Update();
 
+		//自キャラの更新処理
+		player_->Update(viewProjection_);
+
 		debugText_->Print(" BIT SHOOTER", 200, 200, 3.0f);
 		debugText_->Print(" SPACE start", 200, 350, 2.0f);
 		if (input_->TriggerKey(DIK_SPACE)) {
@@ -340,6 +343,10 @@ void GameScene::Draw() {
 	switch (scene_) {
 	case title:
 		skydome_->Draw(viewProjection_);
+
+		player_->Draw(viewProjection_);
+
+		enemy_->DrawStage3(viewProjection_);
 		break;
 	case howtoplay:
 		skydome_->Draw(viewProjection_);

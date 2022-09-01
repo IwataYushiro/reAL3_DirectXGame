@@ -39,19 +39,15 @@ void Enemy::Initialize(Model* model) {
 	Stage1Parameter();
 }
 
-// 接近フェーズ初期化
-void Enemy::InitializeApproach() {
-	//発射タイマー初期化
-	fireTimer = kFireInterval;
-}
-
 //パラメータ
 void Enemy::Stage1Parameter() {
 	worldTransform_.translation_ = {-10.0f, -5.0f, 80.0f};
 	worldTransform_.rotation_ = MyMathUtility::MySetVector3Zero();
 	//初期フェーズ
 	phase_ = Phase::ApproachStage1;
-	InitializeApproach();
+
+	//発射タイマー初期化
+	fireTimer = kFireIntervalStage1;
 
 	life_ = 40;
 	isDead_ = false;
@@ -67,7 +63,9 @@ void Enemy::Stage2Parameter() {
 	worldTransform_.translation_ = {5.0f, 5.0f, 100.0f};
 	//初期フェーズ
 	phase_ = Phase::ApproachStage2;
-	InitializeApproach();
+	//発射タイマー初期化
+	fireTimer = kFireIntervalStage2;
+
 
 	life_ = 60;
 	isDead_ = false;
@@ -83,7 +81,9 @@ void Enemy::Stage3Parameter() {
 	worldTransform_.translation_ = {0.0f, 10.0f, 100.0f};
 	//初期フェーズ
 	phase_ = Phase::ApproachStage3;
-	InitializeApproach();
+	//発射タイマー初期化
+	fireTimer = kFireIntervalStage3;
+
 
 	life_ = 100;
 	isDead_ = false;
@@ -271,7 +271,7 @@ void Enemy::UpdateApproachStage1() {
 		//弾発射
 		Fire();
 		//発射タイマー初期化
-		fireTimer = kFireInterval;
+		fireTimer = kFireIntervalStage1;
 	}
 
 	//指定の位置に到達したら離脱
@@ -293,7 +293,7 @@ void Enemy::UpdateApproachStage2() {
 		//弾発射
 		Fire();
 		//発射タイマー初期化
-		fireTimer = kFireInterval;
+		fireTimer = kFireIntervalStage2;
 	}
 	if (worldTransform_.translation_.z < 80.0f) {
 		phase_ = Phase::AttackStage2;
@@ -313,7 +313,7 @@ void Enemy::UpdateApproachStage3() {
 		//弾発射
 		Fire();
 		//発射タイマー初期化
-		fireTimer = kFireInterval;
+		fireTimer = kFireIntervalStage3;
 	}
 	if (worldTransform_.translation_.z < 70.0f) {
 		phase_ = Phase::AttackStage3;
@@ -348,7 +348,7 @@ void Enemy::UpdateAttackStage1() {
 			//弾発射
 			Fire();
 			//発射タイマー初期化
-			fireTimer = kFireInterval;
+		    fireTimer = kFireIntervalStage1;
 		}
 		//死んだら
 		if (life_ <= 0) {
@@ -389,7 +389,7 @@ void Enemy::UpdateAttackStage2() {
 		//弾発射
 		Fire();
 		//発射タイマー初期化
-		fireTimer = kFireInterval;
+		fireTimer = kFireIntervalStage2;
 	}
 	//死んだら
 	if (life_ <= 0) {
@@ -436,7 +436,7 @@ void Enemy::UpdateAttackStage3() {
 		//弾発射
 		Fire();
 		//発射タイマー初期化
-		fireTimer = kFireInterval;
+		fireTimer = kFireIntervalStage3;
 	}
 	//死んだら
 	if (life_ <= 0) {
