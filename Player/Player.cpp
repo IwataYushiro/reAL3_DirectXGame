@@ -90,7 +90,7 @@ void Player::Move() {
 
 void Player::Jump() {
 	//スペースキーを押した瞬間泳ぐ(床から離れている状態)
-	if (input_->PushKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		isSwim = true;
 		//重力が0になる
 		gravity = 0.0f;
