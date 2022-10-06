@@ -22,6 +22,9 @@ void Player::Initialize(Model* model) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
+//挙動初期化
+	isSwim = true;
+	gravity = 0.6f;
 }
 
 void Player::Reset() {
@@ -86,7 +89,22 @@ void Player::Move() {
 }
 
 void Player::Jump() {
-
+	//スペースキーを押した瞬間泳ぐ(床から離れている状態)
+	if (input_->PushKey(DIK_SPACE)) {
+		isSwim = true;
+		//重力が0になる
+		gravity = 0.0f;
+	}
+	//泳いでいる間
+	if (isSwim == true) {
+		//プレイヤーの座標 -= 浮力(固定) - 重力(徐々に上がる)　
+		worldTransform_.translation_.y -= buoyancy - gravity;
+		//重力は徐々に上がる
+		gravity += 0.02f;
+	}
+	if (gravity >= 1.0f) {
+		gravity = 1.0f;
+	}
 }
 
 void Player::MoveLimit() {

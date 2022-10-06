@@ -58,6 +58,12 @@ class Player {
 	//死亡フラグとライフ
 	bool isDead_ = false;
 	int life_ = 5;
+	//泳いだか
+	bool isSwim;
+	//浮力(変わらない)
+	const float buoyancy = 0.5f;
+	//重力
+	float gravity;
 
   public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
