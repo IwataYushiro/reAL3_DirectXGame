@@ -11,20 +11,19 @@ void Gimmick::Initialize() {
 	InitializeSpring();
 }
 
-void Gimmick::InitializeSpring() { 
+void Gimmick::InitializeSpring() {
 	//バネのモデル
-	modelSpring_ = Model::Create(); 
-	
+	modelSpring_ = Model::Create();
+
 	worldTransformSpring_.Initialize();
 	worldTransformSpring_.translation_ = {25.0f, -15.0f, 0.0f};
 }
 
 //更新
-void Gimmick::Update() { 
-
+void Gimmick::Update() {
 
 	//ワールド行列更新
-	worldTransformSpring_.Update(worldTransformSpring_); 
+	worldTransformSpring_.Update(worldTransformSpring_);
 }
 
 //描画

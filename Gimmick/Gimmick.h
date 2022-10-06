@@ -16,12 +16,10 @@ class Gimmick {
 	void Initialize();
 	//バネ初期化
 	void InitializeSpring();
-	
+
 	//全体更新
 	void Update();
-	//バネ更新
-	void UpdateSpring();
-	
+
 	//全体描画
 	void Draw(ViewProjection& viewProjection);
 	//バネ描画
@@ -29,17 +27,19 @@ class Gimmick {
 
 	//各仕掛けのワールド座標を取得
 	Vector3 GetWorldPositionSpring();
+
   private:
 	//ワールド変換データ
 	WorldTransform worldTransformSpring_;
 	//バネ
 	Vector3 SpringPos_;
 	//モデルデータ
-	Model* modelSpring_ = nullptr;	//バネ
+	Model* modelSpring_ = nullptr; //バネ
 	//プレーヤーデータ
 	Player* player_ = nullptr;
-	public:
+
+  public:
 	//プレーヤーセット
 	void SetPlayer(Player* player) { player_ = player; }
-	  void OnCollisionSpring();
+	void OnCollisionSpring();
 };

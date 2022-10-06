@@ -67,7 +67,7 @@ void GameScene::Update() {
 		player_->Update(viewProjection_);
 		//仕掛け更新
 		gimmick_->Update();
-		
+
 		//当たり判定
 		ChackAllCollisions();
 		break;
@@ -267,7 +267,7 @@ void GameScene::ChackAllCollisions() {
 	float radiusB;
 	float radiiusAB;
 
-	#pragma region 自機と敵弾の当たり判定
+#pragma region 自機と敵弾の当たり判定
 	//それぞれの半径
 	radiusA = 1.0f;
 	radiusB = 3.0f;
@@ -287,7 +287,7 @@ void GameScene::ChackAllCollisions() {
 	if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
 		//自キャラの衝突時コールバック関数を呼び出す
 		player_->OnCollisionSpring();
-		//敵弾の衝突時コールバック関数を呼び出す
+		//バネの衝突時コールバック関数を呼び出す
 		gimmick_->OnCollisionSpring();
 	}
 #pragma endregion

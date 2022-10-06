@@ -5,7 +5,7 @@ Player::Player() {}
 Player::~Player() {
 	//オプションの解放
 	delete modelDead_;
-	}
+}
 
 void Player::Initialize(Model* model) {
 	// NULLポインタチェック
@@ -14,7 +14,7 @@ void Player::Initialize(Model* model) {
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
 	modelDead_ = Model::CreateFromOBJ("playerdead", true);
-	
+
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
@@ -22,7 +22,7 @@ void Player::Initialize(Model* model) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
-//挙動初期化
+	//挙動初期化
 	isSwim = true;
 	gravity = -0.6f;
 }
@@ -40,7 +40,7 @@ void Player::Death() {}
 void Player::Update(ViewProjection& viewprojection) {
 
 	if (!isDead_) {
-	
+
 		//移動処理
 		Move();
 		//ジャンプ処理
