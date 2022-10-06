@@ -24,7 +24,7 @@ void Player::Initialize(Model* model) {
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
 //挙動初期化
 	isSwim = true;
-	gravity = 0.6f;
+	gravity = -0.6f;
 }
 
 void Player::Reset() {
@@ -100,10 +100,10 @@ void Player::Jump() {
 		//プレイヤーの座標 -= 浮力(固定) - 重力(徐々に上がる)　
 		worldTransform_.translation_.y -= buoyancy - gravity;
 		//重力は徐々に上がる
-		gravity += 0.02f;
+		gravity -= 0.02f;
 	}
-	if (gravity >= 1.0f) {
-		gravity = 1.0f;
+	if (gravity <= -1.0f) {
+		gravity = -1.0f;
 	}
 }
 

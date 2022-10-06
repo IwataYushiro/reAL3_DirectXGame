@@ -61,7 +61,7 @@ class Player {
 	//‰j‚¢‚¾‚©
 	bool isSwim;
 	//•‚—Í(•Ï‚í‚ç‚È‚¢)
-	const float buoyancy = 0.5f;
+	const float buoyancy = -0.5f;
 	//d—Í
 	float gravity;
 
