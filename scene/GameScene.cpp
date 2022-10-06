@@ -14,9 +14,6 @@ GameScene::~GameScene() {
 	//自キャラの解放
 	delete player_;
 	delete modelPlayer_;
-	//敵キャラの解放
-	delete enemy_;
-	delete modelEnemy1_;
 	//天球データ解放
 	delete skydome_;
 	delete modelSkydome_;
@@ -35,32 +32,21 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 	//プレイヤー
 	modelPlayer_ = Model::CreateFromOBJ("player", true);
-	//敵(1面)
-	modelEnemy1_ = Model::CreateFromOBJ("enemy1", true);
 	//天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	//自キャラの生成
 	player_ = new Player();
-
-	//敵キャラの生成
-	enemy_ = new Enemy();
-
 	//天球データ生成
 	skydome_ = new Skydome();
 
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
-
-	//敵キャラの初期化
-	enemy_->Initialize(modelEnemy1_);
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	scene_ = title;
-	//敵に自機のアドレスを渡す
-	enemy_->SetPlayer(player_);
 }
 
 void GameScene::Update() {
@@ -72,12 +58,12 @@ void GameScene::Update() {
 		//自キャラの更新処理
 		player_->Update(viewProjection_);
 
-		debugText_->Print(" BIT SHOOTER", 200, 200, 3.0f);
-		debugText_->Print(" SPACE start", 200, 350, 2.0f);
-		if (input_->TriggerKey(DIK_SPACE)) {
+		/*debugText_->Print(" BIT SHOOTER", 200, 200, 3.0f);
+		debugText_->Print(" SPACE start", 200, 350, 2.0f);*/
+		/*if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = howtoplay;
 			break;
-		}
+		}*/
 		break;
 
 	case howtoplay:
@@ -94,18 +80,12 @@ void GameScene::Update() {
 
 		if (input_->TriggerKey(DIK_SPACE)) {
 			player_->Reset();
-			enemy_->Reset();
 			scene_ = stage1;
 			break;
 		}
 		break;
 
 	case stage1:
-
-		//敵キャラの更新処理
-		enemy_->Update();
-		if (!enemy_->IsDead()) {
-
 			//天球データの更新処理
 			skydome_->Update();
 			//自キャラの更新処理
@@ -115,137 +95,38 @@ void GameScene::Update() {
 				scene_ = gameover;
 				break;
 			}
-		}
-		if (enemy_->IsDead()) {
-
-			//敵が死んだらステージクリア
-			debugText_->Print("STAGE CLEAR", 300, 300, 3.0f);
-			debugText_->Print(" SPACE next stage", 300, 400, 2.0f);
-			debugText_->Print(" ESC title", 300, 450, 2.0f);
-
-			if (input_->TriggerKey(DIK_SPACE)) {
-				//プレイヤー情報リセット
-				player_->Reset();
-				//次のステージの敵パラメータ
-				enemy_->Stage2Parameter();
-				scene_ = stage2;
-				break;
-			}
-			if (input_->TriggerKey(DIK_ESCAPE)) {
-				scene_ = title;
-				break;
-			}
-		}
-
 		//当たり判定
 		ChackAllCollisions();
 		break;
 
 	case stage2:
+		//天球データの更新処理
+		skydome_->Update();
+		//自キャラの更新処理
+		player_->Update(viewProjection_);
 
-		//敵キャラの更新処理
-		enemy_->Update();
-
-		if (!enemy_->IsDead()) {
-
-			//天球データの更新処理
-			skydome_->Update();
-			//自キャラの更新処理
-			player_->Update(viewProjection_);
-
-			if (player_->IsDead()) {
-				scene_ = gameover;
-				break;
-			}
-			if (enemy_->GetWorldPosition().z <= -30.0f) {
-				scene_ = gameover;
-				break;
-			}
+		if (player_->IsDead()) {
+			scene_ = gameover;
+			break;
 		}
-
-		if (enemy_->IsDead()) {
-			//クリアテキスト
-			debugText_->Print("STAGE CLEAR", 300, 300, 3.0f);
-			debugText_->Print(" SPACE next stage", 300, 400, 2.0f);
-			debugText_->Print(" ESC title", 300, 450, 2.0f);
-
-			//次の指示
-			if (input_->TriggerKey(DIK_SPACE)) {
-				//プレイヤー情報リセット
-				player_->Reset();
-				//次のステージの敵パラメータ
-				enemy_->Stage3Parameter();
-				scene_ = stage3;
-				break;
-			}
-			if (input_->TriggerKey(DIK_ESCAPE)) {
-				scene_ = title;
-				break;
-			}
-		}
-
 		//当たり判定
 		ChackAllCollisions();
 		break;
-
 	case stage3:
+		//天球データの更新処理
+		skydome_->Update();
+		//自キャラの更新処理
+		player_->Update(viewProjection_);
 
-		//敵キャラの更新処理
-		enemy_->Update();
-
-		if (!enemy_->IsDead()) {
-
-			//天球データの更新処理
-			skydome_->Update();
-			//自キャラの更新処理
-			player_->Update(viewProjection_);
-
-			if (player_->IsDead()) {
-				scene_ = gameover;
-				break;
-			}
-
-			if (enemy_->GetWorldPosition().z <= -10.0f) {
-				//敵が奥に行ったらバッドエンド
-				//クリアテキスト
-				debugText_->Print("STAGE CLEAR...??", 300, 300, 3.0f);
-				debugText_->Print(" SPACE result", 300, 400, 2.0f);
-				debugText_->Print(" ESC title", 300, 450, 2.0f);
-
-				if (input_->TriggerKey(DIK_SPACE)) {
-					enemy_->EndingPosition();
-					scene_ = normalend;
-					break;
-				}
-			}
+		if (player_->IsDead()) {
+			scene_ = gameover;
+			break;
 		}
-		if (enemy_->IsDead()) {
-			//クリアテキスト
-			debugText_->Print("congratulation!!", 150, 150, 3.0f);
-
-			debugText_->Print("STAGE CLEAR!!", 300, 300, 3.0f);
-			debugText_->Print(" SPACE result", 300, 400, 2.0f);
-			debugText_->Print(" ESC title", 300, 450, 2.0f);
-
-			//次の指示
-			if (input_->TriggerKey(DIK_SPACE)) {
-				enemy_->EndingPosition();
-				scene_ = trueend;
-				break;
-			}
-			if (input_->TriggerKey(DIK_ESCAPE)) {
-				scene_ = title;
-				break;
-			}
-		}
-
 		//当たり判定
 		ChackAllCollisions();
 		break;
 
 	case normalend:
-		enemy_->Update();
-
 		debugText_->Print(" GAME CLEAR...?", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
 
@@ -258,8 +139,6 @@ void GameScene::Update() {
 		break;
 
 	case trueend:
-		enemy_->Update();
-
 		debugText_->Print(" GAME CLEAR!", 200, 200, 3.0f);
 		debugText_->Print(" SPACE title", 200, 350, 2.0f);
 		//スペースキーでタイトル
@@ -313,8 +192,6 @@ void GameScene::Draw() {
 		skydome_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
-
-		enemy_->DrawStage3(viewProjection_);
 		break;
 	case howtoplay:
 		skydome_->Draw(viewProjection_);
@@ -325,7 +202,6 @@ void GameScene::Draw() {
 
 		player_->Draw(viewProjection_);
 
-		enemy_->DrawStage1(viewProjection_);
 		break;
 	case stage2:
 		// 3Dモデル描画
@@ -333,7 +209,6 @@ void GameScene::Draw() {
 
 		player_->Draw(viewProjection_);
 
-		enemy_->DrawStage2(viewProjection_);
 		break;
 	case stage3:
 		// 3Dモデル描画
@@ -341,15 +216,12 @@ void GameScene::Draw() {
 
 		player_->Draw(viewProjection_);
 
-		enemy_->DrawStage3(viewProjection_);
 		break;
 
 	case normalend:
-		enemy_->DrawStage3(viewProjection_);
 		break;
 
 	case trueend:
-		enemy_->DrawStage3(viewProjection_);
 		break;
 
 	case gameover:
@@ -388,160 +260,4 @@ void GameScene::ChackAllCollisions() {
 	float radiusA;
 	float radiusB;
 	float radiiusAB;
-
-	//自機弾リストを取得
-	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
-	//オプションの弾リストを取得
-	const std::list<std::unique_ptr<OptionBullet>>& optionBullets =
-	  player_->GetOption()->GetOptionBullets();
-
-	//敵弾リストを取得
-	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetEnemyBullets();
-
-#pragma region 自機と敵弾の当たり判定
-	//それぞれの半径
-	radiusA = 1.0f;
-	radiusB = 1.0f;
-
-	//自機の座標
-	posA = player_->GetWorldPosition();
-
-	//自機と全ての敵弾の当たり判定
-	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
-		//敵弾の座標
-		posB = bullet->GetWorldPosition();
-		//座標A,Bの距離を求める
-		posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
-		posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
-		posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
-		radiiusAB = (radiusA + radiusB) * (radiusA + radiusB);
-
-		//球と球の交差判定
-		if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
-			//自キャラの衝突時コールバック関数を呼び出す
-			player_->OnCollision();
-			//敵弾の衝突時コールバック関数を呼び出す
-			bullet->OnCollision();
-		}
-	}
-
-#pragma endregion
-
-#pragma region 自弾と敵の当たり判定
-	//それぞれの半径
-	radiusA = 3.0f;
-	radiusB = 1.0f;
-
-	//敵の座標
-	posA = enemy_->GetWorldPosition();
-
-	//敵と全ての弾の当たり判定
-	for (const std::unique_ptr<PlayerBullet>& bullet : playerBullets) {
-		//弾の座標
-		posB = bullet->GetWorldPosition();
-		//座標A,Bの距離を求める
-		posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
-		posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
-		posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
-		radiiusAB = (radiusA + radiusB) * (radiusA + radiusB);
-
-		//球と球の交差判定
-		if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
-			//敵キャラの衝突時コールバック関数を呼び出す
-			enemy_->OnCollisionPlayer();
-			//自機弾の衝突時コールバック関数を呼び出す
-			bullet->OnCollision();
-		}
-	}
-#pragma endregion
-
-#pragma region 自弾と敵弾の当たり判定
-	//それぞれの半径
-	radiusA = 1.0f;
-	radiusB = 1.0f;
-
-	for (const std::unique_ptr<PlayerBullet>& pBullet : playerBullets) {
-
-		//自機弾の座標
-		posA = pBullet->GetWorldPosition();
-
-		for (const std::unique_ptr<EnemyBullet>& eBullet : enemyBullets) {
-
-			//敵弾の座標
-			posB = eBullet->GetWorldPosition();
-			//座標A,Bの距離を求める
-			posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
-			posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
-			posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
-			radiiusAB = (radiusA + radiusB) * (radiusA + radiusB);
-
-			//球と球の交差判定
-			if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
-				//自機弾の衝突時コールバック関数を呼び出す
-				pBullet->OnCollision();
-				//敵弾の衝突時コールバック関数を呼び出す
-				eBullet->OnCollision();
-			}
-		}
-	}
-#pragma endregion
-
-#pragma region オプション弾と敵の当たり判定
-	//それぞれの半径
-	radiusA = 3.0f;
-	radiusB = 1.0f;
-
-	//敵の座標
-	posA = enemy_->GetWorldPosition();
-
-	//敵と全ての弾の当たり判定
-	for (const std::unique_ptr<OptionBullet>& bullet : optionBullets) {
-		//弾の座標
-		posB = bullet->GetWorldPosition();
-		//座標A,Bの距離を求める
-		posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
-		posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
-		posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
-		radiiusAB = (radiusA + radiusB) * (radiusA + radiusB);
-
-		//球と球の交差判定
-		if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
-			//敵キャラの衝突時コールバック関数を呼び出す
-			enemy_->OnCollisionOption();
-			//オプション弾の衝突時コールバック関数を呼び出す
-			bullet->OnCollision();
-		}
-	}
-#pragma endregion
-
-#pragma region オプション弾と敵弾の当たり判定
-	//それぞれの半径
-	radiusA = 1.0f;
-	radiusB = 1.0f;
-
-	for (const std::unique_ptr<OptionBullet>& oBullet : optionBullets) {
-
-		//自機弾の座標
-		posA = oBullet->GetWorldPosition();
-
-		for (const std::unique_ptr<EnemyBullet>& eBullet : enemyBullets) {
-
-			//敵弾の座標
-			posB = eBullet->GetWorldPosition();
-			//座標A,Bの距離を求める
-			posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
-			posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
-			posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
-			radiiusAB = (radiusA + radiusB) * (radiusA + radiusB);
-
-			//球と球の交差判定
-			if (radiiusAB >= (posAB.x + posAB.y + posAB.z)) {
-				//オプション弾の衝突時コールバック関数を呼び出す
-				oBullet->OnCollision();
-				//敵弾の衝突時コールバック関数を呼び出す
-				eBullet->OnCollision();
-			}
-		}
-	}
-#pragma endregion
 }

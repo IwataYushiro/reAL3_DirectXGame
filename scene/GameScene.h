@@ -4,7 +4,6 @@
 #include "DebugCamera.h"
 #include "DebugText.h"
 #include "DirectXCommon.h"
-#include "Enemy.h"
 #include "GlobalScene.h"
 #include "Input.h"
 #include "Model.h"
@@ -70,10 +69,6 @@ class GameScene {
 	//自キャラ
 	Player* player_ = nullptr;
 	Model* modelPlayer_ = nullptr;
-	//敵キャラ
-	Enemy* enemy_ = nullptr;
-	Model* modelEnemy1_ = nullptr;
-
 	//天球データ
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;

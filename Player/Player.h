@@ -4,8 +4,6 @@
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
-#include "Option.h"
-#include "PlayerBullet.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <cassert>
@@ -28,13 +26,8 @@ class Player {
 
 	//プレイヤーの移動処理
 	void Move();
-
-	//プレイヤーの旋回処理
-	void Rotate();
-
-	//プレイヤーの攻撃処理
-	void Attack();
-
+	//ジャンプ処理
+	void Jump();
 	//移動処理制限
 	void MoveLimit();
 
@@ -48,14 +41,7 @@ class Player {
 	//衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
-	//弾リストを取得
-	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
-
   private:
-	//弾
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-	//オプション
-	Option* option_ = nullptr;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
@@ -75,5 +61,4 @@ class Player {
 
   public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
-	Option* GetOption() const { return option_; }
 };

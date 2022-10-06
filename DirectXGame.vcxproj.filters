@@ -102,23 +102,8 @@
     <ClCompile Include="Player\Player.cpp">
       <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Player\PlayerBullet.cpp">
-      <Filter>ソース ファイル\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy\Enemy.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy\EnemyBullet.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Skydome\Skydome.cpp">
       <Filter>ソース ファイル\Skydome</Filter>
-    </ClCompile>
-    <ClCompile Include="Player\Option.cpp">
-      <Filter>ソース ファイル\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Player\OptionBullet.cpp">
-      <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
     <ClCompile Include="Camera\RailCamera.cpp">
       <Filter>ソース ファイル\Camera</Filter>
@@ -212,23 +197,8 @@
     <ClInclude Include="Player\Player.h">
       <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Player\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy\Enemy.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy\EnemyBullet.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Skydome\Skydome.h">
       <Filter>ヘッダー ファイル\Skydome</Filter>
-    </ClInclude>
-    <ClInclude Include="Player\Option.h">
-      <Filter>ヘッダー ファイル\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Player\OptionBullet.h">
-      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Camera\RailCamera.h">
       <Filter>ヘッダー ファイル\Camera</Filter>

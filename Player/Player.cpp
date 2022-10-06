@@ -4,11 +4,8 @@ Player::Player() {}
 
 Player::~Player() {
 	//オプションの解放
-	delete option_;
 	delete modelDead_;
-	delete modelBullet_;
-	delete modelOption_;
-}
+	}
 
 void Player::Initialize(Model* model) {
 	// NULLポインタチェック
@@ -17,11 +14,7 @@ void Player::Initialize(Model* model) {
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
 	modelDead_ = Model::CreateFromOBJ("playerdead", true);
-	modelBullet_ = Model::CreateFromOBJ("playerbullet", true);
-	modelOption_ = Model::CreateFromOBJ("option", true);
-	//オプションの生成
-	option_ = new Option();
-
+	
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
@@ -29,8 +22,6 @@ void Player::Initialize(Model* model) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
-	//ここでオプション初期化
-	option_->Initialize(modelOption_, worldTransform_.translation_);
 }
 
 void Player::Reset() {
@@ -39,11 +30,6 @@ void Player::Reset() {
 
 	life_ = 5;
 	isDead_ = false;
-	option_->Reset(worldTransform_.translation_);
-	//弾リセット
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-		bullet->Reset();
-	}
 }
 //ゲームオーバー座標
 void Player::Death() {}
@@ -51,23 +37,11 @@ void Player::Death() {}
 void Player::Update(ViewProjection& viewprojection) {
 
 	if (!isDead_) {
-		//死亡フラグの立った弾を削除
-		bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) { return bullet->IsDead(); });
-
+	
 		//移動処理
 		Move();
-		//旋回処理
-		Rotate();
-		//攻撃処理
-		Attack();
-
-		//オプションの更新処理
-		option_->Update(viewprojection);
-		//弾更新
-		for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-			bullet->Update();
-		}
-
+		//ジャンプ処理
+		Jump();
 		//移動制限
 		MoveLimit();
 	}
@@ -81,14 +55,6 @@ void Player::Update(ViewProjection& viewprojection) {
 void Player::Draw(ViewProjection& viewProjection) {
 	if (!isDead_) {
 		model_->Draw(worldTransform_, viewProjection);
-
-		//弾描画
-		for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-			bullet->Draw(viewProjection);
-		}
-
-		//オプション描画
-		option_->Draw(viewProjection);
 	}
 }
 
@@ -103,59 +69,24 @@ void Player::Move() {
 
 	//キーボード入力による移動処理
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
-	if (input_->PushKey(DIK_A)) {
+	if (input_->PushKey(DIK_LEFT)) {
 		move.x = -moveSpeed;
 	}
-	if (input_->PushKey(DIK_D)) {
+	if (input_->PushKey(DIK_RIGHT)) {
 		move.x = moveSpeed;
 	}
-	if (input_->PushKey(DIK_W)) {
+	if (input_->PushKey(DIK_UP)) {
 		move.y = moveSpeed;
 	}
-	if (input_->PushKey(DIK_S)) {
+	if (input_->PushKey(DIK_DOWN)) {
 		move.y = -moveSpeed;
 	}
 
 	worldTransform_.translation_ += move;
 }
 
-//旋回処理
-void Player::Rotate() {
+void Player::Jump() {
 
-	Vector3 angle = MyMathUtility::MySetVector3Zero();
-	float angleSpeed = 0.1f;
-
-	if (input_->PushKey(DIK_Q)) {
-		angle.y -= angleSpeed;
-	}
-	if (input_->PushKey(DIK_E)) {
-		angle.y += angleSpeed;
-	}
-
-	worldTransform_.rotation_ += angle;
-}
-
-//攻撃処理
-void Player::Attack() {
-
-	if (input_->IsTriggerMouse(0)) {
-		//弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
-
-		velocity = MyMathUtility::MyVector3TransformNormal(velocity, worldTransform_.matWorld_);
-		//自キャラの座標をコピー
-		Vector3 position = worldTransform_.translation_;
-
-		//弾を生成し初期化
-		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
-		newBullet->Initialize(modelBullet_, position, velocity);
-
-		//弾を登録
-		bullets_.push_back(std::move(newBullet));
-		//あるメモリの所有権を持つunique_ptrはただ一つしか存在できない
-		//その所有権を謙渡するための機能が std::move()
-	}
 }
 
 void Player::MoveLimit() {
