@@ -137,9 +137,8 @@ Vector3 Player::GetWorldPosition() {
 }
 
 //衝突を検出したら呼び出されるコールバック関数
-void Player::OnCollision() {
-	life_--;
-	if (life_ <= 0) {
-		isDead_ = true;
-	}
+void Player::OnCollisionSpring() {
+	isSwim = true;
+	//重力が0になる
+	gravity = 0.5f;
 }

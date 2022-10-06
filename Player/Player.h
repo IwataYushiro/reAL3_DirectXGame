@@ -39,7 +39,8 @@ class Player {
 	void DrawDead(ViewProjection& viewProjection);
 
 	//衝突を検出したら呼び出されるコールバック関数
-	void OnCollision();
+	//バネと衝突
+	void OnCollisionSpring();
 
   private:
 	//ワールド変換データ
