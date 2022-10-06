@@ -101,6 +101,7 @@
     <ClCompile Include="Camera\RailCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\MyMathUtility.cpp" />
+    <ClCompile Include="memo.cpp" />
     <ClCompile Include="Player\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Skydome\Skydome.cpp" />
