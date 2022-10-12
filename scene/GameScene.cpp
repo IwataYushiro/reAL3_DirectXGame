@@ -14,6 +14,8 @@ GameScene::~GameScene() {
 	//自キャラの解放
 	delete player_;
 	delete modelPlayer_;
+	//仕掛け解放
+	delete gimmick_;
 	//天球データ解放
 	delete skydome_;
 	delete modelSkydome_;
@@ -39,6 +41,8 @@ void GameScene::Initialize() {
 
 	//自キャラの生成
 	player_ = new Player();
+	//仕掛け生成
+	gimmick_ = new Gimmick();
 	//天球データ生成
 	skydome_ = new Skydome();
 	// ステージ
@@ -46,6 +50,8 @@ void GameScene::Initialize() {
 
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
+	//仕掛け初期化
+	gimmick_->Initialize();
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	// ステージ
@@ -53,6 +59,8 @@ void GameScene::Initialize() {
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	scene_ = title;
+	//仕掛けに自機のアドレスを渡す
+	gimmick_->SetPlayer(player_);
 }
 
 void GameScene::Update() {
@@ -63,6 +71,8 @@ void GameScene::Update() {
 
 		//自キャラの更新処理
 		player_->Update(viewProjection_);
+		//仕掛け更新
+		gimmick_->Update();
 
 		// ステージ
 		stage_->Update();
@@ -73,6 +83,8 @@ void GameScene::Update() {
 			scene_ = howtoplay;
 			break;
 		}*/
+		//当たり判定
+		ChackAllCollisions();
 		break;
 
 	case howtoplay:
@@ -95,15 +107,15 @@ void GameScene::Update() {
 		break;
 
 	case stage1:
-			//天球データの更新処理
-			skydome_->Update();
-			//自キャラの更新処理
-			player_->Update(viewProjection_);
+		//天球データの更新処理
+		skydome_->Update();
+		//自キャラの更新処理
+		player_->Update(viewProjection_);
 
-			if (player_->IsDead()) {
-				scene_ = gameover;
-				break;
-			}
+		if (player_->IsDead()) {
+			scene_ = gameover;
+			break;
+		}
 		//当たり判定
 		ChackAllCollisions();
 		break;
@@ -199,7 +211,7 @@ void GameScene::Draw() {
 	switch (scene_) {
 	case title:
 		skydome_->Draw(viewProjection_);
-
+		gimmick_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
 
 		stage_->Draw(viewProjection_);
@@ -265,10 +277,73 @@ void GameScene::ChackAllCollisions() {
 
 	//判定対象A,Bの座標
 	Vector3 posA, posB;
-	// A,Bの座標の距離用
+	
+	//A,Bの座標の距離用
 	Vector3 posAB;
+	
 	//判定対象A,Bの半径
 	float radiusA;
 	float radiusB;
-	float radiiusAB;
+	float radiusAB;
+	
+
+	//配列用のC
+	Vector3 posC;
+	Vector3 posAC;
+	float radiusC;
+	
+	//配列用のAC
+	float radiusAC;
+
+#pragma region 自機とバネの当たり判定
+	//それぞれの半径
+	radiusA = 1.0f;
+	radiusB = 3.0f;
+
+	//自機の座標
+	posA = player_->GetWorldPosition();
+
+	//自機とバネの当たり判定
+	posB = gimmick_->GetWorldPositionSpring();
+	//座標A,Bの距離を求める
+	posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
+	posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
+	posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
+	radiusAB = (radiusA + radiusB) * (radiusA + radiusB);
+
+	//球と球の交差判定
+	if (radiusAB >= (posAB.x + posAB.y + posAB.z)) {
+		//自キャラの衝突時コールバック関数を呼び出す
+		player_->OnCollisionSpring();
+		//バネの衝突時コールバック関数を呼び出す
+		gimmick_->OnCollisionSpring();
+	}
+#pragma endregion
+#pragma region 自機と水流の当たり判定
+	//自機の半径
+	radiusA = 1.0f;
+	//自機の座標
+	posA = player_->GetWorldPosition();
+
+	//自機と全水流の当たり判定
+		//水流の半径
+		radiusC = 5.0f;
+
+		posC = gimmick_->GetWorldPositionWaterFlow();
+
+		//座標A,Bの距離を求める
+		posAC.x = (posC.x - posA.x) * (posC.x - posA.x);
+		posAC.y = (posC.y - posA.y) * (posC.y - posA.y);
+		posAC.z = (posC.z - posA.z) * (posC.z - posA.z);
+		radiusAC = (radiusA + radiusC) * (radiusA + radiusC);
+
+		//球と球の交差判定
+		if (radiusAC >= (posAC.x + posAC.y + posAC.z)) {
+			//自キャラの衝突時コールバック関数を呼び出す
+			player_->OnCollisionWaterFlow();
+			//バネの衝突時コールバック関数を呼び出す
+			gimmick_->OnCollisionWaterFlow();
+		}
+	
+#pragma endregion
 }

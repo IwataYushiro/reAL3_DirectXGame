@@ -5,6 +5,7 @@
 #include "DebugText.h"
 #include "DirectXCommon.h"
 #include "GlobalScene.h"
+#include "Gimmick.h"
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
@@ -77,6 +78,8 @@ class GameScene {
 	// ステージ
 	Stage* stage_ = nullptr;
 
+	//仕掛けデータ
+	Gimmick* gimmick_ = nullptr;
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 	//デバッグカメラ有効化

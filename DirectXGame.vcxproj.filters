@@ -58,12 +58,6 @@
     <Filter Include="ヘッダー ファイル\Player">
       <UniqueIdentifier>{aeb90401-b259-4121-86a5-42937e5f2b84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Enemy">
-      <UniqueIdentifier>{3447f50d-bc90-4c3f-b950-2a6474d6190b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Enemy">
-      <UniqueIdentifier>{a6663694-b671-452e-8ef6-da4864eae5e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Skydome">
       <UniqueIdentifier>{9ac00128-9f05-4b73-96b6-2427d72bb7a6}</UniqueIdentifier>
     </Filter>
@@ -81,6 +75,11 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Stage">
       <UniqueIdentifier>{e2b0960b-da84-4d06-9188-673db8daff9e}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Gimmick">
+      <UniqueIdentifier>{3447f50d-bc90-4c3f-b950-2a6474d6190b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Gimmick">
+      <UniqueIdentifier>{a6663694-b671-452e-8ef6-da4864eae5e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +118,8 @@
     </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>ソース ファイル\Stage</Filter>
+    <ClCompile Include="Gimmick\Gimmick.cpp">
+      <Filter>ソース ファイル\Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +221,8 @@
     </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>ヘッダー ファイル\Stage</Filter>
+    <ClInclude Include="Gimmick\Gimmick.h">
+      <Filter>ヘッダー ファイル\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
