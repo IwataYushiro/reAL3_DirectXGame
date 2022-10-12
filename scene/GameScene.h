@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "SafeDelete.h"
 #include "Skydome/Skydome.h"
+#include "Stage.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -73,6 +74,10 @@ class GameScene {
 	//天球データ
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
+
+	// ステージ
+	Stage* stage_ = nullptr;
+
 	//仕掛けデータ
 	Gimmick* gimmick_ = nullptr;
 	//デバッグカメラ
