@@ -17,6 +17,8 @@ GameScene::~GameScene() {
 	//天球データ解放
 	delete skydome_;
 	delete modelSkydome_;
+	// ステージ
+	delete stage_;
 }
 
 void GameScene::Initialize() {
@@ -39,11 +41,15 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	//天球データ生成
 	skydome_ = new Skydome();
+	// ステージ
+	stage_ = new Stage();
 
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
+	// ステージ
+	stage_->Initialize(model_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	scene_ = title;
@@ -57,6 +63,9 @@ void GameScene::Update() {
 
 		//自キャラの更新処理
 		player_->Update(viewProjection_);
+
+		// ステージ
+		stage_->Update();
 
 		/*debugText_->Print(" BIT SHOOTER", 200, 200, 3.0f);
 		debugText_->Print(" SPACE start", 200, 350, 2.0f);*/
@@ -192,6 +201,8 @@ void GameScene::Draw() {
 		skydome_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
+
+		stage_->Draw(viewProjection_);
 		break;
 	case howtoplay:
 		skydome_->Draw(viewProjection_);
