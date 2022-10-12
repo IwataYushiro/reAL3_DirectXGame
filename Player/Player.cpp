@@ -3,9 +3,10 @@
 Player::Player() {}
 
 Player::~Player() {
+	delete gimmick_;
 	//オプションの解放
 	delete modelDead_;
-	}
+}
 
 void Player::Initialize(Model* model) {
 	// NULLポインタチェック
@@ -14,7 +15,7 @@ void Player::Initialize(Model* model) {
 	//引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
 	modelDead_ = Model::CreateFromOBJ("playerdead", true);
-	
+
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
@@ -22,7 +23,9 @@ void Player::Initialize(Model* model) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
-//挙動初期化
+	//挙動初期化
+	gimmick_ = new Gimmick();
+
 	isSwim = true;
 	gravity = -0.6f;
 }
@@ -40,7 +43,7 @@ void Player::Death() {}
 void Player::Update(ViewProjection& viewprojection) {
 
 	if (!isDead_) {
-	
+
 		//移動処理
 		Move();
 		//ジャンプ処理
@@ -90,7 +93,7 @@ void Player::Move() {
 
 void Player::Jump() {
 	//スペースキーを押した瞬間泳ぐ(床から離れている状態)
-	if (input_->PushKey(DIK_SPACE)) {
+	if (input_->TriggerKey(DIK_SPACE)) {
 		isSwim = true;
 		//重力が0になる
 		gravity = 0.0f;
@@ -137,9 +140,13 @@ Vector3 Player::GetWorldPosition() {
 }
 
 //衝突を検出したら呼び出されるコールバック関数
-void Player::OnCollision() {
-	life_--;
-	if (life_ <= 0) {
-		isDead_ = true;
-	}
+void Player::OnCollisionSpring() {
+	isSwim = true;
+	//重力が0になる
+	gravity = 0.5f;
+}
+void Player::OnCollisionWaterFlow() {
+	isSwim = true;
+	worldTransform_.translation_.y += gimmick_->GetWaterFlowSpeed();
+	gravity =0.0f;
 }
