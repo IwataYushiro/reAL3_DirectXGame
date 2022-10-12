@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DebugText.h"
+#include "Gimmick.h"
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
@@ -41,6 +42,8 @@ class Player {
 	//衝突を検出したら呼び出されるコールバック関数
 	//バネと衝突
 	void OnCollisionSpring();
+	//水流と衝突
+	void OnCollisionWaterFlow();
 
   private:
 	//ワールド変換データ
@@ -48,8 +51,6 @@ class Player {
 	//モデル
 	Model* model_ = nullptr;
 	Model* modelDead_ = nullptr;
-	Model* modelBullet_ = nullptr;
-	Model* modelOption_ = nullptr;
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	//インプット
@@ -66,6 +67,8 @@ class Player {
 	//重力
 	float gravity;
 
+	//仕掛け
+	Gimmick* gimmick_ = nullptr;
   public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
 };

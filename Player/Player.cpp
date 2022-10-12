@@ -3,6 +3,7 @@
 Player::Player() {}
 
 Player::~Player() {
+	delete gimmick_;
 	//オプションの解放
 	delete modelDead_;
 }
@@ -23,6 +24,8 @@ void Player::Initialize(Model* model) {
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
 	//挙動初期化
+	gimmick_ = new Gimmick();
+
 	isSwim = true;
 	gravity = -0.6f;
 }
@@ -141,4 +144,9 @@ void Player::OnCollisionSpring() {
 	isSwim = true;
 	//重力が0になる
 	gravity = 0.5f;
+}
+void Player::OnCollisionWaterFlow() {
+	isSwim = true;
+	worldTransform_.translation_.y += gimmick_->GetWaterFlowSpeed();
+	gravity =0.0f;
 }
