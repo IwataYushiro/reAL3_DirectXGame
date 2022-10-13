@@ -13,6 +13,9 @@ class Gimmick {
 	~Gimmick();
 
 	//
+	//水流をパーティクル生成するための変数
+	static const int WATERFLOW_MAX_ = 500; //最大個数
+
 	//全体初期化
 	void Initialize();
 	//バネ初期化
@@ -45,9 +48,7 @@ class Gimmick {
 	Model* modelSpring_ = nullptr; //バネ
 
 	//水流
-	//水流をパーティクル生成するための変数
-	static const int WATERFLOW_MAX_ = 500;       //最大個数
-
+	
 	//ワールド変換データ
 	WorldTransform worldTransformWaterFlow_[WATERFLOW_MAX_];
 	//モデルデータ

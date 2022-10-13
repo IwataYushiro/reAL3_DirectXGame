@@ -277,23 +277,22 @@ void GameScene::ChackAllCollisions() {
 
 	//判定対象A,Bの座標
 	Vector3 posA, posB;
-	
-	//A,Bの座標の距離用
+
+	// A,Bの座標の距離用
 	Vector3 posAB;
-	
+
 	//判定対象A,Bの半径
 	float radiusA;
 	float radiusB;
 	float radiusAB;
-	
 
 	//配列用のC
-	Vector3 posC;
-	Vector3 posAC;
-	float radiusC;
+	Vector3 posC[Gimmick::WATERFLOW_MAX_];
+	Vector3 posAC[Gimmick::WATERFLOW_MAX_];
+	float radiusC[Gimmick::WATERFLOW_MAX_];
 	
 	//配列用のAC
-	float radiusAC;
+	float radiusAC[Gimmick::WATERFLOW_MAX_];
 
 #pragma region 自機とバネの当たり判定
 	//それぞれの半径
@@ -326,24 +325,27 @@ void GameScene::ChackAllCollisions() {
 	posA = player_->GetWorldPosition();
 
 	//自機と全水流の当たり判定
+	for (int i = 0; i < Gimmick::WATERFLOW_MAX_; i++) {
 		//水流の半径
-		radiusC = 5.0f;
+		radiusC[i] = 3.0f;
 
-		posC = gimmick_->GetWorldPositionWaterFlow();
+		posC[i].x = gimmick_->GetWorldPositionWaterFlow().x;
+		posC[i].y = gimmick_->GetWorldPositionWaterFlow().y;
+		posC[i].z = gimmick_->GetWorldPositionWaterFlow().z;
 
 		//座標A,Bの距離を求める
-		posAC.x = (posC.x - posA.x) * (posC.x - posA.x);
-		posAC.y = (posC.y - posA.y) * (posC.y - posA.y);
-		posAC.z = (posC.z - posA.z) * (posC.z - posA.z);
-		radiusAC = (radiusA + radiusC) * (radiusA + radiusC);
+		posAC[i].x = (posC[i].x - posA.x) * (posC[i].x - posA.x);
+		posAC[i].y = (posC[i].y - posA.y) * (posC[i].y - posA.y);
+		posAC[i].z = (posC[i].z - posA.z) * (posC[i].z - posA.z);
+		radiusAC[i] = (radiusA + radiusC[i]) * (radiusA + radiusC[i]);
 
 		//球と球の交差判定
-		if (radiusAC >= (posAC.x + posAC.y + posAC.z)) {
+		if (radiusAC[i] >= (posAC[i].x + posAC[i].y + posAC[i].z)) {
 			//自キャラの衝突時コールバック関数を呼び出す
 			player_->OnCollisionWaterFlow();
 			//バネの衝突時コールバック関数を呼び出す
 			gimmick_->OnCollisionWaterFlow();
 		}
-	
+	}
 #pragma endregion
 }

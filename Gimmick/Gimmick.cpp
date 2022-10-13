@@ -46,6 +46,9 @@ void Gimmick::Update() {
 	UpdateWaterFlow();
 	//ワールド行列更新
 	worldTransformSpring_.Update(worldTransformSpring_);
+	for (int i = 0; i < WATERFLOW_MAX_; i++) {
+		worldTransformWaterFlow_[i].Update(worldTransformWaterFlow_[i]);
+	}
 }
 void Gimmick::UpdateWaterFlow() {
 	//乱数シード生成
@@ -76,9 +79,7 @@ void Gimmick::UpdateWaterFlow() {
 			isActiveWaterFlow_[i] = false;
 		}
 	}
-	for (int i = 0; i < WATERFLOW_MAX_; i++) {
-		worldTransformWaterFlow_[i].Update(worldTransformWaterFlow_[i]);
-	}
+	
 }
 //描画
 void Gimmick::Draw(ViewProjection& viewProjection) {
