@@ -286,14 +286,7 @@ void GameScene::ChackAllCollisions() {
 	float radiusB;
 	float radiusAB;
 
-	//配列用のC
-	Vector3 posC[Gimmick::WATERFLOW_MAX_];
-	Vector3 posAC[Gimmick::WATERFLOW_MAX_];
-	float radiusC[Gimmick::WATERFLOW_MAX_];
 	
-	//配列用のAC
-	float radiusAC[Gimmick::WATERFLOW_MAX_];
-
 #pragma region 自機とバネの当たり判定
 	//それぞれの半径
 	radiusA = 1.0f;
@@ -325,7 +318,7 @@ void GameScene::ChackAllCollisions() {
 	posA = player_->GetWorldPosition();
 
 	//自機と全水流の当たり判定
-	for (int i = 0; i < Gimmick::WATERFLOW_MAX_; i++) {
+	for (const std::unique_ptr<Gimmick>& waterflow:gimmick_) {
 		//水流の半径
 		radiusC[i] = 3.0f;
 
