@@ -12,8 +12,6 @@ Gimmick::~Gimmick() {
 void Gimmick::Initialize() {
 	//バネ初期化
 	InitializeSpring();
-	//水流初期化
-	InitializeWaterFlow();
 }
 
 void Gimmick::InitializeSpring() {
@@ -26,13 +24,42 @@ void Gimmick::InitializeSpring() {
 
 //更新
 void Gimmick::Update() {
+	//乱数シード生成
+	std::random_device seed_gen;
+	//メルセンヌ・ツイスター
+	std::mt19937_64 engine(seed_gen());
+	//水流座標の範囲
+	std::uniform_real_distribution<float> waterFlowDistX(-30.0f, -10.0f);
+
+
+	//死亡フラグが立った水流の削除
+	waterFlow_.remove_if(
+	  [](std::unique_ptr<WaterFlow>& waterFlow) { return waterFlow->IsActive(); });
+	
+	//水流の速度
+	const float kWaterFlowSpeed = 0.5f;
+	Vector3 position;
+	Vector3 velocity;
+
+	//初期位置
+	position = {waterFlowDistX(engine), -20.0f, 0.0f};
+	//スピード
+	velocity = {0.0f, 0.5f, 0.0f};
+
+	//弾を生成し初期化
+	std::unique_ptr<WaterFlow> newWaterFlow = std::make_unique<WaterFlow>();
+	newWaterFlow->Initialize(position, velocity);
+
+	//弾を登録
+	waterFlow_.push_back(std::move(newWaterFlow));
+
 	//水流更新
-	UpdateWaterFlow();
+	  for (std::unique_ptr<WaterFlow>& waterFlow : waterFlow_) {
+		waterFlow->Update();
+	}
 	//ワールド行列更新
 	worldTransformSpring_.Update(worldTransformSpring_);
-	for (int i = 0; i < WATERFLOW_MAX_; i++) {
-		worldTransformWaterFlow_[i].Update(worldTransformWaterFlow_[i]);
-	}
+	
 }
 
 //描画
@@ -40,7 +67,9 @@ void Gimmick::Draw(ViewProjection& viewProjection) {
 	//バネ
 	DrawSpring(viewProjection);
 	//水流
-	DrawWaterFlow(viewProjection);
+	for (std::unique_ptr<WaterFlow>& waterFlow : waterFlow_) {
+		waterFlow->Draw(viewProjection);
+	}
 }
 
 void Gimmick::DrawSpring(ViewProjection& viewProjection) {

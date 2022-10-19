@@ -33,7 +33,8 @@ class Gimmick {
 	
 	//各仕掛けのワールド座標を取得
 	Vector3 GetWorldPositionSpring();
-
+	//水流リストを取得
+	const std::list<std::unique_ptr<WaterFlow>>& GetWaterFlow() { return waterFlow_; }
   private:
 	//バネ
 	//ワールド変換データ
@@ -42,7 +43,7 @@ class Gimmick {
 	Model* modelSpring_ = nullptr; //バネ
 
 	//水流
-	
+	std::list<std::unique_ptr<WaterFlow>> waterFlow_;
 	//プレーヤーデータ
 	Player* player_ = nullptr;
 

@@ -12,7 +12,9 @@ class WaterFlow {
 	~WaterFlow();
 
 	//水流初期化
-	void Initialize();
+	void Initialize(const Vector3& position, const Vector3& velocity);
+	//リセット
+	void Reset();
 
 	//水流更新
 	void Update();
@@ -23,7 +25,6 @@ class WaterFlow {
 	Vector3 GetWorldPosition();
 
   private:
-	
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデルデータ
@@ -32,7 +33,7 @@ class WaterFlow {
 	float width_;  //横幅
 	float height_; //縦幅
 	// float waterFlowRadius;						//半径
-	float speed_;                               //速度
+	Vector3 speed_; //速度
 	int bright_;    //明るさ
 
 	//寿命
@@ -40,10 +41,11 @@ class WaterFlow {
 	//死亡時間
 	int32_t deathTimer_ = kLifeTime;
 
-	bool isActive_; //生きてるか
+	bool isActive_ = true; //生きてるか
 
+  public:
+	//アクセッサ
 	//水流
 	void OnCollision();
-	float GetSpeed() { return speed_; }
+	bool IsActive() const { return isActive_; }
 };
-

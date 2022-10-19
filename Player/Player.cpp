@@ -147,6 +147,6 @@ void Player::OnCollisionSpring() {
 }
 void Player::OnCollisionWaterFlow() {
 	isSwim = true;
-	worldTransform_.translation_.y += gimmick_->GetWaterFlowSpeed();
+	worldTransform_.translation_.y += 0.5f;
 	gravity = -0.2f;
 }
