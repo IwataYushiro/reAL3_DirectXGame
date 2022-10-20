@@ -145,8 +145,12 @@ void Player::OnCollisionSpring() {
 	//èdóÕÇ™0Ç…Ç»ÇÈ
 	gravity = 0.5f;
 }
+
 void Player::OnCollisionWaterFlow() {
+	Vector3 speed;
+	speed = {0.0f, -0.1f, 0.0f};
+
 	isSwim = true;
-	worldTransform_.translation_.y += 0.5f;
+	worldTransform_.translation_ += speed;
 	gravity = -0.2f;
 }

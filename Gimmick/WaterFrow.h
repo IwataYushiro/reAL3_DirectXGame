@@ -8,7 +8,6 @@
 
 class WaterFlow {
   public:
-	WaterFlow();
 	~WaterFlow();
 
 	//水流初期化
@@ -41,7 +40,7 @@ class WaterFlow {
 	//死亡時間
 	int32_t deathTimer_ = kLifeTime;
 
-	bool isActive_ = true; //生きてるか
+	bool isActive_ = false; //生きてるか
 
   public:
 	//アクセッサ

@@ -1,7 +1,5 @@
 #include "WaterFrow.h"
 
-WaterFlow::WaterFlow() {}
-
 WaterFlow::~WaterFlow() { delete model_; }
 
 //…—¬‰Šú‰»
@@ -19,8 +17,7 @@ void WaterFlow::Initialize(const Vector3& position, const Vector3& velocity) {
 	worldTransform_.translation_ = position;
 	speed_ = velocity;
 
-	bright_ = 255;     //–¾‚é‚³
-	isActive_ = false; //¶‚«‚Ä‚é‚©
+	bright_ = 255; //–¾‚é‚³
 }
 void WaterFlow::Reset() { isActive_ = false; }
 
@@ -28,7 +25,7 @@ void WaterFlow::Update() {
 
 	worldTransform_.translation_ += speed_;
 
-	if (--deathTimer_<=0) {
+	if (--deathTimer_ <= 0) {
 		isActive_ = false;
 	}
 

@@ -3,10 +3,7 @@
 
 Gimmick::Gimmick() {}
 
-Gimmick::~Gimmick() {
-	delete modelSpring_;
-	
-}
+Gimmick::~Gimmick() { delete modelSpring_; }
 
 //初期化
 void Gimmick::Initialize() {
@@ -31,11 +28,10 @@ void Gimmick::Update() {
 	//水流座標の範囲
 	std::uniform_real_distribution<float> waterFlowDistX(-30.0f, -10.0f);
 
-
 	//死亡フラグが立った水流の削除
 	waterFlow_.remove_if(
 	  [](std::unique_ptr<WaterFlow>& waterFlow) { return waterFlow->IsActive(); });
-	
+
 	//水流の速度
 	const float kWaterFlowSpeed = 0.5f;
 	Vector3 position;
@@ -44,7 +40,7 @@ void Gimmick::Update() {
 	//初期位置
 	position = {waterFlowDistX(engine), -20.0f, 0.0f};
 	//スピード
-	velocity = {0.0f, 0.5f, 0.0f};
+	velocity = {0.0f, kWaterFlowSpeed, 0.0f};
 
 	//弾を生成し初期化
 	std::unique_ptr<WaterFlow> newWaterFlow = std::make_unique<WaterFlow>();
@@ -54,12 +50,11 @@ void Gimmick::Update() {
 	waterFlow_.push_back(std::move(newWaterFlow));
 
 	//水流更新
-	  for (std::unique_ptr<WaterFlow>& waterFlow : waterFlow_) {
+	for (std::unique_ptr<WaterFlow>& waterFlow : waterFlow_) {
 		waterFlow->Update();
 	}
 	//ワールド行列更新
 	worldTransformSpring_.Update(worldTransformSpring_);
-	
 }
 
 //描画
@@ -77,8 +72,6 @@ void Gimmick::DrawSpring(ViewProjection& viewProjection) {
 	modelSpring_->Draw(worldTransformSpring_, viewProjection);
 }
 
-
-
 Vector3 Gimmick::GetWorldPositionSpring() {
 	//ワールド座標を取得
 	Vector3 worldPos;
@@ -90,6 +83,5 @@ Vector3 Gimmick::GetWorldPositionSpring() {
 
 	return worldPos;
 }
-
 
 void Gimmick::OnCollisionSpring(){};
