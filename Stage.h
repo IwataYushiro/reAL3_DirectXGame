@@ -3,11 +3,8 @@
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
-#include "ViewProjection.h"
 #include "WorldTransform.h"
 #include <cassert>
-#include <list>
-#include <memory>
 
 #include <sstream>
 
@@ -38,7 +35,8 @@ public:
 		BLOCK,			// 床
 		STEPUP,		// 段差上
 		STEPDOWN,	// 段差下
-		WALL			// 壁
+		WALL,			// 壁
+		END
 	};
 
 	// 構造体
@@ -47,10 +45,10 @@ public:
 		int block_;
 	};
 
-private:
 	// ブロックの数
 	static const int blockNum = 100;
 
+private:
 	// ワールド変換データ
 	StageData stage_[blockNum];
 
@@ -64,11 +62,21 @@ private:
 	DebugText* debugText_ = nullptr;
 
 	// 壁の高さ
-	Vector3 wallHeight = { 0.0f, 3.0f, 6.0f };
+	float wallHeight = 3.0f;
 
 	// 段差の高さ
-	Vector3 stepHeight = { 0.0f, 1.0f, 6.0f };
+	float stepHeight = 1.0f;
 
 	std::stringstream stageCommands;
+
+	float radius = 5.0f;
+
+public:
+
+	float GetRadius() { return radius; }
+
+	Vector3 GetWorldPosition(int num) { return stage_[num].worldTransform_.translation_; }
+
+	int GetBlock(int num) { return stage_[num].block_; }
 };
 

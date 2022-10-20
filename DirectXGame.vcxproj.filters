@@ -75,6 +75,7 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Stage">
       <UniqueIdentifier>{e2b0960b-da84-4d06-9188-673db8daff9e}</UniqueIdentifier>
+      </Filter>
     <Filter Include="ソース ファイル\Gimmick">
       <UniqueIdentifier>{3447f50d-bc90-4c3f-b950-2a6474d6190b}</UniqueIdentifier>
     </Filter>
@@ -118,6 +119,7 @@
     </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>ソース ファイル\Stage</Filter>
+      </ClCompile>
     <ClCompile Include="Gimmick\Gimmick.cpp">
       <Filter>ソース ファイル\Gimmick</Filter>
     </ClCompile>
@@ -221,6 +223,7 @@
     </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>ヘッダー ファイル\Stage</Filter>
+       </ClInclude>
     <ClInclude Include="Gimmick\Gimmick.h">
       <Filter>ヘッダー ファイル\Gimmick</Filter>
     </ClInclude>

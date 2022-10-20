@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";C:\k021g1138\re AL3\KamataEngine\DirectXGame\Enemy;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;$(ProjectDir)Gimmick;C:\k021g1138\re AL3\KamataEngine\DirectXGame\Enemy;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,7 +78,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";$(ProjectDir)Enemy;$(ProjectDir)Skydome;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;$(ProjectDir)Gimmick;$(ProjectDir)Enemy;$(ProjectDir)Skydome;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MinSpace</Optimization>
     </ClCompile>

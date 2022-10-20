@@ -58,6 +58,9 @@ void GameScene::Initialize() {
 	stage_->Initialize(model_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+	viewProjection_.eye = { 20.0f, 5.0f, -60.0f };
+	viewProjection_.UpdateMatrix();
+	viewProjection_.TransferMatrix();
 	scene_ = title;
 	//仕掛けに自機のアドレスを渡す
 	gimmick_->SetPlayer(player_);
@@ -277,21 +280,20 @@ void GameScene::ChackAllCollisions() {
 
 	//判定対象A,Bの座標
 	Vector3 posA, posB;
-	
+
 	//A,Bの座標の距離用
 	Vector3 posAB;
-	
+
 	//判定対象A,Bの半径
 	float radiusA;
 	float radiusB;
 	float radiusAB;
-	
 
 	//配列用のC
 	Vector3 posC;
 	Vector3 posAC;
 	float radiusC;
-	
+
 	//配列用のAC
 	float radiusAC;
 
@@ -327,23 +329,82 @@ void GameScene::ChackAllCollisions() {
 
 	//自機と全水流の当たり判定
 		//水流の半径
-		radiusC = 5.0f;
+	radiusC = 5.0f;
 
-		posC = gimmick_->GetWorldPositionWaterFlow();
+	posC = gimmick_->GetWorldPositionWaterFlow();
 
-		//座標A,Bの距離を求める
-		posAC.x = (posC.x - posA.x) * (posC.x - posA.x);
-		posAC.y = (posC.y - posA.y) * (posC.y - posA.y);
-		posAC.z = (posC.z - posA.z) * (posC.z - posA.z);
-		radiusAC = (radiusA + radiusC) * (radiusA + radiusC);
+	//座標A,Bの距離を求める
+	posAC.x = (posC.x - posA.x) * (posC.x - posA.x);
+	posAC.y = (posC.y - posA.y) * (posC.y - posA.y);
+	posAC.z = (posC.z - posA.z) * (posC.z - posA.z);
+	radiusAC = (radiusA + radiusC) * (radiusA + radiusC);
 
-		//球と球の交差判定
-		if (radiusAC >= (posAC.x + posAC.y + posAC.z)) {
-			//自キャラの衝突時コールバック関数を呼び出す
-			player_->OnCollisionWaterFlow();
-			//バネの衝突時コールバック関数を呼び出す
-			gimmick_->OnCollisionWaterFlow();
+	//球と球の交差判定
+	if (radiusAC >= (posAC.x + posAC.y + posAC.z)) {
+		//自キャラの衝突時コールバック関数を呼び出す
+		player_->OnCollisionWaterFlow();
+		//バネの衝突時コールバック関数を呼び出す
+		gimmick_->OnCollisionWaterFlow();
+	}
+
+#pragma endregion
+#pragma region 自機とステージブロックの当たり判定
+	// 自機の座標
+	posA = player_->GetWorldPosition();
+	// ステージ用の自機の当たり判定の半径
+	radiusA = 1.5f;
+	// ステージブロックの半径
+	radiusB = stage_->GetRadius();
+
+	// ブロックと自機の当たり判定用の変数
+	int block;
+	// 矩形用の隅の座標p(自機)、b(ブロック)
+	float pX1, pX2, pY1, pY2, pZ1, pZ2;
+	float bX1, bX2, bY1, bY2, bZ1, bZ2;
+
+	pX1 = posA.x - radiusA;
+	pX2 = posA.x + radiusA;
+	pY1 = posA.y - radiusA;
+	pY2 = posA.y + radiusA;
+	pZ1 = posA.z - radiusA;
+	pZ2 = posA.z + radiusA;
+
+	for (int i = 0; i < Stage::blockNum; i++) {
+		// ステージブロックの座標、種類取得
+		posB = stage_->GetWorldPosition(i);
+		block = stage_->GetBlock(i);
+
+		// ブロックの矩形座標
+		bX1 = posB.x - radiusB;
+		bX2 = posB.x + radiusB;
+		bY1 = posB.y - radiusB;
+		bY2 = posB.y + radiusB;
+		bZ1 = posB.z - radiusB;
+		bZ2 = posB.z + radiusB;
+
+		// 当たり判定
+		if(pX1 < bX2 && pX2 > bX1 &&
+			pY1 < bY2 && pY2 > bY1 &&
+			pZ1 < bZ2 && pZ2 > bZ1) {
+			if (block == Stage::WALL) {
+				if (posA.y < bY2 - 1.0f) {
+					player_->OnCollisionWall();
+					break;
+				}
+			}
+			if (block == Stage::STEPUP) {
+				if (posA.y >= bY2 + radiusA - 0.050f) {
+					player_->OnCollisionBlock();
+				}
+				else {
+					player_->OnCollisionStep();
+				}
+				break;
+			}
+			player_->OnCollisionBlock();
+			break;
 		}
-	
+		player_->OffCollisionBlock();
+	}
 #pragma endregion
 }
