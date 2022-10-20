@@ -29,6 +29,8 @@ class Player {
 	void Move();
 	//ジャンプ処理
 	void Jump();
+	// 泳ぐ(水中)
+	void Swim();
 	//移動処理制限
 	void MoveLimit();
 
@@ -44,6 +46,11 @@ class Player {
 	void OnCollisionSpring();
 	//水流と衝突
 	void OnCollisionWaterFlow();
+	// ステージとの当たり判定
+	void OnCollisionBlock();
+	void OnCollisionStep();
+	void OnCollisionWall();
+	void OffCollisionBlock();
 
   private:
 	//ワールド変換データ
@@ -62,10 +69,14 @@ class Player {
 	int life_ = 5;
 	//泳いだか
 	bool isSwim;
+	// ジャンプしているか
+	bool isJump;
 	//浮力(変わらない)
 	const float buoyancy = -0.5f;
 	//重力
 	float gravity;
+	// 1フレーム前の自機の位置
+	Vector3 prePosition_;
 
 	//仕掛け
 	Gimmick* gimmick_ = nullptr;

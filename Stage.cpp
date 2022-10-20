@@ -16,7 +16,10 @@ void Stage::Initialize(Model* model) {
 			stage.worldTransform_.Initialize();
 			
 			// スケール設定
-			stage.worldTransform_.scale_ = { 5.0f, 5.0f, 3.0f };
+			stage.worldTransform_.scale_ = { 5.0f, 5.0f, 5.0f };
+		}
+		else {
+			stage.worldTransform_.translation_ = { 0.0f, -100.0f, 0.0f };
 		}
 	}
 
@@ -54,21 +57,31 @@ void Stage::Draw(ViewProjection viewProjection) {
 }
 
 void Stage::StageBlockInitialize() {
+	// 高さ
+	float height = 0.0f;
+
 	for (int i = 0; i < blockNum; i++) {
+		// ブロック初期位置
+		stage_[i].worldTransform_.translation_ = { 0.0f,-24.0f, 10.0f * i };
+
+		// ブロックごとの条件分け
 		if (stage_[i].block_ == BLOCK) {
-			stage_[i].worldTransform_.translation_ = { 0.0f,-24.0f, 6.0f * i };
+			stage_[i].worldTransform_.translation_.y += height;
 		}
 		else if (stage_[i].block_ == STEPUP) {
-			stage_[i].worldTransform_.translation_ = stage_[i - 1].worldTransform_.translation_;
-			stage_[i].worldTransform_.translation_ += stepHeight;
+			height += stepHeight;
+			stage_[i].worldTransform_.translation_.y += height;
 		}
 		else if (stage_[i].block_ == STEPDOWN) {
-			stage_[i].worldTransform_.translation_ = stage_[i - 1].worldTransform_.translation_;
-			stage_[i].worldTransform_.translation_ -= stepHeight;
+			height -= stepHeight;
+			stage_[i].worldTransform_.translation_ .y += height;
 		}
 		else if (stage_[i].block_ == WALL) {
-			stage_[i].worldTransform_.translation_ = stage_[i - 1].worldTransform_.translation_;
-			stage_[i].worldTransform_.translation_ += wallHeight;
+			height += wallHeight;
+			stage_[i].worldTransform_.translation_ .y += height;
+		}
+		else if (stage_[i].block_ == NONE) {
+
 		}
 	}
 }
