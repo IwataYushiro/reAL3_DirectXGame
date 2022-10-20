@@ -4,29 +4,29 @@ Player::Player() {}
 
 Player::~Player() {
 	delete gimmick_;
-	//ƒIƒvƒVƒ‡ƒ“‚Ì‰ğ•ú
+	//ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®è§£æ”¾
 	delete modelDead_;
 }
 
 void Player::Initialize(Model* model) {
-	// NULLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
+	// NULLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
 	assert(model);
 
-	//ˆø”‚Æ‚µ‚Äó‚¯æ‚Á‚½ƒf[ƒ^‚ğƒƒ“ƒo•Ï”‚É‹L˜^‚·‚é
+	//å¼•æ•°ã¨ã—ã¦å—ã‘å–ã£ãŸãƒ‡ãƒ¼ã‚¿ã‚’ãƒ¡ãƒ³ãƒå¤‰æ•°ã«è¨˜éŒ²ã™ã‚‹
 	model_ = model;
 	modelDead_ = Model::CreateFromOBJ("playerdead", true);
 
-	//ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾
+	//ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
-	//ƒ[ƒ‹ƒh•ÏŠ·‚Ì‰Šú‰»
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ã®åˆæœŸåŒ–
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
 
 	prePosition_ = worldTransform_.translation_;
 
-	//‹““®‰Šú‰»
+	//æŒ™å‹•åˆæœŸåŒ–
 	gimmick_ = new Gimmick();
 
 	isJump = false;
@@ -41,20 +41,20 @@ void Player::Reset() {
 	life_ = 5;
 	isDead_ = false;
 }
-//ƒQ[ƒ€ƒI[ƒo[À•W
+//ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼åº§æ¨™
 void Player::Death() {}
 
 void Player::Update(ViewProjection& viewprojection) {
 
 	if (!isDead_) {
 
-		//ˆÚ“®ˆ—
+		//ç§»å‹•å‡¦ç†
 		Move();
-		//ƒWƒƒƒ“ƒvˆ—
+		//ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
 		Jump();
-		// …’†ˆ—
+		// æ°´ä¸­å‡¦ç†
 		Swim();
-		//ˆÚ“®§ŒÀ
+		//ç§»å‹•åˆ¶é™
 		MoveLimit();
 	}
 
@@ -73,13 +73,13 @@ void Player::Draw(ViewProjection& viewProjection) {
 void Player::DrawDead(ViewProjection& viewProjection) {
 	modelDead_->Draw(worldTransform_, viewProjection);
 }
-//ˆÚ“®ˆ—
+//ç§»å‹•å‡¦ç†
 void Player::Move() {
 
 	Vector3 move = MyMathUtility::MySetVector3Zero();
 	float moveSpeed = 0.3f;
 
-	//ƒL[ƒ{[ƒh“ü—Í‚É‚æ‚éˆÚ“®ˆ—
+	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å…¥åŠ›ã«ã‚ˆã‚‹ç§»å‹•å‡¦ç†
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
 	if (input_->PushKey(DIK_LEFT)) {
 		move.x = -moveSpeed;
@@ -98,14 +98,14 @@ void Player::Move() {
 }
 
 void Player::Jump() {
-	//ƒXƒy[ƒXƒL[‚ğ‰Ÿ‚µ‚½uŠÔ‰j‚®(°‚©‚ç—£‚ê‚Ä‚¢‚éó‘Ô)
+	//ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸç¬é–“æ³³ã(åºŠã‹ã‚‰é›¢ã‚Œã¦ã„ã‚‹çŠ¶æ…‹)
 	if (input_->TriggerKey(DIK_SPACE)) {
 		isJump = true;
-		//d—Í‚ª0‚É‚È‚é
+		//é‡åŠ›ãŒ0ã«ãªã‚‹
 		gravity = 0.0f;
 	}
 
-	// ƒWƒƒƒ“ƒvŒãd—Í‚ª•‚—Í‚ğ’´‚¦‚½‚ç‰j‚¢‚Å‚éó‘Ô‚É‚·‚é
+	// ã‚¸ãƒ£ãƒ³ãƒ—å¾Œé‡åŠ›ãŒæµ®åŠ›ã‚’è¶…ãˆãŸã‚‰æ³³ã„ã§ã‚‹çŠ¶æ…‹ã«ã™ã‚‹
 	if (isJump == true && gravity <= buoyancy) {
 		isSwim = true;
 		isJump = false;
@@ -113,42 +113,42 @@ void Player::Jump() {
 }
 
 void Player::Swim() {
-	//‰j‚¢‚Å‚¢‚éŠÔ
+	//æ³³ã„ã§ã„ã‚‹é–“
 	if (isSwim == true || isJump == true) {
-		//ƒvƒŒƒCƒ„[‚ÌÀ•W -= •‚—Í(ŒÅ’è) - d—Í(™X‚Éã‚ª‚é)@
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™ -= æµ®åŠ›(å›ºå®š) - é‡åŠ›(å¾ã€…ã«ä¸ŠãŒã‚‹)ã€€
 		worldTransform_.translation_.y -= buoyancy - gravity;
 	}
 
-	//d—Í‚Í™X‚Éã‚ª‚é
+	//é‡åŠ›ã¯å¾ã€…ã«ä¸ŠãŒã‚‹
 	gravity -= 0.02f;
-	// d—Í§ŒÀ
+	// é‡åŠ›åˆ¶é™
 	if (gravity <= -1.0f) {
 		gravity = -1.0f;
 	}
 }
 
 void Player::MoveLimit() {
-	//ˆÚ“®ŒÀŠEÀ•W
+	//ç§»å‹•é™ç•Œåº§æ¨™
 	const float kMoveLimitX = 30.0f;
 	const float kMoveLimitY = 18.0f;
-	//”ÍˆÍ‚ğ’´‚¦‚È‚¢ˆ—
+	//ç¯„å›²ã‚’è¶…ãˆãªã„å‡¦ç†
 	worldTransform_.translation_.x = max(worldTransform_.translation_.x, -kMoveLimitX);
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
 	// worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
-	//s—ñXV
+	//è¡Œåˆ—æ›´æ–°
 	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
 	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
 }
 
-//ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 Vector3 Player::GetWorldPosition() {
 
-	//ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 worldPos;
 
-	//ƒ[ƒ‹ƒhs—ñ‚Ì•½sˆÚ“®¬•ª‚ğæ“¾
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¹³è¡Œç§»å‹•æˆåˆ†ã‚’å–å¾—
 	worldPos.x = worldTransform_.translation_.x;
 	worldPos.y = worldTransform_.translation_.y;
 	worldPos.z = worldTransform_.translation_.z;
@@ -156,17 +156,21 @@ Vector3 Player::GetWorldPosition() {
 	return worldPos;
 }
 
-//Õ“Ë‚ğŒŸo‚µ‚½‚çŒÄ‚Ño‚³‚ê‚éƒR[ƒ‹ƒoƒbƒNŠÖ”
+//è¡çªã‚’æ¤œå‡ºã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 void Player::OnCollisionSpring() {
 	isJump = true;
-	//d—Í‚ª0‚É‚È‚é
+	//é‡åŠ›ãŒ0ã«ãªã‚‹
 	gravity = 0.5f;
 }
+
 void Player::OnCollisionWaterFlow() {
+	Vector3 speed;
+	speed = {0.0f, -0.1f, 0.0f};
 	isSwim = true;
-	worldTransform_.translation_.y += gimmick_->GetWaterFlowSpeed();
-	gravity =0.0f;
+	worldTransform_.translation_ += speed;
+	gravity = -0.2f;
 }
+
 void Player::OnCollisionBlock() {
 	if (!isJump) {
 		worldTransform_.translation_ = prePosition_;
@@ -174,14 +178,17 @@ void Player::OnCollisionBlock() {
 	isSwim = false;
 	prePosition_ = worldTransform_.translation_;
 }
+
 void Player::OnCollisionStep() {
 	worldTransform_.translation_.y += 0.050f;
 	isSwim = false;
 	prePosition_ = worldTransform_.translation_;
 }
+
 void Player::OnCollisionWall() {
 	isDead_ = true;
 }
+
 void Player::OffCollisionBlock() {
 	if (!isSwim && !isJump) {
 		isSwim = true;

@@ -100,6 +100,7 @@
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Camera\RailCamera.cpp" />
     <ClCompile Include="Gimmick\Gimmick.cpp" />
+    <ClCompile Include="Gimmick\WaterFlow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\MyMathUtility.cpp" />
     <ClCompile Include="memo.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Camera\GlobalScene.h" />
     <ClInclude Include="Camera\RailCamera.h" />
     <ClInclude Include="Gimmick\Gimmick.h" />
+    <ClInclude Include="Gimmick\WaterFrow.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\MathUtility.h" />
     <ClInclude Include="math\Matrix4.h" />
