@@ -137,6 +137,11 @@ void Player::MoveLimit() {
 	// worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
 
+	// 画面外に出たら死亡する
+	if (worldTransform_.translation_.y <= -30.0f) {
+		isDead_ = true;
+	}
+
 	//行列更新
 	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
 	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);

@@ -60,14 +60,22 @@ class GameScene {
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	DebugText* debugText_ = nullptr;
+
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
+	uint32_t titleTexture_ = 0;
+
+	// スプライト
+	Sprite* title_;
+
 	// 3Dモデル
 	Model* model_ = nullptr;
+
 	//ビュープロジェクション
 	ViewProjection viewProjection_;
 	//カメラ上方向の角度
 	float viewAngle = 0.0f;
+
 	//自キャラ
 	Player* player_ = nullptr;
 	Model* modelPlayer_ = nullptr;
@@ -82,6 +90,7 @@ class GameScene {
 	Gimmick* gimmick_ = nullptr;
 	//デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
+
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
 	size_t scene_;
