@@ -108,6 +108,7 @@ void GameScene::Update() {
 			player_->Reset();
 			scene_ = stage1;
 			
+			gimmick_->Initialize();
 			// ステージ
 			stage_->Initialize(model_, gimmick_, scene_);
 			break;
@@ -139,6 +140,7 @@ void GameScene::Update() {
 				player_->Reset();
 				scene_ = stage2;
 				
+				gimmick_->Initialize();
 				// ステージ
 				stage_->Initialize(model_, gimmick_, scene_);
 				break;
@@ -174,6 +176,7 @@ void GameScene::Update() {
 				player_->Reset();
 				scene_ = stage3;
 				
+				gimmick_->Initialize();
 				// ステージ
 				stage_->Initialize(model_, gimmick_, scene_);
 				break;
