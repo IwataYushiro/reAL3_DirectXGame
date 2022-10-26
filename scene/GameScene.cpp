@@ -37,6 +37,8 @@ GameScene::~GameScene() {
 
 	// BGMロード
 	titleBgm_ = audio_->LoadWave("sound/title.wav");
+	doneSe_ = audio_->LoadWave("sound/se/done.wav");
+
 	audio_->PlayWave(titleBgm_, false, 0.1f);
 	// 3Dモデルの生成
 	model_ = Model::Create();
@@ -90,6 +92,7 @@ void GameScene::Update() {
 	case title:
 		// スペースを押したら操作説明へ
 		if (input_->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(doneSe_);
 			scene_ = howtoplay;
 			break;
 		}
@@ -100,12 +103,13 @@ void GameScene::Update() {
 		//天球データの更新処理
 		skydome_->Update();
 		if (input_->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(doneSe_);
 			player_->Reset();
 			scene_ = stage1;
 			//仕掛け初期化
 			gimmick_->Initialize();
 			// ステージ
-			stage_->Initialize(model_, gimmick_);
+			stage_->Initialize(model_, gimmick_, scene_);
 			break;
 		}
 		break;
@@ -131,6 +135,7 @@ void GameScene::Update() {
 		// ステージクリア
 		if (stage_->GetEnd()) {
 			if (input_->TriggerKey(DIK_SPACE)) {
+				audio_->PlayWave(doneSe_);
 				scene_ = normalend;
 				break;
 			}
@@ -151,6 +156,7 @@ void GameScene::Update() {
 	case normalend:
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(doneSe_);
 			scene_ = title;
 			break;
 		}
@@ -159,6 +165,7 @@ void GameScene::Update() {
 	case trueend:
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(doneSe_);
 			scene_ = title;
 			break;
 		}
@@ -167,6 +174,7 @@ void GameScene::Update() {
 	case gameover:
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(doneSe_);
 			scene_ = title;
 			break;
 		}

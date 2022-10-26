@@ -2,12 +2,20 @@
 #include <fstream>
 #include "Gimmick.h"
 
-void Stage::Initialize(Model* model, Gimmick* gimmick) {
+void Stage::Initialize(Model* model, Gimmick* gimmick, size_t scene) {
 	// モデル読み込み
 	model_ = model;
 
 	// ステージブロック読み込み
-	LoadStageData();
+	if (scene == stage1) {
+		LoadStageData1();
+	}
+	else if (scene == stage2) {
+		LoadStageData2();
+	}
+	else if (scene == stage3) {
+		LoadStageData3();
+	}
 	LoadStageCommands();
 
 	// ワールドトランスフォームの初期設定
@@ -107,10 +115,36 @@ void Stage::StageBlockInitialize(Gimmick* gimmick) {
 	}
 }
 
-void Stage::LoadStageData() {
+void Stage::LoadStageData1() {
 	// ファイルを開く
 	std::ifstream file;
 	file.open("Resources/stage/stage1.csv");
+	assert(file.is_open());
+
+	// ファイルの内容を文字列ストリームにコピー
+	stageCommands << file.rdbuf();
+
+	// ファイルを閉じる
+	file.close();
+}
+
+void Stage::LoadStageData2() {
+	// ファイルを開く
+	std::ifstream file;
+	file.open("Resources/stage/stage2.csv");
+	assert(file.is_open());
+
+	// ファイルの内容を文字列ストリームにコピー
+	stageCommands << file.rdbuf();
+
+	// ファイルを閉じる
+	file.close();
+}
+
+void Stage::LoadStageData3() {
+	// ファイルを開く
+	std::ifstream file;
+	file.open("Resources/stage/stage3.csv");
 	assert(file.is_open());
 
 	// ファイルの内容を文字列ストリームにコピー

@@ -6,6 +6,7 @@
 #include "WorldTransform.h"
 #include <cassert>
 #include <sstream>
+#include "GlobalScene.h"
 
 // 前方宣言
 class Gimmick;
@@ -13,7 +14,7 @@ class Gimmick;
 class Stage {
 public:
 	// 初期化
-	void Initialize(Model* model, Gimmick* gimmick);
+	void Initialize(Model* model, Gimmick* gimmick, size_t scene);
 
 	// 更新
 	void Update();
@@ -25,7 +26,9 @@ public:
 	void StageBlockInitialize(Gimmick* gimmick);
 
 	// ステージ読み込み
-	void LoadStageData();
+	void LoadStageData1();
+	void LoadStageData2();
+	void LoadStageData3();
 
 	// ステージ読み込み
 	void LoadStageCommands();

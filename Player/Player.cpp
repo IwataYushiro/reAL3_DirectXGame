@@ -11,15 +11,17 @@ Player::~Player() {
 void Player::Initialize(Model* model) {
 	// NULLポインタチェック
 	assert(model);
-
+	audio_ = Audio::GetInstance();
 	//引数として受け取ったデータをメンバ変数に記録する
+	
 	model_ = model;
 	modelDead_ = Model::CreateFromOBJ("playerdead", true);
 
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
-
+	//音
+	jumpSound_ = audio_->LoadWave("sound/se/jump.wav");
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
@@ -71,6 +73,7 @@ void Player::DrawDead(ViewProjection& viewProjection) {
 void Player::Jump() {
 	//スペースキーを押した瞬間泳ぐ(床から離れている状態)
 	if (input_->TriggerKey(DIK_SPACE)) {
+		audio_->PlayWave(jumpSound_);
 		isJump = true;
 		//重力が0になる
 		gravity = 0.0f;
