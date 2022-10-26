@@ -5,8 +5,10 @@ WaterFlow::~WaterFlow() { delete model_; }
 //水流初期化
 void WaterFlow::Initialize(const Vector3& position, const Vector3& velocity) {
 
+	//テクスチャ読み込み
+	texWaterFlow_ = TextureManager::Load("texture/bubble.png");
 	//水流のモデル
-	model_ = Model::CreateFromOBJ("playerbullet", true);
+	model_ = Model::Create();
 
 	width_ = 10.0f;  //横幅
 	height_ = 20.0f; //縦幅
@@ -35,7 +37,7 @@ void WaterFlow::Update() {
 
 void WaterFlow::Draw(ViewProjection& viewProjection) {
 
-	model_->Draw(worldTransform_, viewProjection);
+	model_->Draw(worldTransform_, viewProjection, texWaterFlow_);
 }
 
 Vector3 WaterFlow::GetWorldPosition() {

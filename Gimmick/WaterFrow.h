@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.h"
+#include "TextureManager.h"
 #include "WorldTransform.h"
 #include <cassert>
 #include <random>
@@ -26,6 +27,8 @@ class WaterFlow {
   private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
+	//テクスチャ
+	uint32_t texWaterFlow_ = 0;
 	//モデルデータ
 	Model* model_ = nullptr; //水流
 

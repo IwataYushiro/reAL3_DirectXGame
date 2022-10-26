@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.h"
+#include "TextureManager.h"
 #include "WorldTransform.h"
 #include <cassert>
 #include "WaterFrow.h"
@@ -39,6 +40,9 @@ class Gimmick {
 	//バネ
 	//ワールド変換データ
 	WorldTransform worldTransformSpring_;
+	
+	//テクスチャ
+	uint32_t texSpring_ = 0;
 	//モデルデータ
 	Model* modelSpring_ = nullptr; //バネ
 

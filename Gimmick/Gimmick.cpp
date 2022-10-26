@@ -3,7 +3,9 @@
 
 Gimmick::Gimmick() {}
 
-Gimmick::~Gimmick() { delete modelSpring_; }
+Gimmick::~Gimmick() { 
+	delete modelSpring_; 
+}
 
 //初期化
 void Gimmick::Initialize() {
@@ -12,6 +14,9 @@ void Gimmick::Initialize() {
 }
 
 void Gimmick::InitializeSpring() {
+	//テクスチャ読み込み
+	texSpring_ = TextureManager::Load("texture/spring.png");
+	
 	//バネのモデル
 	modelSpring_ = Model::Create();
 
@@ -69,7 +74,7 @@ void Gimmick::Draw(ViewProjection& viewProjection) {
 
 void Gimmick::DrawSpring(ViewProjection& viewProjection) {
 
-	modelSpring_->Draw(worldTransformSpring_, viewProjection);
+	modelSpring_->Draw(worldTransformSpring_, viewProjection,texSpring_);
 }
 
 Vector3 Gimmick::GetWorldPositionSpring() {
