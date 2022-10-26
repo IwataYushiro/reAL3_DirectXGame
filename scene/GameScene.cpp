@@ -84,6 +84,8 @@ GameScene::~GameScene() {
 
 	//仕掛けに自機のアドレスを渡す
 	gimmick_->SetPlayer(player_);
+	//仕掛け初期化
+			gimmick_->Initialize();
 }
 
 void GameScene::Update() {
@@ -105,8 +107,7 @@ void GameScene::Update() {
 			audio_->PlayWave(doneSe_);
 			player_->Reset();
 			scene_ = stage1;
-			//仕掛け初期化
-			gimmick_->Initialize();
+			
 			// ステージ
 			stage_->Initialize(model_, gimmick_, scene_);
 			break;
@@ -137,8 +138,7 @@ void GameScene::Update() {
 				audio_->PlayWave(doneSe_);
 				player_->Reset();
 				scene_ = stage2;
-				//仕掛け初期化
-				gimmick_->Initialize();
+				
 				// ステージ
 				stage_->Initialize(model_, gimmick_, scene_);
 				break;
@@ -173,8 +173,7 @@ void GameScene::Update() {
 				audio_->PlayWave(doneSe_);
 				player_->Reset();
 				scene_ = stage3;
-				//仕掛け初期化
-				gimmick_->Initialize();
+				
 				// ステージ
 				stage_->Initialize(model_, gimmick_, scene_);
 				break;

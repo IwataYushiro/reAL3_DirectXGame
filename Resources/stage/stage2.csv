@@ -1,9 +1,14 @@
 // コマンド(種類) NONE:0 BLOCK:1 STEPUP:2 STEPDOWN:3 WALL:4 END:9
 // ギミック引数 バネ:1 水流:2
-1,,
 BLOCK,,
+STEPUP,,
 STEPUP,1,
 NONE,,
-NONE,2,
+WALL,,
 STEPDOWN,,
+STEPDOWN,,
+NONE,,
+NONE,2,
+NONE,2,
+WALL,,
 END,,
