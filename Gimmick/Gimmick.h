@@ -16,10 +16,6 @@ class Gimmick {
 	Gimmick();
 	~Gimmick();
 
-	
-	//水流をパーティクル生成するための変数
-	static const int WATERFLOW_MAX_ = 500; //最大個数
-
 	//全体初期化
 	void Initialize();
 	//バネ初期化

@@ -7,6 +7,9 @@ WaterFlow::~WaterFlow() {
 //水流初期化
 void WaterFlow::Initialize(const Vector3& position, const Vector3& position2, const Vector3& velocity) {
 
+	audio_ = Audio::GetInstance();
+	//サウンドデータ読み込み
+	waterFlowSe_ = audio_->LoadWave("sound/se/bubble.wav");
 	//テクスチャ読み込み
 	texWaterFlow_ = TextureManager::Load("texture/bubble.png");
 	//水流のモデル
@@ -55,4 +58,9 @@ Vector3 WaterFlow::GetWorldPosition() {
 	return worldPos;
 }
 
-void WaterFlow::OnCollision(){};
+void WaterFlow::OnCollision() {
+	if (!audio_->IsPlaying(waterFlowSe_)) {
+	
+		audio_->PlayWave(waterFlowSe_, false, 0.1f);
+	}
+};
