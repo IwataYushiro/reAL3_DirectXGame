@@ -10,7 +10,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	// BGM解放
-
+	audio_->Finalize();
 	//自キャラの解放
 	delete player_;
 	delete modelPlayer_;
@@ -36,7 +36,8 @@ GameScene::~GameScene() {
 	debugText_ = DebugText::GetInstance();
 
 	// BGMロード
-
+	titleBgm_ = audio_->LoadWave("sound/title.wav");
+	audio_->PlayWave(titleBgm_);
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//プレイヤー
@@ -98,6 +99,11 @@ void GameScene::Update() {
 		//天球データの更新処理
 		skydome_->Update();
 		if (input_->TriggerKey(DIK_SPACE)) {
+			
+			if (audio_->IsPlaying(titleBgm_)) {
+				audio_->StopWave(titleBgm_);
+			}
+
 			player_->Reset();
 			scene_ = stage1;
 			//仕掛け初期化
@@ -148,6 +154,7 @@ void GameScene::Update() {
 	case normalend:
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(titleBgm_);
 			scene_ = title;
 			break;
 		}
@@ -156,6 +163,7 @@ void GameScene::Update() {
 	case trueend:
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
+			audio_->PlayWave(titleBgm_);
 			scene_ = title;
 			break;
 		}
@@ -165,6 +173,7 @@ void GameScene::Update() {
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = title;
+			audio_->PlayWave(titleBgm_);
 			break;
 		}
 		break;

@@ -61,6 +61,9 @@ class GameScene {
 	Audio* audio_ = nullptr;
 	DebugText* debugText_ = nullptr;
 
+	//サウンドデータハンドル
+	uint32_t titleBgm_ = 0;
+	
 	//テクスチャハンドル
 	
 	uint32_t titleTexture_ = 0;
@@ -96,9 +99,7 @@ class GameScene {
 
 	//仕掛けデータ
 	Gimmick* gimmick_ = nullptr;
-	//デバッグカメラ
-	DebugCamera* debugCamera_ = nullptr;
-
+	
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
 	size_t scene_;

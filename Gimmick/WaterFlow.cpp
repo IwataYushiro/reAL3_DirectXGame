@@ -1,6 +1,8 @@
 #include "WaterFrow.h"
 
-WaterFlow::~WaterFlow() { delete model_; }
+WaterFlow::~WaterFlow() {
+	delete model_; 
+}
 
 //…—¬‰Šú‰»
 void WaterFlow::Initialize(const Vector3& position, const Vector3& position2, const Vector3& velocity) {
