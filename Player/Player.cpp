@@ -47,9 +47,6 @@ void Player::Death() {}
 void Player::Update(ViewProjection& viewprojection) {
 
 	if (!isDead_) {
-
-		//移動処理
-		Move();
 		//ジャンプ処理
 		Jump();
 		// 水中処理
@@ -69,29 +66,6 @@ void Player::Draw(ViewProjection& viewProjection) {
 
 void Player::DrawDead(ViewProjection& viewProjection) {
 	modelDead_->Draw(worldTransform_, viewProjection);
-}
-//移動処理
-void Player::Move() {
-
-	Vector3 move = MyMathUtility::MySetVector3Zero();
-	float moveSpeed = 0.3f;
-
-	//キーボード入力による移動処理
-	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
-	if (input_->PushKey(DIK_LEFT)) {
-		move.x = -moveSpeed;
-	}
-	if (input_->PushKey(DIK_RIGHT)) {
-		move.x = moveSpeed;
-	}
-	if (input_->PushKey(DIK_UP)) {
-		move.y = moveSpeed;
-	}
-	if (input_->PushKey(DIK_DOWN)) {
-		move.y = -moveSpeed;
-	}
-
-	worldTransform_.translation_ += move;
 }
 
 void Player::Jump() {

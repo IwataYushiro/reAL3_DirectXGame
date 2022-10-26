@@ -42,9 +42,17 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// テクスチャ読み込み
-	titleTexture_ = TextureManager::Load("2141.png");
+	titleTexture_ = TextureManager::Load("texture/title.png");
+	howToPlayTexture_ = TextureManager::Load("texture/howtoplay.png");
+	stageClearTexture_ = TextureManager::Load("texture/stageclear.png");
+	gameOverTexture_ = TextureManager::Load("texture/gameover.png");
+	gameClearTexture_ = TextureManager::Load("texture/gameclear.png");
 	// スプライト
-	title_ = Sprite::Create(titleTexture_, { 0.0f, 0.0f });
+	title_ = Sprite::Create(titleTexture_, {0.0f, 0.0f});
+	howtoplay_ = Sprite::Create(howToPlayTexture_, {0.0f, 0.0f});
+	stageClear_= Sprite::Create(stageClearTexture_, {0.0f, 0.0f});
+	gameOver_= Sprite::Create(gameOverTexture_, {0.0f, 0.0f});
+	gameClear_= Sprite::Create(gameClearTexture_, {0.0f, 0.0f});
 
 	//自キャラの生成
 	player_ = new Player();
@@ -65,13 +73,13 @@ void GameScene::Initialize() {
 	stage_->Initialize(model_, gimmick_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 20.0f, 5.0f, -60.0f };
+	viewProjection_.eye = {20.0f, 5.0f, -60.0f};
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
 	// シーン
 	scene_ = title;
-	
+
 	//仕掛けに自機のアドレスを渡す
 	gimmick_->SetPlayer(player_);
 }
@@ -89,13 +97,6 @@ void GameScene::Update() {
 	case howtoplay:
 		//天球データの更新処理
 		skydome_->Update();
-
-		//遊び方説明
-		debugText_->Print("USE SPACE ONLY", 200, 250, 2.0f);
-		debugText_->Print("SPACE => JUMP", 200, 300, 2.0f);
-
-		debugText_->Print(" SPACE game start", 200, 450, 2.0f);
-
 		if (input_->TriggerKey(DIK_SPACE)) {
 			player_->Reset();
 			scene_ = stage1;
@@ -108,22 +109,24 @@ void GameScene::Update() {
 			scene_ = gameover;
 			break;
 		}
-		
 
-		//自キャラの更新処理
-		player_->Update(viewProjection_);
+		if (!stage_->GetEnd()) {
+			//自キャラの更新処理
+			player_->Update(viewProjection_);
 
-		//天球データの更新処理
-		skydome_->Update();
-		// ステージ
-		stage_->Update();
-		//仕掛け更新
-		gimmick_->Update();
-		
+			//天球データの更新処理
+			skydome_->Update();
+			// ステージ
+			stage_->Update();
+			//仕掛け更新
+			gimmick_->Update();
+		}
 		// ステージクリア
 		if (stage_->GetEnd()) {
-			scene_ = normalend;
-			break;
+			if (input_->TriggerKey(DIK_SPACE)) {
+				scene_ = normalend;
+				break;
+			}
 		}
 
 		//当たり判定
@@ -135,14 +138,10 @@ void GameScene::Update() {
 		break;
 
 	case stage3:
-		
+
 		break;
 
 	case normalend:
-		debugText_->Print(" GAME CLEAR...?", 200, 200, 3.0f);
-		debugText_->Print(" SPACE title", 200, 350, 2.0f);
-
-		debugText_->Print(" HINT stage3 enemylife 0", 200, 500, 2.0f);
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = title;
@@ -151,8 +150,6 @@ void GameScene::Update() {
 		break;
 
 	case trueend:
-		debugText_->Print(" GAME CLEAR!", 200, 200, 3.0f);
-		debugText_->Print(" SPACE title", 200, 350, 2.0f);
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = title;
@@ -161,9 +158,6 @@ void GameScene::Update() {
 		break;
 
 	case gameover:
-
-		debugText_->Print(" GAME OVER", 200, 200, 3.0f);
-		debugText_->Print(" SPACE title", 200, 350, 2.0f);
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = title;
@@ -185,7 +179,34 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
+	switch (scene_) {
+	case title:
+	case howtoplay:
+	
+		break;
 
+	case stage1:
+
+		break;
+
+	case stage2:
+
+		break;
+
+	case stage3:
+
+		break;
+
+	case normalend:
+		break;
+
+	case trueend:
+		break;
+
+	case gameover:
+
+		break;
+	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -212,6 +233,7 @@ void GameScene::Draw() {
 	case stage1:
 		// 3Dモデル描画
 		skydome_->Draw(viewProjection_);
+
 		stage_->Draw(viewProjection_);
 		gimmick_->Draw(viewProjection_);
 
@@ -234,7 +256,7 @@ void GameScene::Draw() {
 		break;
 
 	case gameover:
-		player_->DrawDead(viewProjection_);
+		
 		break;
 	}
 
@@ -249,14 +271,42 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	// デバッグテキストの描画
-	debugText_->DrawAll(commandList);
-
 	switch (scene_) {
 	case title:
+
 		title_->Draw();
 		break;
+	case howtoplay:
+		howtoplay_->Draw();
+		break;
+
+	case stage1:
+		if (stage_->GetEnd()) {
+			stageClear_->Draw();
+		}
+		break;
+
+	case stage2:
+
+		break;
+
+	case stage3:
+
+		break;
+
+	case normalend:
+		gameClear_->Draw();
+		break;
+
+	case trueend:
+		break;
+
+	case gameover:
+		gameOver_->Draw();
+		break;
 	}
+	// デバッグテキストの描画
+	debugText_->DrawAll(commandList);
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -277,7 +327,7 @@ void GameScene::ChackAllCollisions() {
 	float radiusA;
 	float radiusB;
 	float radiusAB;
-  
+
 	//水流リストを取得
 	const std::list<std::unique_ptr<WaterFlow>>& waterFlows = gimmick_->GetWaterFlow();
 
@@ -310,13 +360,12 @@ void GameScene::ChackAllCollisions() {
 	radiusA = 1.0f;
 	//水流の半径
 	radiusB = 1.0f;
-	
+
 	//自機の座標
 	posA = player_->GetWorldPosition();
 
 	//自機と全水流の当たり判定
-	for (const std::unique_ptr<WaterFlow>& waterflow : waterFlows)
-	{
+	for (const std::unique_ptr<WaterFlow>& waterflow : waterFlows) {
 		posB = waterflow->GetWorldPosition();
 
 		//座標A,Bの距離を求める
@@ -332,7 +381,7 @@ void GameScene::ChackAllCollisions() {
 			//水流の衝突時コールバック関数を呼び出す
 			waterflow->OnCollision();
 		}
-  }
+	}
 #pragma endregion
 #pragma region 自機とステージブロックの当たり判定
 	// 自機の座標
@@ -369,9 +418,7 @@ void GameScene::ChackAllCollisions() {
 		bZ2 = posB.z + radiusB;
 
 		// 当たり判定
-		if(pX1 < bX2 && pX2 > bX1 &&
-			pY1 < bY2 && pY2 > bY1 &&
-			pZ1 < bZ2 && pZ2 > bZ1) {
+		if (pX1 < bX2 && pX2 > bX1 && pY1 < bY2 && pY2 > bY1 && pZ1 < bZ2 && pZ2 > bZ1) {
 			if (block == Stage::WALL) {
 				if (posA.y < bY2 - 1.0f) {
 					player_->OnCollisionWall();
@@ -381,8 +428,7 @@ void GameScene::ChackAllCollisions() {
 			if (block == Stage::STEPUP) {
 				if (posA.y >= bY2 + radiusA - 0.050f) {
 					player_->OnCollisionBlock();
-				}
-				else {
+				} else {
 					player_->OnCollisionStep();
 				}
 				break;

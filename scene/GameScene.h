@@ -62,11 +62,19 @@ class GameScene {
 	DebugText* debugText_ = nullptr;
 
 	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
+	
 	uint32_t titleTexture_ = 0;
+	uint32_t howToPlayTexture_ = 0;
+	uint32_t stageClearTexture_ = 0;
+	uint32_t gameOverTexture_ = 0;
+	uint32_t gameClearTexture_ = 0;
 
 	// スプライト
 	Sprite* title_;
+	Sprite* howtoplay_;
+	Sprite* stageClear_;
+	Sprite* gameOver_;
+	Sprite* gameClear_;
 
 	// 3Dモデル
 	Model* model_ = nullptr;
