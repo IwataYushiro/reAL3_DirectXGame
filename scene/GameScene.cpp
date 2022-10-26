@@ -66,14 +66,11 @@ GameScene::~GameScene() {
 	// ステージ
 	stage_ = new Stage();
 
-	//自キャラの初期化
-	player_->Initialize(modelPlayer_);
-	//仕掛け初期化
-	gimmick_->Initialize();
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
-	// ステージ
-	stage_->Initialize(model_, gimmick_);
+	//自キャラの初期化
+	player_->Initialize(modelPlayer_);
+
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	viewProjection_.eye = {20.0f, 5.0f, -60.0f};
@@ -103,6 +100,10 @@ void GameScene::Update() {
 		if (input_->TriggerKey(DIK_SPACE)) {
 			player_->Reset();
 			scene_ = stage1;
+			//仕掛け初期化
+			gimmick_->Initialize();
+			// ステージ
+			stage_->Initialize(model_, gimmick_);
 		}
 		break;
 
