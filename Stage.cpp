@@ -29,6 +29,8 @@ void Stage::Initialize(Model* model, Gimmick* gimmick) {
 	
 	// デバックテキスト
 	debugText_ = DebugText::GetInstance();
+
+	isEnd = false;
 }
 
 // 更新
