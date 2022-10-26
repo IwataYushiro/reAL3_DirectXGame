@@ -23,9 +23,12 @@ GameScene::~GameScene() {
 	delete stage_;
 	// スプライト
 	delete title_;
+	delete howtoplay_;
+	delete stageClear_;
+	delete gameOver_;
+	delete gameClear_;
 }
-
-void GameScene::Initialize() {
+ void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
