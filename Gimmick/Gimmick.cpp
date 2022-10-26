@@ -9,11 +9,14 @@ Gimmick::~Gimmick() {
 
 //初期化
 void Gimmick::Initialize() {
+	audio_ = Audio::GetInstance();
 	//バネ初期化
 	InitializeSpring();
 }
 
 void Gimmick::InitializeSpring() {
+	//サウンドデータ読み込み
+	springSe_ = audio_->LoadWave("sound/se/spring.wav");
 	//テクスチャ読み込み
 	texSpring_ = TextureManager::Load("texture/spring.png");
 	
@@ -95,4 +98,4 @@ Vector3 Gimmick::GetWorldPositionSpring() {
 	return worldPos;
 }
 
-void Gimmick::OnCollisionSpring(){};
+void Gimmick::OnCollisionSpring() { audio_->PlayWave(springSe_); };

@@ -1,4 +1,5 @@
 #pragma once
+#include "Audio.h"
 #include "Model.h"
 #include "TextureManager.h"
 #include "WorldTransform.h"
@@ -15,7 +16,7 @@ class Gimmick {
 	Gimmick();
 	~Gimmick();
 
-	//
+	
 	//水流をパーティクル生成するための変数
 	static const int WATERFLOW_MAX_ = 500; //最大個数
 
@@ -38,7 +39,11 @@ class Gimmick {
 	//水流リストを取得
 	const std::list<std::unique_ptr<WaterFlow>>& GetWaterFlow() { return waterFlow_; }
   private:
+	//音
+	Audio* audio_ = nullptr;
+	
 	//バネ
+	uint32_t springSe_ = 0;
 	//ワールド変換データ
 	WorldTransform worldTransformSpring_;
 	
