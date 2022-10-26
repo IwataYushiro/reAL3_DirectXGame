@@ -12,7 +12,7 @@ class WaterFlow {
 	~WaterFlow();
 
 	//…—¬‰Šú‰»
-	void Initialize(const Vector3& position, const Vector3& velocity);
+	void Initialize(const Vector3& position, const Vector3& position2, const Vector3& velocity);
 	//ƒŠƒZƒbƒg
 	void Reset();
 

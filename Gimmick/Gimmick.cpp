@@ -20,7 +20,6 @@ void Gimmick::InitializeSpring() {
 	//バネのモデル
 	modelSpring_ = Model::Create();
 
-	worldTransformSpring_.translation_ = {25.0f, -15.0f, 0.0f};
 	worldTransformSpring_.Initialize();
 }
 
@@ -31,7 +30,9 @@ void Gimmick::Update() {
 	//メルセンヌ・ツイスター
 	std::mt19937_64 engine(seed_gen());
 	//水流座標の範囲
-	std::uniform_real_distribution<float> waterFlowDistX(-30.0f, -10.0f);
+	std::uniform_real_distribution<float> waterFlowDistX(-10.0f, 10.0f);
+
+	Vector3 move = { 0.0f, 0.0f, -0.1f };
 
 	//死亡フラグが立った水流の削除
 	waterFlow_.remove_if(
@@ -44,12 +45,13 @@ void Gimmick::Update() {
 
 	//初期位置
 	position = {waterFlowDistX(engine), -20.0f, 0.0f};
+	waterFlowPosition_ += move;
 	//スピード
 	velocity = {0.0f, kWaterFlowSpeed, 0.0f};
 
 	//弾を生成し初期化
 	std::unique_ptr<WaterFlow> newWaterFlow = std::make_unique<WaterFlow>();
-	newWaterFlow->Initialize(position, velocity);
+	newWaterFlow->Initialize(position, waterFlowPosition_, velocity);
 
 	//弾を登録
 	waterFlow_.push_back(std::move(newWaterFlow));
@@ -58,6 +60,10 @@ void Gimmick::Update() {
 	for (std::unique_ptr<WaterFlow>& waterFlow : waterFlow_) {
 		waterFlow->Update();
 	}
+
+	// バネ
+	worldTransformSpring_.translation_ += move;
+
 	//ワールド行列更新
 	worldTransformSpring_.Update(worldTransformSpring_);
 }

@@ -62,7 +62,7 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	// ステージ
-	stage_->Initialize(model_);
+	stage_->Initialize(model_, gimmick_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f, 5.0f, -60.0f };
@@ -108,6 +108,7 @@ void GameScene::Update() {
 			scene_ = gameover;
 			break;
 		}
+		
 
 		//自キャラの更新処理
 		player_->Update(viewProjection_);
@@ -117,8 +118,14 @@ void GameScene::Update() {
 		// ステージ
 		stage_->Update();
 		//仕掛け更新
-		//gimmick_->Update();
+		gimmick_->Update();
 		
+		// ステージクリア
+		if (stage_->GetEnd()) {
+			scene_ = normalend;
+			break;
+		}
+
 		//当たり判定
 		ChackAllCollisions();
 		break;
