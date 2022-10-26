@@ -1,4 +1,5 @@
 #pragma once
+#include "Audio.h"
 #include "Model.h"
 #include "TextureManager.h"
 #include "WorldTransform.h"
@@ -25,10 +26,14 @@ class WaterFlow {
 	Vector3 GetWorldPosition();
 
   private:
+	//音
+	Audio* audio_ = nullptr;  
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//テクスチャ
 	uint32_t texWaterFlow_ = 0;
+	//サウンドデータ
+	uint32_t waterFlowSe_ = 0;
 	//モデルデータ
 	Model* model_ = nullptr; //水流
 

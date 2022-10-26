@@ -10,7 +10,6 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	// BGM解放
-	audio_->Finalize();
 	//自キャラの解放
 	delete player_;
 	delete modelPlayer_;
@@ -85,6 +84,8 @@ GameScene::~GameScene() {
 
 	//仕掛けに自機のアドレスを渡す
 	gimmick_->SetPlayer(player_);
+	//仕掛け初期化
+			gimmick_->Initialize();
 }
 
 void GameScene::Update() {
@@ -106,8 +107,7 @@ void GameScene::Update() {
 			audio_->PlayWave(doneSe_);
 			player_->Reset();
 			scene_ = stage1;
-			//仕掛け初期化
-			gimmick_->Initialize();
+			
 			// ステージ
 			stage_->Initialize(model_, gimmick_, scene_);
 			break;
@@ -136,7 +136,11 @@ void GameScene::Update() {
 		if (stage_->GetEnd()) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				audio_->PlayWave(doneSe_);
-				scene_ = normalend;
+				player_->Reset();
+				scene_ = stage2;
+				
+				// ステージ
+				stage_->Initialize(model_, gimmick_, scene_);
 				break;
 			}
 		}
@@ -146,11 +150,69 @@ void GameScene::Update() {
 		break;
 
 	case stage2:
+		// プレイヤーが死んでいたら終了
+		if (player_->IsDead()) {
+			scene_ = gameover;
+			break;
+		}
 
+		if (!stage_->GetEnd()) {
+			//自キャラの更新処理
+			player_->Update(viewProjection_);
+
+			//天球データの更新処理
+			skydome_->Update();
+			// ステージ
+			stage_->Update();
+			//仕掛け更新
+			gimmick_->Update();
+		}
+		// ステージクリア
+		if (stage_->GetEnd()) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				audio_->PlayWave(doneSe_);
+				player_->Reset();
+				scene_ = stage3;
+				
+				// ステージ
+				stage_->Initialize(model_, gimmick_, scene_);
+				break;
+			}
+		}
+
+		//当たり判定
+		ChackAllCollisions();
 		break;
 
 	case stage3:
+		// プレイヤーが死んでいたら終了
+		if (player_->IsDead()) {
+			scene_ = gameover;
+			break;
+		}
 
+		if (!stage_->GetEnd()) {
+			//自キャラの更新処理
+			player_->Update(viewProjection_);
+
+			//天球データの更新処理
+			skydome_->Update();
+			// ステージ
+			stage_->Update();
+			//仕掛け更新
+			gimmick_->Update();
+		}
+		// ステージクリア
+		if (stage_->GetEnd()) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				audio_->PlayWave(doneSe_);
+				scene_ = normalend;
+				break;
+			}
+		}
+
+		//当たり判定
+		ChackAllCollisions();
 		break;
 
 	case normalend:
@@ -258,10 +320,24 @@ void GameScene::Draw() {
 
 	case stage2:
 		// 3Dモデル描画
+		skydome_->Draw(viewProjection_);
+
+		stage_->Draw(viewProjection_);
+		gimmick_->Draw(viewProjection_);
+
+		player_->Draw(viewProjection_);
+
 		break;
 
 	case stage3:
 		// 3Dモデル描画
+		skydome_->Draw(viewProjection_);
+
+		stage_->Draw(viewProjection_);
+		gimmick_->Draw(viewProjection_);
+
+		player_->Draw(viewProjection_);
+
 		break;
 
 	case normalend:
@@ -302,11 +378,15 @@ void GameScene::Draw() {
 		break;
 
 	case stage2:
-
+		if (stage_->GetEnd()) {
+			stageClear_->Draw();
+		}
 		break;
 
 	case stage3:
-
+		if (stage_->GetEnd()) {
+			stageClear_->Draw();
+		}
 		break;
 
 	case normalend:
