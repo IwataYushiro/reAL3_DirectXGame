@@ -63,6 +63,7 @@ class GameScene {
 
 	//サウンドデータハンドル
 	uint32_t titleBgm_ = 0;
+	uint32_t doneSe_ = 0;
 	
 	//テクスチャハンドル
 	

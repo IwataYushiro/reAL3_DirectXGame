@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Audio.h"
 #include "DebugText.h"
 #include "Gimmick.h"
 #include "Input.h"
@@ -53,6 +54,8 @@ class Player {
 	void OffCollisionBlock();
 
   private:
+	//音
+	Audio* audio_ = nullptr;
 	//ワールド変換データ
 	WorldTransform worldTransform_;
 	//モデル
@@ -62,6 +65,8 @@ class Player {
 	uint32_t textureHandle_ = 0u;
 	//インプット
 	Input* input_ = nullptr;
+	//サウンドデータ
+	uint32_t jumpSound_ = 0;
 	//デバッグテキスト
 	DebugText* debugText_ = nullptr;
 	//死亡フラグとライフ
