@@ -5,13 +5,15 @@
 #include "MyMathUtility.h"
 #include "WorldTransform.h"
 #include <cassert>
-
 #include <sstream>
+
+// 前方宣言
+class Gimmick;
 
 class Stage {
 public:
 	// 初期化
-	void Initialize(Model* model);
+	void Initialize(Model* model, Gimmick* gimmick);
 
 	// 更新
 	void Update();
@@ -20,7 +22,7 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 	// ブロック初期化
-	void StageBlockInitialize();
+	void StageBlockInitialize(Gimmick* gimmick);
 
 	// ステージ読み込み
 	void LoadStageData();
@@ -43,6 +45,7 @@ public:
 	struct StageData {
 		WorldTransform worldTransform_;
 		int block_;
+		int isGimmick_;
 	};
 
 	// ブロックの数
@@ -71,6 +74,8 @@ private:
 
 	float radius = 5.0f;
 
+	bool isEnd = false;
+
 public:
 
 	float GetRadius() { return radius; }
@@ -78,5 +83,6 @@ public:
 	Vector3 GetWorldPosition(int num) { return stage_[num].worldTransform_.translation_; }
 
 	int GetBlock(int num) { return stage_[num].block_; }
+	int GetEnd() { return isEnd; }
 };
 

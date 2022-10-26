@@ -1,7 +1,8 @@
 #include "Stage.h"
 #include <fstream>
+#include "Gimmick.h"
 
-void Stage::Initialize(Model* model) {
+void Stage::Initialize(Model* model, Gimmick* gimmick) {
 	// モデル読み込み
 	model_ = model;
 
@@ -24,7 +25,7 @@ void Stage::Initialize(Model* model) {
 	}
 
 	// 各ブロックの平行移動成分初期化
-	StageBlockInitialize();
+	StageBlockInitialize(gimmick);
 	
 	// デバックテキスト
 	debugText_ = DebugText::GetInstance();
@@ -43,6 +44,11 @@ void Stage::Update() {
 			stage.worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(stage.worldTransform_);
 
 			stage.worldTransform_.TransferMatrix();
+			if (stage.block_ == END) {
+				if(stage.worldTransform_.translation_.z <= -3.0f) {
+					isEnd = true;
+				}
+			}
 		}
 	}
 }
@@ -56,7 +62,7 @@ void Stage::Draw(ViewProjection viewProjection) {
 	}
 }
 
-void Stage::StageBlockInitialize() {
+void Stage::StageBlockInitialize(Gimmick* gimmick) {
 	// 高さ
 	float height = 0.0f;
 
@@ -80,8 +86,21 @@ void Stage::StageBlockInitialize() {
 			height += wallHeight;
 			stage_[i].worldTransform_.translation_ .y += height;
 		}
+		else if (stage_[i].block_ == END) {
+			stage_[i].worldTransform_.translation_.y += height;
+		}
 		else if (stage_[i].block_ == NONE) {
 
+		}
+		//
+		if (stage_[i].isGimmick_ == 1) {
+			Vector3 position = stage_[i].worldTransform_.translation_;
+			position += Vector3(0.0f, 6.0f, 0.0f);
+			gimmick->SetWorldPositionSpring(position);
+		}
+		else if (stage_[i].isGimmick_ == 2) {
+			Vector3 position = stage_[i].worldTransform_.translation_;
+			gimmick->SetPositionWaterFlow(position);
 		}
 	}
 }
@@ -122,25 +141,62 @@ void Stage::LoadStageCommands() {
 		// コマンド読み込み
 		if (word.find("NONE") == 0 || word.find("0") == 0) {
 			stage_[num].block_ = NONE;
+			getline(line_stream, word, ',');
+			if (word.find("1") == 0) {
+				stage_[num].isGimmick_ = 1;
+			}
+			else if (word.find("2") == 0) {
+				stage_[num].isGimmick_ = 2;
+			}
 			num++;
 		}
 		else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
 			stage_[num].block_ = BLOCK;
+			getline(line_stream, word, ',');
+			if (word.find("1") == 0) {
+				stage_[num].isGimmick_ = 1;
+			}
+			else if (word.find("2") == 0) {
+				stage_[num].isGimmick_ = 2;
+			}
 			num++;
 		}
 		else if (word.find("STEPUP") == 0 || word.find("2") == 0) {
 			stage_[num].block_ = STEPUP;
+			getline(line_stream, word, ',');
+			if (word.find("1") == 0) {
+				stage_[num].isGimmick_ = 1;
+			}
+			else if (word.find("2") == 0) {
+				stage_[num].isGimmick_ = 2;
+			}
 			num++;
 		}
 		else if (word.find("STEPDOWN") == 0 || word.find("3") == 0) {
 			stage_[num].block_ = STEPDOWN;
+			getline(line_stream, word, ',');
+			if (word.find("1") == 0) {
+				stage_[num].isGimmick_ = 1;
+			}
+			else if (word.find("2") == 0) {
+				stage_[num].isGimmick_ = 2;
+			}
 			num++;
 		}
 		else if (word.find("WALL") == 0 || word.find("4") == 0) {
 			stage_[num].block_ = WALL;
+			getline(line_stream, word, ',');
+			if (word.find("1") == 0) {
+				stage_[num].isGimmick_ = 1;
+			}
+			else if (word.find("2") == 0) {
+				stage_[num].isGimmick_ = 2;
+			}
 			num++;
 		}
 		else if (word.find("END") == 0 || word.find("9") == 0) {
+			stage_[num].block_ = END;
+			num++;
 			for (int i = num; i < blockNum; i++) {
 				stage_[num].block_ = NONE;
 			}

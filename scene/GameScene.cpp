@@ -21,6 +21,8 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	// ステージ
 	delete stage_;
+	// スプライト
+	delete title_;
 }
 
 void GameScene::Initialize() {
@@ -39,6 +41,11 @@ void GameScene::Initialize() {
 	//天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
+	// テクスチャ読み込み
+	titleTexture_ = TextureManager::Load("2141.png");
+	// スプライト
+	title_ = Sprite::Create(titleTexture_, { 0.0f, 0.0f });
+
 	//自キャラの生成
 	player_ = new Player();
 	//仕掛け生成
@@ -55,13 +62,16 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	// ステージ
-	stage_->Initialize(model_);
+	stage_->Initialize(model_, gimmick_);
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f, 5.0f, -60.0f };
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
+
+	// シーン
 	scene_ = title;
+	
 	//仕掛けに自機のアドレスを渡す
 	gimmick_->SetPlayer(player_);
 }
@@ -69,25 +79,11 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	switch (scene_) {
 	case title:
-		//天球データの更新処理
-		skydome_->Update();
-
-		//自キャラの更新処理
-		player_->Update(viewProjection_);
-		//仕掛け更新
-		gimmick_->Update();
-
-		// ステージ
-		stage_->Update();
-
-		/*debugText_->Print(" BIT SHOOTER", 200, 200, 3.0f);
-		debugText_->Print(" SPACE start", 200, 350, 2.0f);*/
-		/*if (input_->TriggerKey(DIK_SPACE)) {
+		// スペースを押したら操作説明へ
+		if (input_->TriggerKey(DIK_SPACE)) {
 			scene_ = howtoplay;
-			break;
-		}*/
-		//当たり判定
-		ChackAllCollisions();
+		}
+
 		break;
 
 	case howtoplay:
@@ -95,59 +91,51 @@ void GameScene::Update() {
 		skydome_->Update();
 
 		//遊び方説明
-		debugText_->Print("WASD move player", 200, 200, 2.0f);
-		debugText_->Print("QE rotate player", 200, 250, 2.0f);
-		debugText_->Print("MOUSE move option", 200, 300, 2.0f);
-		debugText_->Print("MOUSE LEFT shot", 200, 350, 2.0f);
+		debugText_->Print("USE SPACE ONLY", 200, 250, 2.0f);
+		debugText_->Print("SPACE => JUMP", 200, 300, 2.0f);
 
 		debugText_->Print(" SPACE game start", 200, 450, 2.0f);
 
 		if (input_->TriggerKey(DIK_SPACE)) {
 			player_->Reset();
 			scene_ = stage1;
-			break;
 		}
 		break;
 
 	case stage1:
-		//天球データの更新処理
-		skydome_->Update();
-		//自キャラの更新処理
-		player_->Update(viewProjection_);
-
+		// プレイヤーが死んでいたら終了
 		if (player_->IsDead()) {
 			scene_ = gameover;
 			break;
 		}
+		
+
+		//自キャラの更新処理
+		player_->Update(viewProjection_);
+
+		//天球データの更新処理
+		skydome_->Update();
+		// ステージ
+		stage_->Update();
+		//仕掛け更新
+		gimmick_->Update();
+		
+		// ステージクリア
+		if (stage_->GetEnd()) {
+			scene_ = normalend;
+			break;
+		}
+
 		//当たり判定
 		ChackAllCollisions();
 		break;
 
 	case stage2:
-		//天球データの更新処理
-		skydome_->Update();
-		//自キャラの更新処理
-		player_->Update(viewProjection_);
 
-		if (player_->IsDead()) {
-			scene_ = gameover;
-			break;
-		}
-		//当たり判定
-		ChackAllCollisions();
 		break;
-	case stage3:
-		//天球データの更新処理
-		skydome_->Update();
-		//自キャラの更新処理
-		player_->Update(viewProjection_);
 
-		if (player_->IsDead()) {
-			scene_ = gameover;
-			break;
-		}
-		//当たり判定
-		ChackAllCollisions();
+	case stage3:
+		
 		break;
 
 	case normalend:
@@ -213,35 +201,30 @@ void GameScene::Draw() {
 	/// </summary>
 	switch (scene_) {
 	case title:
-		skydome_->Draw(viewProjection_);
-		gimmick_->Draw(viewProjection_);
-		player_->Draw(viewProjection_);
 
-		stage_->Draw(viewProjection_);
 		break;
+
 	case howtoplay:
 		skydome_->Draw(viewProjection_);
+
 		break;
+
 	case stage1:
 		// 3Dモデル描画
 		skydome_->Draw(viewProjection_);
+		stage_->Draw(viewProjection_);
+		gimmick_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
 
 		break;
+
 	case stage2:
 		// 3Dモデル描画
-		skydome_->Draw(viewProjection_);
-
-		player_->Draw(viewProjection_);
-
 		break;
+
 	case stage3:
 		// 3Dモデル描画
-		skydome_->Draw(viewProjection_);
-
-		player_->Draw(viewProjection_);
-
 		break;
 
 	case normalend:
@@ -268,7 +251,13 @@ void GameScene::Draw() {
 	/// </summary>
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
-	//
+
+	switch (scene_) {
+	case title:
+		title_->Draw();
+		break;
+	}
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 

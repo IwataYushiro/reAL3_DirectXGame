@@ -3,7 +3,7 @@
 WaterFlow::~WaterFlow() { delete model_; }
 
 //水流初期化
-void WaterFlow::Initialize(const Vector3& position, const Vector3& velocity) {
+void WaterFlow::Initialize(const Vector3& position, const Vector3& position2, const Vector3& velocity) {
 
 	//テクスチャ読み込み
 	texWaterFlow_ = TextureManager::Load("texture/bubble.png");
@@ -16,7 +16,8 @@ void WaterFlow::Initialize(const Vector3& position, const Vector3& velocity) {
 	//ワールド座標初期化
 	worldTransform_.Initialize();
 	//引数の初期座標をセット
-	worldTransform_.translation_ = position;
+	worldTransform_.translation_ = position2;
+	worldTransform_.translation_ += position;
 	speed_ = velocity;
 
 	bright_ = 255; //明るさ

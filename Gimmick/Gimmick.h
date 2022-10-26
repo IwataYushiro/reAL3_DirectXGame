@@ -34,6 +34,7 @@ class Gimmick {
 	
 	//各仕掛けのワールド座標を取得
 	Vector3 GetWorldPositionSpring();
+
 	//水流リストを取得
 	const std::list<std::unique_ptr<WaterFlow>>& GetWaterFlow() { return waterFlow_; }
   private:
@@ -48,6 +49,7 @@ class Gimmick {
 
 	//水流
 	std::list<std::unique_ptr<WaterFlow>> waterFlow_;
+	Vector3 waterFlowPosition_;
 	//プレーヤーデータ
 	Player* player_ = nullptr;
 
@@ -57,4 +59,7 @@ class Gimmick {
 	//バネ
 	void OnCollisionSpring();
 	
+	void SetWorldPositionSpring(Vector3 position) { worldTransformSpring_.translation_ = position; }
+
+	void SetPositionWaterFlow(Vector3 position) { waterFlowPosition_ = position; }
 };

@@ -59,9 +59,6 @@ void Player::Update(ViewProjection& viewprojection) {
 	}
 
 	worldTransform_.TransferMatrix();
-	debugText_->SetScale(1.0f);
-	debugText_->SetPos(50, 50);
-	debugText_->Printf("life:(%d)", life_);
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
@@ -136,6 +133,11 @@ void Player::MoveLimit() {
 	worldTransform_.translation_.x = min(worldTransform_.translation_.x, +kMoveLimitX);
 	// worldTransform_.translation_.y = max(worldTransform_.translation_.y, -kMoveLimitY);
 	worldTransform_.translation_.y = min(worldTransform_.translation_.y, +kMoveLimitY);
+
+	// 画面外に出たら死亡する
+	if (worldTransform_.translation_.y <= -30.0f) {
+		isDead_ = true;
+	}
 
 	//行列更新
 	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
