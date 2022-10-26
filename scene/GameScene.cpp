@@ -109,7 +109,7 @@ void GameScene::Update() {
 			//仕掛け初期化
 			gimmick_->Initialize();
 			// ステージ
-			stage_->Initialize(model_, gimmick_);
+			stage_->Initialize(model_, gimmick_, scene_);
 			break;
 		}
 		break;
