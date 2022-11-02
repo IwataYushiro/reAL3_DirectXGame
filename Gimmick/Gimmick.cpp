@@ -23,6 +23,7 @@ void Gimmick::InitializeSpring() {
 	//バネのモデル
 	modelSpring_ = Model::Create();
 
+	//ワールド座標初期化
 	worldTransformSpring_.Initialize();
 }
 
