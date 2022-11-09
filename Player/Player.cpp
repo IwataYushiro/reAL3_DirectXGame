@@ -13,7 +13,7 @@ void Player::Initialize(Model* model) {
 	assert(model);
 	audio_ = Audio::GetInstance();
 	//引数として受け取ったデータをメンバ変数に記録する
-	
+
 	model_ = model;
 	modelDead_ = Model::CreateFromOBJ("playerdead", true);
 
@@ -24,7 +24,7 @@ void Player::Initialize(Model* model) {
 	jumpSound_ = audio_->LoadWave("sound/se/jump.wav");
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
+	worldTransform_.translation_ = { 0.0f, -10.0f, 0.0f };
 
 	prePosition_ = worldTransform_.translation_;
 
@@ -37,7 +37,7 @@ void Player::Initialize(Model* model) {
 }
 
 void Player::Reset() {
-	worldTransform_.translation_ = {0.0f, -10.0f, 0.0f};
+	worldTransform_.translation_ = { 0.0f, -10.0f, 0.0f };
 	worldTransform_.rotation_ = MyMathUtility::MySetVector3Zero();
 
 	life_ = 5;
@@ -49,6 +49,7 @@ void Player::Death() {}
 void Player::Update(ViewProjection& viewprojection) {
 
 	if (!isDead_) {
+		Move();
 		//ジャンプ処理
 		Jump();
 		// 水中処理
@@ -58,6 +59,11 @@ void Player::Update(ViewProjection& viewprojection) {
 	}
 
 	worldTransform_.TransferMatrix();
+
+	debugText_->SetPos(50, 25);
+	debugText_->Printf("mousePos_(%d,%d)", po.x, po.y);
+	debugText_->SetPos(50, 50);
+	debugText_->Printf("mouseClick_(%d)", mouseClick_);
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
@@ -68,6 +74,31 @@ void Player::Draw(ViewProjection& viewProjection) {
 
 void Player::DrawDead(ViewProjection& viewProjection) {
 	modelDead_->Draw(worldTransform_, viewProjection);
+}
+
+void Player::Move()
+{
+	//マウスの現在の座標を取得する
+	GetCursorPos(&po);
+
+	// 左クリックを押したときフラグに1を足す
+	if (input_->IsTriggerMouse(0) && mouseClick_ == false)
+	{
+		mouseClick_ = true;
+	}
+	else if(input_->IsTriggerMouse(0)) 
+	{
+		mouseClick_ = false;
+	}
+
+	if (mouseClick_ == true)
+	{
+
+	}
+	else 
+	{
+
+	}
 }
 
 void Player::Jump() {
@@ -144,7 +175,7 @@ void Player::OnCollisionSpring() {
 
 void Player::OnCollisionWaterFlow() {
 	Vector3 speed;
-	speed = {0.0f, -0.1f, 0.0f};
+	speed = { 0.0f, -0.1f, 0.0f };
 	isSwim = true;
 	worldTransform_.translation_ += speed;
 	gravity = -0.2f;
