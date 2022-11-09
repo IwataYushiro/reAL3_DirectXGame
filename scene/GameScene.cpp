@@ -72,10 +72,11 @@ GameScene::~GameScene() {
 	skydome_->Initialize(modelSkydome_);
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
+	stage_->Initialize(model_, scene_);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = {20.0f, 5.0f, -60.0f};
+	viewProjection_.eye = {0.0f, 20.0f, -60.0f};
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -110,7 +111,7 @@ void GameScene::Update() {
 			
 			gimmick_->Initialize();
 			// ステージ
-			stage_->Initialize(model_, gimmick_, scene_);
+			//stage_->Initialize(model_, gimmick_, scene_);
 			break;
 		}
 		break;
@@ -122,30 +123,30 @@ void GameScene::Update() {
 			break;
 		}
 
-		if (!stage_->GetEnd()) {
-			//自キャラの更新処理
-			player_->Update(viewProjection_);
+		//if (!stage_->GetEnd()) {
+		//	//自キャラの更新処理
+		//	player_->Update(viewProjection_);
 
-			//天球データの更新処理
-			skydome_->Update();
-			// ステージ
-			stage_->Update();
-			//仕掛け更新
-			gimmick_->Update();
-		}
-		// ステージクリア
-		if (stage_->GetEnd()) {
-			if (input_->TriggerKey(DIK_SPACE)) {
-				audio_->PlayWave(doneSe_);
-				player_->Reset();
-				scene_ = stage2;
-				
-				gimmick_->Initialize();
-				// ステージ
-				stage_->Initialize(model_, gimmick_, scene_);
-				break;
-			}
-		}
+		//	//天球データの更新処理
+		//	skydome_->Update();
+		//	// ステージ
+		//	stage_->Update();
+		//	//仕掛け更新
+		//	gimmick_->Update();
+		//}
+		//// ステージクリア
+		//if (stage_->GetEnd()) {
+		//	if (input_->TriggerKey(DIK_SPACE)) {
+		//		audio_->PlayWave(doneSe_);
+		//		player_->Reset();
+		//		scene_ = stage2;
+		//		
+		//		gimmick_->Initialize();
+		//		// ステージ
+		//		stage_->Initialize(model_, gimmick_, scene_);
+		//		break;
+		//	}
+		//}
 
 		//当たり判定
 		ChackAllCollisions();
@@ -158,30 +159,30 @@ void GameScene::Update() {
 			break;
 		}
 
-		if (!stage_->GetEnd()) {
-			//自キャラの更新処理
-			player_->Update(viewProjection_);
+		//if (!stage_->GetEnd()) {
+		//	//自キャラの更新処理
+		//	player_->Update(viewProjection_);
 
-			//天球データの更新処理
-			skydome_->Update();
-			// ステージ
-			stage_->Update();
-			//仕掛け更新
-			gimmick_->Update();
-		}
+		//	//天球データの更新処理
+		//	skydome_->Update();
+		//	// ステージ
+		//	stage_->Update();
+		//	//仕掛け更新
+		//	gimmick_->Update();
+		//}
 		// ステージクリア
-		if (stage_->GetEnd()) {
-			if (input_->TriggerKey(DIK_SPACE)) {
-				audio_->PlayWave(doneSe_);
-				player_->Reset();
-				scene_ = stage3;
-				
-				gimmick_->Initialize();
-				// ステージ
-				stage_->Initialize(model_, gimmick_, scene_);
-				break;
-			}
-		}
+		//if (stage_->GetEnd()) {
+		//	if (input_->TriggerKey(DIK_SPACE)) {
+		//		audio_->PlayWave(doneSe_);
+		//		player_->Reset();
+		//		scene_ = stage3;
+		//		
+		//		gimmick_->Initialize();
+		//		// ステージ
+		//		stage_->Initialize(model_, gimmick_, scene_);
+		//		break;
+		//	}
+		//}
 
 		//当たり判定
 		ChackAllCollisions();
@@ -194,25 +195,25 @@ void GameScene::Update() {
 			break;
 		}
 
-		if (!stage_->GetEnd()) {
-			//自キャラの更新処理
-			player_->Update(viewProjection_);
+		//if (!stage_->GetEnd()) {
+		//	//自キャラの更新処理
+		//	player_->Update(viewProjection_);
 
-			//天球データの更新処理
-			skydome_->Update();
-			// ステージ
-			stage_->Update();
-			//仕掛け更新
-			gimmick_->Update();
-		}
+		//	//天球データの更新処理
+		//	skydome_->Update();
+		//	// ステージ
+		//	stage_->Update();
+		//	//仕掛け更新
+		//	gimmick_->Update();
+		//}
 		// ステージクリア
-		if (stage_->GetEnd()) {
+		/*if (stage_->GetEnd()) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				audio_->PlayWave(doneSe_);
 				scene_ = normalend;
 				break;
 			}
-		}
+		}*/
 
 		//当たり判定
 		ChackAllCollisions();
@@ -302,7 +303,7 @@ void GameScene::Draw() {
 	/// </summary>
 	switch (scene_) {
 	case title:
-
+		stage_->Draw(viewProjection_);
 		break;
 
 	case howtoplay:
@@ -368,28 +369,28 @@ void GameScene::Draw() {
 	switch (scene_) {
 	case title:
 
-		title_->Draw();
+		//title_->Draw();
 		break;
 	case howtoplay:
 		howtoplay_->Draw();
 		break;
 
 	case stage1:
-		if (stage_->GetEnd()) {
+		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
-		}
+		}*/
 		break;
 
 	case stage2:
-		if (stage_->GetEnd()) {
+		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
-		}
+		}*/
 		break;
 
 	case stage3:
-		if (stage_->GetEnd()) {
+		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
-		}
+		}*/
 		break;
 
 	case normalend:
@@ -479,62 +480,6 @@ void GameScene::ChackAllCollisions() {
 			//水流の衝突時コールバック関数を呼び出す
 			waterflow->OnCollision();
 		}
-	}
-#pragma endregion
-#pragma region 自機とステージブロックの当たり判定
-	// 自機の座標
-	posA = player_->GetWorldPosition();
-	// ステージ用の自機の当たり判定の半径
-	radiusA = 1.5f;
-	// ステージブロックの半径
-	radiusB = stage_->GetRadius();
-
-	// ブロックと自機の当たり判定用の変数
-	int block;
-	// 矩形用の隅の座標p(自機)、b(ブロック)
-	float pX1, pX2, pY1, pY2, pZ1, pZ2;
-	float bX1, bX2, bY1, bY2, bZ1, bZ2;
-
-	pX1 = posA.x - radiusA;
-	pX2 = posA.x + radiusA;
-	pY1 = posA.y - radiusA;
-	pY2 = posA.y + radiusA;
-	pZ1 = posA.z - radiusA;
-	pZ2 = posA.z + radiusA;
-
-	for (int i = 0; i < Stage::blockNum; i++) {
-		// ステージブロックの座標、種類取得
-		posB = stage_->GetWorldPosition(i);
-		block = stage_->GetBlock(i);
-
-		// ブロックの矩形座標
-		bX1 = posB.x - radiusB;
-		bX2 = posB.x + radiusB;
-		bY1 = posB.y - radiusB;
-		bY2 = posB.y + radiusB;
-		bZ1 = posB.z - radiusB;
-		bZ2 = posB.z + radiusB;
-
-		// 当たり判定
-		if (pX1 < bX2 && pX2 > bX1 && pY1 < bY2 && pY2 > bY1 && pZ1 < bZ2 && pZ2 > bZ1) {
-			if (block == Stage::WALL) {
-				if (posA.y < bY2 - 1.0f) {
-					player_->OnCollisionWall();
-					break;
-				}
-			}
-			if (block == Stage::STEPUP) {
-				if (posA.y >= bY2 + radiusA - 0.050f) {
-					player_->OnCollisionBlock();
-				} else {
-					player_->OnCollisionStep();
-				}
-				break;
-			}
-			player_->OnCollisionBlock();
-			break;
-		}
-		player_->OffCollisionBlock();
 	}
 #pragma endregion
 }

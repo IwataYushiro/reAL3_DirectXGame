@@ -2,10 +2,10 @@
 #include <fstream>
 #include "Gimmick.h"
 
-void Stage::Initialize(Model* model, Gimmick* gimmick, size_t scene) {
+void Stage::Initialize(Model* model, size_t scene) {
 	// モデル読み込み
 	model_ = model;
-
+	LoadStageData1();
 	// ステージブロック読み込み
 	if (scene == stage1) {
 		LoadStageData1();
@@ -17,102 +17,38 @@ void Stage::Initialize(Model* model, Gimmick* gimmick, size_t scene) {
 		LoadStageData3();
 	}
 	LoadStageCommands();
-
-	// ワールドトランスフォームの初期設定
-	for (StageData& stage : stage_) {
-		// ブロックがNONEじゃなかったら初期化する
-		if (stage.block_ != NONE) {
-			stage.worldTransform_.Initialize();
-			
-			// スケール設定
-			stage.worldTransform_.scale_ = { 5.0f, 5.0f, 5.0f };
-		}
-		else {
-			stage.worldTransform_.translation_ = { 0.0f, -100.0f, 0.0f };
-		}
-	}
-
-	// 各ブロックの平行移動成分初期化
-	StageBlockInitialize(gimmick);
 	
 	// デバックテキスト
 	debugText_ = DebugText::GetInstance();
-
-	isEnd = false;
 }
 
 // 更新
 void Stage::Update() {
-	Vector3 move = { 0.0f, 0.0f, -0.1f };
-	
-	for (StageData& stage : stage_) {
-		if (stage.block_ != NONE) {
-			stage.worldTransform_.translation_ += move;
 
-			// 行列更新
-			stage.worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
-			stage.worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(stage.worldTransform_);
-
-			stage.worldTransform_.TransferMatrix();
-			if (stage.block_ == END) {
-				if(stage.worldTransform_.translation_.z <= -3.0f) {
-					isEnd = true;
-				}
-			}
-		}
-	}
 }
 
 // 描画
 void Stage::Draw(ViewProjection viewProjection) {
-	for (StageData& stage : stage_) {
-		if (stage.block_ != NONE) {
-			model_->Draw(stage.worldTransform_, viewProjection);
+	for (std::unique_ptr<StageData>& block : stageBlock_) {
+		if (block->type_ != NONE) {
+			model_->Draw(block->worldTransform_, viewProjection);
 		}
 	}
 }
 
-void Stage::StageBlockInitialize(Gimmick* gimmick) {
-	// 高さ
-	float height = 0.0f;
+void Stage::StageBlockInitialize(std::unique_ptr<StageData>& block, Vector3 pos) {
+	// ワールドトランスフォームの初期化設定
+	block->worldTransform_.Initialize();
 
-	for (int i = 0; i < blockNum; i++) {
-		// ブロック初期位置
-		stage_[i].worldTransform_.translation_ = { 0.0f,-24.0f, 10.0f * i };
+	// スケール設定
+	block->worldTransform_.scale_ = { five_, five_, five_ };
+	// 座標設定
+	block->worldTransform_.translation_ = pos;
 
-		// ブロックごとの条件分け
-		if (stage_[i].block_ == BLOCK) {
-			stage_[i].worldTransform_.translation_.y += height;
-		}
-		else if (stage_[i].block_ == STEPUP) {
-			height += stepHeight;
-			stage_[i].worldTransform_.translation_.y += height;
-		}
-		else if (stage_[i].block_ == STEPDOWN) {
-			height -= stepHeight;
-			stage_[i].worldTransform_.translation_ .y += height;
-		}
-		else if (stage_[i].block_ == WALL) {
-			height += wallHeight;
-			stage_[i].worldTransform_.translation_ .y += height;
-		}
-		else if (stage_[i].block_ == END) {
-			stage_[i].worldTransform_.translation_.y += height;
-		}
-		else if (stage_[i].block_ == NONE) {
-
-		}
-		//
-		if (stage_[i].isGimmick_ == 1) {
-			Vector3 position = stage_[i].worldTransform_.translation_;
-			position += Vector3(0.0f, 6.0f, 0.0f);
-			gimmick->SetWorldPositionSpring(position);
-		}
-		else if (stage_[i].isGimmick_ == 2) {
-			Vector3 position = stage_[i].worldTransform_.translation_;
-			gimmick->SetPositionWaterFlow(position);
-		}
-	}
+	// 行列更新
+	block->worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
+	block->worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(block->worldTransform_);
+	block->worldTransform_.TransferMatrix();
 }
 
 void Stage::LoadStageData1() {
@@ -157,14 +93,18 @@ void Stage::LoadStageData3() {
 void Stage::LoadStageCommands() {
 	// 1行分の文字列を入れる変数
 	std::string line;
-	int num = 0;
 
 	// コマンド実行ループ
 	while (getline(stageCommands, line)) {
+		// リストに入れるために新しく宣言
+		std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
+
 		// 1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);
 
+		// 文字列
 		std::string word;
+
 		// ,区切りで行の先頭文字列を取得
 		getline(line_stream, word, ',');
 
@@ -176,67 +116,26 @@ void Stage::LoadStageCommands() {
 
 		// コマンド読み込み
 		if (word.find("NONE") == 0 || word.find("0") == 0) {
-			stage_[num].block_ = NONE;
-			getline(line_stream, word, ',');
-			if (word.find("1") == 0) {
-				stage_[num].isGimmick_ = 1;
-			}
-			else if (word.find("2") == 0) {
-				stage_[num].isGimmick_ = 2;
-			}
-			num++;
+			// NONEは読み飛ばす
+			continue;
 		}
 		else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
-			stage_[num].block_ = BLOCK;
+			newBlock->type_ = BLOCK;
+			// x座標
 			getline(line_stream, word, ',');
-			if (word.find("1") == 0) {
-				stage_[num].isGimmick_ = 1;
-			}
-			else if (word.find("2") == 0) {
-				stage_[num].isGimmick_ = 2;
-			}
-			num++;
-		}
-		else if (word.find("STEPUP") == 0 || word.find("2") == 0) {
-			stage_[num].block_ = STEPUP;
+			float x = (float)std::atof(word.c_str());
+			// y座標
 			getline(line_stream, word, ',');
-			if (word.find("1") == 0) {
-				stage_[num].isGimmick_ = 1;
-			}
-			else if (word.find("2") == 0) {
-				stage_[num].isGimmick_ = 2;
-			}
-			num++;
-		}
-		else if (word.find("STEPDOWN") == 0 || word.find("3") == 0) {
-			stage_[num].block_ = STEPDOWN;
+			float y = (float)std::atof(word.c_str());
+			// z座標
 			getline(line_stream, word, ',');
-			if (word.find("1") == 0) {
-				stage_[num].isGimmick_ = 1;
-			}
-			else if (word.find("2") == 0) {
-				stage_[num].isGimmick_ = 2;
-			}
-			num++;
-		}
-		else if (word.find("WALL") == 0 || word.find("4") == 0) {
-			stage_[num].block_ = WALL;
-			getline(line_stream, word, ',');
-			if (word.find("1") == 0) {
-				stage_[num].isGimmick_ = 1;
-			}
-			else if (word.find("2") == 0) {
-				stage_[num].isGimmick_ = 2;
-			}
-			num++;
-		}
-		else if (word.find("END") == 0 || word.find("9") == 0) {
-			stage_[num].block_ = END;
-			num++;
-			for (int i = num; i < blockNum; i++) {
-				stage_[num].block_ = NONE;
-			}
-			break;
+			float z = (float)std::atof(word.c_str());
+
+			// 初期化する
+			StageBlockInitialize(newBlock, Vector3(x, y, z));
+
+			// リストに追加
+			stageBlock_.push_back(std::move(newBlock));
 		}
 	}
 }
