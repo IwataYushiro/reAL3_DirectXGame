@@ -8,13 +8,23 @@
 #include <sstream>
 #include "GlobalScene.h"
 
-// 前方宣言
-class Gimmick;
-
 class Stage {
 public:
+	// 列挙
+	enum STAGE {
+		NONE,			// 穴
+		BLOCK,			// 地面
+	};
+
+	// 構造体
+	struct StageData {
+		WorldTransform worldTransform_;
+		int type_;
+	};
+
+public:
 	// 初期化
-	void Initialize(Model* model, Gimmick* gimmick, size_t scene);
+	void Initialize(Model* model, size_t scene);
 
 	// 更新
 	void Update();
@@ -23,7 +33,7 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 	// ブロック初期化
-	void StageBlockInitialize(Gimmick* gimmick);
+	void StageBlockInitialize(std::unique_ptr<StageData>& block, Vector3 pos);
 
 	// ステージ読み込み
 	void LoadStageData1();
@@ -33,59 +43,26 @@ public:
 	// ステージ読み込み
 	void LoadStageCommands();
 
-public:
-	// 列挙
-	enum STAGE {
-		NONE,			// 穴
-		BLOCK,			// 床
-		STEPUP,		// 段差上
-		STEPDOWN,	// 段差下
-		WALL,			// 壁
-		END
-	};
-
-	// 構造体
-	struct StageData {
-		WorldTransform worldTransform_;
-		int block_;
-		int isGimmick_;
-	};
-
-	// ブロックの数
-	static const int blockNum = 100;
-
 private:
 	// ワールド変換データ
-	StageData stage_[blockNum];
+	std::list<std::unique_ptr<StageData>> stageBlock_;
 
 	// モデル
 	Model* model_ = nullptr;
-
 	// テクスチャハンドル
 	int32_t textureHandle_ = 0u;
 
 	// デバッグテキスト
 	DebugText* debugText_ = nullptr;
 
-	// 壁の高さ
-	float wallHeight = 3.0f;
-
-	// 段差の高さ
-	float stepHeight = 1.0f;
-
 	std::stringstream stageCommands;
 
-	float radius = 5.0f;
+	// 倍率
+	float five_ = 5.0f;
 
-	bool isEnd = false;
-
-public:
-
-	float GetRadius() { return radius; }
-
-	Vector3 GetWorldPosition(int num) { return stage_[num].worldTransform_.translation_; }
-
-	int GetBlock(int num) { return stage_[num].block_; }
-	int GetEnd() { return isEnd; }
+	float radius_ = 5.0f;
+public: // アクセッサ
+	//半径を返す
+	float GetRadius() { return radius_; }
 };
 
