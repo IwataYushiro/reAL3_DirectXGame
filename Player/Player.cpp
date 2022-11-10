@@ -3,7 +3,6 @@
 Player::Player() {}
 
 Player::~Player() {
-	delete gimmick_;
 	//オプションの解放
 	delete modelDead_;
 }
@@ -26,14 +25,6 @@ void Player::Initialize(Model* model) {
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 0.0f, -10.0f, 0.0f };
 
-	prePosition_ = worldTransform_.translation_;
-
-	//挙動初期化
-	gimmick_ = new Gimmick();
-
-	isJump = false;
-	isSwim = true;
-	gravity = -0.6f;
 }
 
 void Player::Reset() {
@@ -49,6 +40,7 @@ void Player::Death() {}
 void Player::Update(ViewProjection& viewprojection) {
 
 	if (!isDead_) {
+
 		Move();
 		//ジャンプ処理
 		Jump();
@@ -154,7 +146,6 @@ void Player::MoveLimit() {
 
 //ワールド座標を取得
 Vector3 Player::GetWorldPosition() {
-
 	//ワールド座標を取得
 	Vector3 worldPos;
 
@@ -164,45 +155,4 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.z = worldTransform_.translation_.z;
 
 	return worldPos;
-}
-
-//衝突を検出したら呼び出されるコールバック関数
-void Player::OnCollisionSpring() {
-	isJump = true;
-	//重力が0になる
-	gravity = 0.5f;
-}
-
-void Player::OnCollisionWaterFlow() {
-	Vector3 speed;
-	speed = { 0.0f, -0.1f, 0.0f };
-	isSwim = true;
-	worldTransform_.translation_ += speed;
-	gravity = -0.2f;
-}
-
-void Player::OnCollisionBlock() {
-	if (!isJump) {
-		worldTransform_.translation_ = prePosition_;
-	}
-	isSwim = false;
-	prePosition_ = worldTransform_.translation_;
-}
-
-void Player::OnCollisionStep() {
-	worldTransform_.translation_.y += 0.050f;
-	isSwim = false;
-	prePosition_ = worldTransform_.translation_;
-}
-
-void Player::OnCollisionWall() {
-	isDead_ = true;
-}
-
-void Player::OffCollisionBlock() {
-	if (!isSwim && !isJump) {
-		isSwim = true;
-		gravity = -0.6f;
-	}
-	prePosition_ = worldTransform_.translation_;
 }

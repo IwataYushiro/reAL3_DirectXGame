@@ -48,11 +48,6 @@ class GameScene {
 	/// </summary>
 	void Draw();
 
-	/// <summary>
-	/// 衝突判定と応答
-	/// </summary>
-	void ChackAllCollisions();
-
 	size_t GetScene() { return scene_; }
 
   private: // メンバ変数
@@ -96,16 +91,19 @@ class GameScene {
 	//天球データ
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-
 	// ステージ
 	Stage* stage_ = nullptr;
 
-	//仕掛けデータ
-	Gimmick* gimmick_ = nullptr;
+	// シーン
+	size_t scene_;
+	// シーン用ファイルネーム
+	const std::string filename_[3] = { "1", "2", "3" };
+
+	// アクション
+	ActionData action_;
 	
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
-	size_t scene_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
