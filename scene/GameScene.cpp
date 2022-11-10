@@ -16,8 +16,6 @@ GameScene::~GameScene() {
 	//自キャラの解放
 	delete player_;
 	delete modelPlayer_;
-	//仕掛け解放
-	delete gimmick_;
 	//天球データ解放
 	delete skydome_;
 	delete modelSkydome_;
@@ -66,8 +64,6 @@ GameScene::~GameScene() {
 
 	//自キャラの生成
 	player_ = new Player();
-	//仕掛け生成
-	gimmick_ = new Gimmick();
 	//天球データ生成
 	skydome_ = new Skydome();
 	// ステージ
@@ -79,7 +75,8 @@ GameScene::~GameScene() {
 	skydome_->Initialize(modelSkydome_);
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
-	stage_->Initialize(model_, scene_);
+	// ステージの初期化
+	stage_->Initialize(model_, filename_[0]);
 
 	// マウスの初期化
 	mouse_->Initialize();
@@ -91,60 +88,49 @@ GameScene::~GameScene() {
 	viewProjection_.TransferMatrix();
 
 	// シーン
-	scene_ = title;
-
-	//仕掛けに自機のアドレスを渡す
-	gimmick_->SetPlayer(player_);
-	//仕掛け初期化
-	gimmick_->Initialize();
+	scene_ = DEBUG;
 }
 
 void GameScene::Update() {
 	switch (scene_) {
-	case title:
+	case DEBUG:
+		//	//自キャラの更新処理
+		player_->Update(viewProjection_);
+
+
+		break;
+
+	case TITLE:
 		// スペースを押したら操作説明へ
 		if (input_->TriggerKey(DIK_SPACE)) {
 			audio_->PlayWave(doneSe_);
-			scene_ = howtoplay;
-			break;
+			scene_ = INFO;
 		}
 
 		break;
 
-	case howtoplay:
-		//天球データの更新処理
-		skydome_->Update();
+	case INFO:
 		if (input_->TriggerKey(DIK_SPACE)) {
 			audio_->PlayWave(doneSe_);
 			player_->Reset();
-			scene_ = stage1;
+			scene_ = STAGE1;
 			
-			gimmick_->Initialize();
 			// ステージ
 			//stage_->Initialize(model_, gimmick_, scene_);
-			break;
 		}
 		break;
 
-	case stage1:
+	case STAGE1:
 		// プレイヤーが死んでいたら終了
 		if (player_->IsDead()) {
-			scene_ = gameover;
+			scene_ = GAMEOVER;
 			break;
 		}
-
-
-		//if (!stage_->GetEnd()) {
-		//	//自キャラの更新処理
-			player_->Update(viewProjection_);
-			mouse_->Update();
 
 		//	//天球データの更新処理
 		//	skydome_->Update();
 		//	// ステージ
 		//	stage_->Update();
-		//	//仕掛け更新
-		//	gimmick_->Update();
 		//}
 		//// ステージクリア
 		//if (stage_->GetEnd()) {
@@ -153,107 +139,36 @@ void GameScene::Update() {
 		//		player_->Reset();
 		//		scene_ = stage2;
 		//		
-		//		gimmick_->Initialize();
 		//		// ステージ
 		//		stage_->Initialize(model_, gimmick_, scene_);
 		//		break;
 		//	}
 		//}
 
-		//当たり判定
-		ChackAllCollisions();
 		break;
 
-	case stage2:
-		// プレイヤーが死んでいたら終了
-		if (player_->IsDead()) {
-			scene_ = gameover;
-			break;
-		}
+	case STAGE2:
 
-		//if (!stage_->GetEnd()) {
-		//	//自キャラの更新処理
-		//	player_->Update(viewProjection_);
-
-		//	//天球データの更新処理
-		//	skydome_->Update();
-		//	// ステージ
-		//	stage_->Update();
-		//	//仕掛け更新
-		//	gimmick_->Update();
-		//}
-		// ステージクリア
-		//if (stage_->GetEnd()) {
-		//	if (input_->TriggerKey(DIK_SPACE)) {
-		//		audio_->PlayWave(doneSe_);
-		//		player_->Reset();
-		//		scene_ = stage3;
-		//		
-		//		gimmick_->Initialize();
-		//		// ステージ
-		//		stage_->Initialize(model_, gimmick_, scene_);
-		//		break;
-		//	}
-		//}
-
-		//当たり判定
-		ChackAllCollisions();
 		break;
 
-	case stage3:
-		// プレイヤーが死んでいたら終了
-		if (player_->IsDead()) {
-			scene_ = gameover;
-			break;
-		}
+	case STAGE3:
 
-		//if (!stage_->GetEnd()) {
-		//	//自キャラの更新処理
-		//	player_->Update(viewProjection_);
-
-		//	//天球データの更新処理
-		//	skydome_->Update();
-		//	// ステージ
-		//	stage_->Update();
-		//	//仕掛け更新
-		//	gimmick_->Update();
-		//}
-		// ステージクリア
-		/*if (stage_->GetEnd()) {
-			if (input_->TriggerKey(DIK_SPACE)) {
-				audio_->PlayWave(doneSe_);
-				scene_ = normalend;
-				break;
-			}
-		}*/
-
-		//当たり判定
-		ChackAllCollisions();
 		break;
 
-	case normalend:
+	case CLEAR:
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			audio_->PlayWave(doneSe_);
-			scene_ = title;
+			scene_ = TITLE;
 			break;
 		}
 		break;
 
-	case trueend:
+	case GAMEOVER:
 		//スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
 			audio_->PlayWave(doneSe_);
-			scene_ = title;
-			break;
-		}
-		break;
-
-	case gameover:
-		//スペースキーでタイトル
-		if (input_->TriggerKey(DIK_SPACE)) {
-			audio_->PlayWave(doneSe_);
-			scene_ = title;
+			scene_ = TITLE;
 			break;
 		}
 		break;
@@ -273,31 +188,28 @@ void GameScene::Draw() {
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
 	switch (scene_) {
-	case title:
-	case howtoplay:
-	
+	case DEBUG:
 		break;
 
-	case stage1:
-
+	case TITLE:
 		break;
 
-	case stage2:
-
+	case INFO:
 		break;
 
-	case stage3:
-
+	case STAGE1:
 		break;
 
-	case normalend:
+	case STAGE2:
 		break;
 
-	case trueend:
+	case STAGE3:
 		break;
 
-	case gameover:
+	case CLEAR:
+		break;
 
+	case GAMEOVER:
 		break;
 	}
 	// スプライト描画後処理
@@ -314,56 +226,50 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	switch (scene_) {
-	case title:
+	case DEBUG:
 		stage_->Draw(viewProjection_);
 		break;
 
-	case howtoplay:
-		skydome_->Draw(viewProjection_);
-
+	case TITLE:
 		break;
 
-	case stage1:
+	case INFO:
+		break;
+
+	case STAGE1:
 		// 3Dモデル描画
 		skydome_->Draw(viewProjection_);
 
 		stage_->Draw(viewProjection_);
-		gimmick_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
 
 		break;
 
-	case stage2:
+	case STAGE2:
 		// 3Dモデル描画
 		skydome_->Draw(viewProjection_);
 
 		stage_->Draw(viewProjection_);
-		gimmick_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
 
 		break;
 
-	case stage3:
+	case STAGE3:
 		// 3Dモデル描画
 		skydome_->Draw(viewProjection_);
 
 		stage_->Draw(viewProjection_);
-		gimmick_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
 
 		break;
 
-	case normalend:
+	case CLEAR:
 		break;
 
-	case trueend:
-		break;
-
-	case gameover:
-		
+	case GAMEOVER:
 		break;
 	}
 
@@ -379,40 +285,40 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 	switch (scene_) {
-	case title:
+	case DEBUG:
+		break;
 
+	case TITLE:
 		//title_->Draw();
 		break;
-	case howtoplay:
+
+	case INFO:
 		howtoplay_->Draw();
 		break;
 
-	case stage1:
+	case STAGE1:
 		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
 		}*/
 		break;
 
-	case stage2:
+	case STAGE2:
 		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
 		}*/
 		break;
 
-	case stage3:
+	case STAGE3:
 		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
 		}*/
 		break;
 
-	case normalend:
+	case CLEAR:
 		gameClear_->Draw();
 		break;
 
-	case trueend:
-		break;
-
-	case gameover:
+	case GAMEOVER:
 		gameOver_->Draw();
 		break;
 	}
@@ -422,76 +328,5 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
-#pragma endregion
-}
-
-//衝突判定と応答
-void GameScene::ChackAllCollisions() {
-
-	//判定対象A,Bの座標
-	Vector3 posA, posB;
-
-	// A,Bの座標の距離用
-	Vector3 posAB;
-
-	//判定対象A,Bの半径
-	float radiusA;
-	float radiusB;
-	float radiusAB;
-
-	//水流リストを取得
-	const std::list<std::unique_ptr<WaterFlow>>& waterFlows = gimmick_->GetWaterFlow();
-
-#pragma region 自機とバネの当たり判定
-	//それぞれの半径
-	radiusA = 1.0f;
-	radiusB = 3.0f;
-
-	//自機の座標
-	posA = player_->GetWorldPosition();
-
-	//自機とバネの当たり判定
-	posB = gimmick_->GetWorldPositionSpring();
-	//座標A,Bの距離を求める
-	posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
-	posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
-	posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
-	radiusAB = (radiusA + radiusB) * (radiusA + radiusB);
-
-	//球と球の交差判定
-	if (radiusAB >= (posAB.x + posAB.y + posAB.z)) {
-		//自キャラの衝突時コールバック関数を呼び出す
-		player_->OnCollisionSpring();
-		//バネの衝突時コールバック関数を呼び出す
-		gimmick_->OnCollisionSpring();
-	}
-#pragma endregion
-#pragma region 自機と水流の当たり判定
-	//自機の半径
-	radiusA = 1.0f;
-	//水流の半径
-	radiusB = 1.0f;
-
-	//自機の座標
-	posA = player_->GetWorldPosition();
-
-	//自機と全水流の当たり判定
-	for (const std::unique_ptr<WaterFlow>& waterflow : waterFlows) {
-		posB = waterflow->GetWorldPosition();
-
-		//座標A,Bの距離を求める
-		posAB.x = (posB.x - posA.x) * (posB.x - posA.x);
-		posAB.y = (posB.y - posA.y) * (posB.y - posA.y);
-		posAB.z = (posB.z - posA.z) * (posB.z - posA.z);
-		radiusAB = (radiusA + radiusB) * (radiusA + radiusB);
-
-		//球と球の交差判定
-		if (radiusAB >= (posAB.x + posAB.y + posAB.z)) {
-			//自キャラの衝突時コールバック関数を呼び出す
-			player_->OnCollisionWaterFlow();
-			//水流の衝突時コールバック関数を呼び出す
-			waterflow->OnCollision();
-		}
-	}
 #pragma endregion
 }
