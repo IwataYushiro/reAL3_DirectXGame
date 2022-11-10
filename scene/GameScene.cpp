@@ -73,7 +73,7 @@ GameScene::~GameScene() {
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = {0.0f, 20.0f, -60.0f};
+	viewProjection_.eye = {0.0f, 50.0f, -50.0f};
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -117,7 +117,7 @@ void GameScene::Update() {
 
 		//if (!stage_->GetEnd()) {
 		//	//自キャラの更新処理
-		//	player_->Update(viewProjection_);
+			player_->Update(viewProjection_);
 
 		//	//天球データの更新処理
 		//	skydome_->Update();
