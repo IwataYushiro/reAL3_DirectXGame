@@ -1,11 +1,26 @@
 #pragma once
 enum Scene { //シーンID
-	title,
-	howtoplay,
-	stage1,
-	stage2,
-	stage3,
-	normalend,
-	trueend,
-	gameover,
+	DEBUG,
+	TITLE,
+	INFO,
+	STAGE1,
+	STAGE2,
+	STAGE3,
+	CLEAR,
+	GAMEOVER,
+};
+
+enum PHASE { // フェーズ
+	MOVE,
+	ATTACK,
+};
+
+enum TURN {
+	OWN,
+	ENEMY
+};
+
+struct ActionData {
+	PHASE phase;
+	TURN turn;
 };

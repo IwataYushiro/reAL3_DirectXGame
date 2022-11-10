@@ -1,12 +1,8 @@
 #pragma once
 #include "DebugText.h"
-#include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
-#include "WorldTransform.h"
-#include <cassert>
 #include <sstream>
-#include "GlobalScene.h"
 
 class Stage {
 public:
@@ -24,7 +20,7 @@ public:
 
 public:
 	// 初期化
-	void Initialize(Model* model, size_t scene);
+	void Initialize(Model* model, const std::string stageNum);
 
 	// 更新
 	void Update();
@@ -35,10 +31,8 @@ public:
 	// ブロック初期化
 	void StageBlockInitialize(std::unique_ptr<StageData>& block, Vector3 pos);
 
-	// ステージ読み込み
-	void LoadStageData1();
-	void LoadStageData2();
-	void LoadStageData3();
+	// ステージファイル読み込み
+	void LoadStageData(const std::string stageNum);
 
 	// ステージ読み込み
 	void LoadStageCommands();
@@ -55,14 +49,19 @@ private:
 	// デバッグテキスト
 	DebugText* debugText_ = nullptr;
 
+	// ファイルコマンド
 	std::stringstream stageCommands;
 
+	// クリアフラグ
+	bool isClear_ = false;
 	// 倍率
 	float five_ = 5.0f;
-
+	// 半径
 	float radius_ = 5.0f;
+
 public: // アクセッサ
 	//半径を返す
 	float GetRadius() { return radius_; }
+	bool GetIsClear() { return isClear_; }
 };
 

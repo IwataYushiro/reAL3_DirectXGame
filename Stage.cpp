@@ -1,33 +1,26 @@
 #include "Stage.h"
+#include <cassert>
 #include <fstream>
-#include "Gimmick.h"
 
-void Stage::Initialize(Model* model, size_t scene) {
+void Stage::Initialize(Model* model, const std::string stageNum) {
+	// 最初に残っている要素を削除
+	stageBlock_.clear();
+
 	// モデル読み込み
 	model_ = model;
-	LoadStageData1();
-	// ステージブロック読み込み
-	if (scene == stage1) {
-		LoadStageData1();
-	}
-	else if (scene == stage2) {
-		LoadStageData2();
-	}
-	else if (scene == stage3) {
-		LoadStageData3();
-	}
+
+	// ステージ用ファイル読み込み
+	LoadStageData(stageNum);
+	// ステージファイルで各要素を設定
 	LoadStageCommands();
-	
+
 	// デバックテキスト
 	debugText_ = DebugText::GetInstance();
 }
 
-// 更新
 void Stage::Update() {
-
 }
 
-// 描画
 void Stage::Draw(ViewProjection viewProjection) {
 	for (std::unique_ptr<StageData>& block : stageBlock_) {
 		if (block->type_ != NONE) {
@@ -51,36 +44,16 @@ void Stage::StageBlockInitialize(std::unique_ptr<StageData>& block, Vector3 pos)
 	block->worldTransform_.TransferMatrix();
 }
 
-void Stage::LoadStageData1() {
+void Stage::LoadStageData(const std::string stageNum) {
 	// ファイルを開く
 	std::ifstream file;
+
+	const std::string name = "stage";
+	const std::string filename = name + stageNum + ".csv";
+	const std::string directoryPath = "Resources/" + name + "/";
+	file.open(directoryPath + filename);
+
 	file.open("Resources/stage/stage1.csv");
-	assert(file.is_open());
-
-	// ファイルの内容を文字列ストリームにコピー
-	stageCommands << file.rdbuf();
-
-	// ファイルを閉じる
-	file.close();
-}
-
-void Stage::LoadStageData2() {
-	// ファイルを開く
-	std::ifstream file;
-	file.open("Resources/stage/stage2.csv");
-	assert(file.is_open());
-
-	// ファイルの内容を文字列ストリームにコピー
-	stageCommands << file.rdbuf();
-
-	// ファイルを閉じる
-	file.close();
-}
-
-void Stage::LoadStageData3() {
-	// ファイルを開く
-	std::ifstream file;
-	file.open("Resources/stage/stage3.csv");
 	assert(file.is_open());
 
 	// ファイルの内容を文字列ストリームにコピー
