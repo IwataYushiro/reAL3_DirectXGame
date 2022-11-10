@@ -13,6 +13,7 @@
 #include "SafeDelete.h"
 #include "Skydome/Skydome.h"
 #include "Stage.h"
+#include "Mouse.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -99,6 +100,9 @@ class GameScene {
 
 	// ステージ
 	Stage* stage_ = nullptr;
+
+	// マウス
+	Mouse* mouse_ = nullptr;
 
 	//仕掛けデータ
 	Gimmick* gimmick_ = nullptr;

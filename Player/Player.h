@@ -82,10 +82,6 @@ class Player {
 	float gravity;
 	// 1フレーム前の自機の位置
 	Vector3 prePosition_;
-	// マウスの座標
-	POINT po;
-	// クリックフラグ
-	bool mouseClick_;
 
 	//仕掛け
 	Gimmick* gimmick_ = nullptr;

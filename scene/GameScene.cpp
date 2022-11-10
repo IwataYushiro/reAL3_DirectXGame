@@ -2,6 +2,9 @@
 #include "AxisIndicator.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
+#include "Collision.h"
+#include <sstream>
+#include <iomanip>
 #include <cassert>
 #include <random>
 
@@ -20,6 +23,8 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	// ステージ
 	delete stage_;
+	// マウス
+	delete mouse_;
 	// スプライト
 	delete title_;
 	delete howtoplay_;
@@ -67,12 +72,17 @@ GameScene::~GameScene() {
 	skydome_ = new Skydome();
 	// ステージ
 	stage_ = new Stage();
+	// マウス
+	mouse_ = new Mouse();
 
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	//自キャラの初期化
 	player_->Initialize(modelPlayer_);
 	stage_->Initialize(model_, scene_);
+
+	// マウスの初期化
+	mouse_->Initialize();
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -86,7 +96,7 @@ GameScene::~GameScene() {
 	//仕掛けに自機のアドレスを渡す
 	gimmick_->SetPlayer(player_);
 	//仕掛け初期化
-			gimmick_->Initialize();
+	gimmick_->Initialize();
 }
 
 void GameScene::Update() {
@@ -123,9 +133,11 @@ void GameScene::Update() {
 			break;
 		}
 
+
 		//if (!stage_->GetEnd()) {
 		//	//自キャラの更新処理
 			player_->Update(viewProjection_);
+			mouse_->Update();
 
 		//	//天球データの更新処理
 		//	skydome_->Update();
