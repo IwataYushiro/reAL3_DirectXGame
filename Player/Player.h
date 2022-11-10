@@ -54,6 +54,10 @@ class Player {
 	//死亡フラグとライフ
 	bool isDead_ = false;
 	int life_ = 5;
+	//マウス
+	bool mouseClick_;
+	//座標
+	POINT po;
 
   public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }

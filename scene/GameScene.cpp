@@ -84,6 +84,8 @@ GameScene::~GameScene() {
 void GameScene::Update() {
 	switch (scene_) {
 	case DEBUG:
+		//	//自キャラの更新処理
+		player_->Update(viewProjection_);
 
 
 		break;
@@ -116,9 +118,7 @@ void GameScene::Update() {
 		}
 
 		//if (!stage_->GetEnd()) {
-		//	//自キャラの更新処理
-			player_->Update(viewProjection_);
-
+		
 		//	//天球データの更新処理
 		//	skydome_->Update();
 		//	// ステージ
