@@ -46,11 +46,6 @@ void Player::Update(ViewProjection& viewprojection) {
 	}
 
 	worldTransform_.TransferMatrix();
-
-	debugText_->SetPos(50, 25);
-	debugText_->Printf("mousePos_(%d,%d)", po.x, po.y);
-	debugText_->SetPos(50, 50);
-	debugText_->Printf("mouseClick_(%d)", mouseClick_);
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
@@ -65,27 +60,7 @@ void Player::DrawDead(ViewProjection& viewProjection) {
 
 void Player::Move()
 {
-	//マウスの現在の座標を取得する
-	GetCursorPos(&po);
-
-	// 左クリックを押したときフラグに1を足す
-	if (input_->IsTriggerMouse(0) && mouseClick_ == false)
-	{
-		mouseClick_ = true;
-	}
-	else if(input_->IsTriggerMouse(0)) 
-	{
-		mouseClick_ = false;
-	}
-
-	if (mouseClick_ == true)
-	{
-
-	}
-	else 
-	{
-
-	}
+	
 }
 
 

@@ -16,49 +16,49 @@ class Player {
 	Player();
 	~Player();
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize(Model* model);
-	//ƒŠƒZƒbƒgˆ—
+	//ãƒªã‚»ãƒƒãƒˆå‡¦ç†
 	void Reset();
-	//€‚ñ‚¾‚ç
+	//æ­»ã‚“ã ã‚‰
 	void Death();
-	//XV
+	//æ›´æ–°
 	void Update(ViewProjection& viewprojection);
 
-	//ƒvƒŒƒCƒ„[‚ÌˆÚ“®ˆ—
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å‡¦ç†
 	void Move();
 
-	//ƒ[ƒ‹ƒhÀ•W‚ğæ“¾
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
 	Vector3 GetWorldPosition();
 
-	//•`‰æ
+	//æç”»
 	void Draw(ViewProjection& viewProjection);
 	void DrawDead(ViewProjection& viewProjection);
 
   private:
-	//‰¹
+	//éŸ³
 	Audio* audio_ = nullptr;
-	//ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
 	WorldTransform worldTransform_;
-	//ƒ‚ƒfƒ‹
+	//ãƒ¢ãƒ‡ãƒ«
 	Model* model_ = nullptr;
 	Model* modelDead_ = nullptr;
-	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
 	uint32_t textureHandle_ = 0u;
-	//ƒCƒ“ƒvƒbƒg
+	//ã‚¤ãƒ³ãƒ—ãƒƒãƒˆ
 	Input* input_ = nullptr;
-	//ƒTƒEƒ“ƒhƒf[ƒ^
+	//ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿
 	uint32_t jumpSound_ = 0;
-	//ƒfƒoƒbƒOƒeƒLƒXƒg
+	//ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆ
 	DebugText* debugText_ = nullptr;
-	//€–Sƒtƒ‰ƒO‚Æƒ‰ƒCƒt
+	//æ­»äº¡ãƒ•ãƒ©ã‚°ã¨ãƒ©ã‚¤ãƒ•
 	bool isDead_ = false;
 	int life_ = 5;
-	//ƒ}ƒEƒX
+	//ãƒã‚¦ã‚¹
 	bool mouseClick_;
-	//À•W
+	//åº§æ¨™
 	POINT po;
 
-  public: //ƒAƒNƒZƒbƒTAƒCƒ“ƒ‰ƒCƒ“ŠÖ”
+  public: //ã‚¢ã‚¯ã‚»ãƒƒã‚µã€ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³é–¢æ•°
 	bool IsDead() const { return isDead_; }
 };
