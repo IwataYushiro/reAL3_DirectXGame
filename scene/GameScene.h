@@ -12,6 +12,7 @@
 #include "SafeDelete.h"
 #include "Skydome/Skydome.h"
 #include "Stage.h"
+#include "Mouse.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -87,6 +88,9 @@ class GameScene {
 	Model* modelSkydome_ = nullptr;
 	// ステージ
 	Stage* stage_ = nullptr;
+
+	// マウス
+	Mouse* mouse_ = nullptr;
 
 	// シーン
 	size_t scene_ = DEBUG;
