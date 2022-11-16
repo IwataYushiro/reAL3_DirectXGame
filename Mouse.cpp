@@ -1,9 +1,7 @@
 #include "Mouse.h"
-#include "Collision.h"
-#include <sstream>
-#include <iomanip>
+using namespace DirectX;
 
-void Mouse::Initialize()
+void Mouse::Initialize(ViewProjection& viewProjection)
 {
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
@@ -16,8 +14,8 @@ void Mouse::Initialize()
 	plane.distance = 0.0f; // 原点(0,0,0)からの距離
 
 	// レイの初期値を設定
-	ray.start = DirectX::XMVectorSet(po.x, po.y, 0, 1); // 原点やや上
-	ray.dir = DirectX::XMVectorSet(0, 1, 1, 0); // 原点(0,0,0)からの距離
+	ray.start = DirectX::XMVectorSet(viewProjection.eye.x, viewProjection.eye.y, viewProjection.eye.z, 0);
+	ray.dir = DirectX::XMVectorSet(0, 0, 0, 0);
 }
 
 void Mouse::Update()
@@ -44,6 +42,10 @@ void Mouse::Update()
 
 	}
 
+	{
+		ray.dir += XMVectorSet(po.x, po.y, 100, 0);
+	}
+
 	// マウスとブロックの当たり判定
 	std::ostringstream raystr;
 	raystr << "lay.start("
@@ -52,10 +54,11 @@ void Mouse::Update()
 		<< ray.start.m128_f32[1] << ","
 		<< ray.start.m128_f32[2] << ")";
 
+
 	debugText_->Print(raystr.str(), 50, 180, 1.0f);
 
 	// レイと平面の当たり判定
-	DirectX::XMVECTOR inter;
+	XMVECTOR inter;
 	float distance;
 	bool hit = Collision::CheckRay2Plane(ray, plane, &distance, &inter);
 	if (hit) {

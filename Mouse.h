@@ -2,16 +2,19 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "CollisionPrimitive.h"
+#include "Collision.h"
+#include <DirectXMath.h>
+#include <sstream>
+#include <iomanip>
 #include <windows.h>
+#include <ViewProjection.h>
 
 class Mouse
 {
 public:
-	void Initialize();
+	void Initialize(ViewProjection& viewProjection);
 
 	void Update();
-
-	void Draw();
 private:
 	//インプット
 	Input* input_ = nullptr;
