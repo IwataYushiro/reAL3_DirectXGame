@@ -79,7 +79,7 @@ GameScene::~GameScene() {
 	stage_->Initialize(model_, filename_[0]);
 
 	// マウスの初期化
-	mouse_->Initialize();
+	mouse_->Initialize(viewProjection_);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
