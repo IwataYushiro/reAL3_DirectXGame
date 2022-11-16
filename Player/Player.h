@@ -13,7 +13,6 @@
 
 class Player {
   public:
-	Player();
 	~Player();
 
 	//初期化
@@ -33,7 +32,6 @@ class Player {
 
 	//描画
 	void Draw(ViewProjection& viewProjection);
-	void DrawDead(ViewProjection& viewProjection);
 
   private:
 	//音
@@ -51,9 +49,13 @@ class Player {
 	uint32_t jumpSound_ = 0;
 	//デバッグテキスト
 	DebugText* debugText_ = nullptr;
-	//死亡フラグとライフ
+	//死亡フラグ
 	bool isDead_ = false;
-	int life_ = 5;
+
+	// 
+	POINT po;
+	// 
+	bool mouseClick_;
 
   public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }

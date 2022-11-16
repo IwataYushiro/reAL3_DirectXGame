@@ -5,7 +5,6 @@
 #include "DebugText.h"
 #include "DirectXCommon.h"
 #include "GlobalScene.h"
-#include "Gimmick.h"
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
@@ -23,11 +22,6 @@
 /// </summary>
 class GameScene {
   public: // メンバ関数
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
-	GameScene();
-
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -71,11 +65,11 @@ class GameScene {
 	uint32_t gameClearTexture_ = 0;
 
 	// スプライト
-	Sprite* title_;
-	Sprite* howtoplay_;
-	Sprite* stageClear_;
-	Sprite* gameOver_;
-	Sprite* gameClear_;
+	Sprite* title_ = nullptr;
+	Sprite* howtoplay_ = nullptr;
+	Sprite* stageClear_ = nullptr;
+	Sprite* gameOver_ = nullptr;
+	Sprite* gameClear_ = nullptr;
 
 	// 3Dモデル
 	Model* model_ = nullptr;
@@ -95,7 +89,7 @@ class GameScene {
 	Stage* stage_ = nullptr;
 
 	// シーン
-	size_t scene_;
+	size_t scene_ = DEBUG;
 	// シーン用ファイルネーム
 	const std::string filename_[3] = { "1", "2", "3" };
 

@@ -5,8 +5,6 @@
 #include <cassert>
 #include <random>
 
-GameScene::GameScene() {}
-
 GameScene::~GameScene() {
 	delete model_;
 	// BGM解放
