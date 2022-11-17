@@ -78,17 +78,17 @@ GameScene::~GameScene() {
 	// ステージの初期化
 	stage_->Initialize(model_, filename_[0]);
 
-	// マウスの初期化
-	mouse_->Initialize(viewProjection_);
-
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	viewProjection_.eye = {0.0f, 50.0f, -50.0f};
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
+	// マウスの初期化
+	mouse_->Initialize(viewProjection_);
+
 	// シーン
-	scene_ = DEBUG;
+	scene_ = TITLE;
 }
 
 void GameScene::Update() {
@@ -126,6 +126,8 @@ void GameScene::Update() {
 			scene_ = GAMEOVER;
 			break;
 		}
+
+		mouse_->Update(viewProjection_);
 
 		//	//天球データの更新処理
 		//	skydome_->Update();
@@ -243,6 +245,8 @@ void GameScene::Draw() {
 		stage_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
+
+		mouse_->Draw(viewProjection_);
 
 		break;
 
