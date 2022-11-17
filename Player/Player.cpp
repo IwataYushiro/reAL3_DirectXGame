@@ -24,7 +24,6 @@ void Player::Initialize(Model* model) {
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = { 0.0f, -10.0f, 0.0f };
-
 }
 
 void Player::Reset() {
@@ -60,9 +59,8 @@ void Player::DrawDead(ViewProjection& viewProjection) {
 
 void Player::Move()
 {
-	
-}
 
+}
 
 //ワールド座標を取得
 Vector3 Player::GetWorldPosition() {
