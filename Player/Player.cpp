@@ -14,7 +14,7 @@ void Player::Initialize(Model* model) {
 
 	//音
 	jumpSound_ = audio_->LoadWave("sound/se/jump.wav");
-
+  
 }
 
 void Player::Update(const Vector3& pos, int phase) {

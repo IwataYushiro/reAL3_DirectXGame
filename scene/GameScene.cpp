@@ -84,6 +84,9 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
+	// マウスの初期化
+	mouse_->Initialize(viewProjection_);
+
 	// シーン
 	scene_ = TITLE;
 }
@@ -192,7 +195,6 @@ void GameScene::Update() {
 
 			break;
 		}
-
 
 		break;
 
@@ -337,6 +339,8 @@ void GameScene::Draw() {
 		stage_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);
+
+		mouse_->Draw(viewProjection_);
 
 		break;
 
