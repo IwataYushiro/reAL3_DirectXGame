@@ -1,68 +1,148 @@
 #include "Player.h"
 
-Player::~Player() {
-	//オプションの解放
-	delete modelDead_;
-}
-
 void Player::Initialize(Model* model) {
 	// NULLポインタチェック
 	assert(model);
-	audio_ = Audio::GetInstance();
-	//引数として受け取ったデータをメンバ変数に記録する
-	model_ = model;
-	modelDead_ = Model::CreateFromOBJ("playerdead", true);
 
 	//シングルトンインスタンスを取得
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
+	audio_ = Audio::GetInstance();
+
+	// 引数として受け取ったデータをメンバ変数に記録する
+	model_ = model;
+
 	//音
 	jumpSound_ = audio_->LoadWave("sound/se/jump.wav");
-	//ワールド変換の初期化
-	worldTransform_.Initialize();
-	worldTransform_.translation_ = { 0.0f, -10.0f, 0.0f };
+
 }
 
-void Player::Reset() {
-	worldTransform_.translation_ = { 0.0f, -10.0f, 0.0f };
-	worldTransform_.rotation_ = MyMathUtility::MySetVector3Zero();
-
-	isDead_ = false;
-}
-//ゲームオーバー座標
-void Player::Death() {}
-
-void Player::Update(ViewProjection& viewprojection) {
-
-	if (!isDead_) {
-		Move();
-		
+void Player::Update(const Vector3& pos, int phase) {
+	
+	switch (phase)
+	{
+	case POP:
+		break;
+	case MOVE:
+		break;
+	case ATTACK:
+		break;
+	}
+	for (std::unique_ptr<Pawn>& pawn : pawns_) {
+		pawn->Update();
 	}
 
-	worldTransform_.TransferMatrix();
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
-	if (!isDead_) {
-		model_->Draw(worldTransform_, viewProjection);
+	for (std::unique_ptr<Pawn>& pawn : pawns_) {
+		pawn->Draw(viewProjection);
+	}
+	for (std::unique_ptr<Rook>& rook : rooks_) {
+		rook->Draw(viewProjection);
+	}
+	for (std::unique_ptr<Bishop>& bishop : bishops_) {
+		bishop->Draw(viewProjection);
+	}
+	for (std::unique_ptr<Knight>& knight : knights_) {
+		knight->Draw(viewProjection);
+	}
+	for (std::unique_ptr<Queen>& queen : queen_) {
+		queen->Draw(viewProjection);
+	}
+	for (std::unique_ptr<King>& king : king_) {
+		king->Draw(viewProjection);
 	}
 }
 
-void Player::Move()
-{
-	
+void Player::Reset() {
+
 }
 
+void Player::Select() {
+	if (input_->TriggerKey(DIK_0)) {
+		popCommand_[num_] = PAWN;
+		num_++;
+		cost_--;
+	}
+}
 
-//ワールド座標を取得
-Vector3 Player::GetWorldPosition() {
-	//ワールド座標を取得
-	Vector3 worldPos;
+void Player::PopPlayer(const Vector3& pos) {
+	// numを0に
+	num_ = 0;
 
-	//ワールド行列の平行移動成分を取得
-	worldPos.x = worldTransform_.translation_.x;
-	worldPos.y = worldTransform_.translation_.y;
-	worldPos.z = worldTransform_.translation_.z;
+	// SPACEを押したらPopCommandに従って生成する
+	if (input_->TriggerKey(DIK_SPACE)) {
+		switch (popCommand_[num_])
+		{
+		case NONE:
+			// インクリメント
+			num_++;
 
-	return worldPos;
+			break;
+		case PAWN:
+			// ポーンを生成
+			PopPawn(pos);
+
+			break;
+		}
+	}
+}
+
+void Player::Move() {
+
+}
+
+void Player::PopPawn(const Vector3& pos) {
+	// ポーン生成
+	std::unique_ptr<Pawn> pawn = std::make_unique<Pawn>();
+	// 初期化
+	pawn->Initialize(model_, pos);
+	// リストに追加
+	pawns_.push_back(std::move(pawn));
+}
+
+void Player::PopRook() {
+	// ルーク生成
+	std::unique_ptr<Rook> rook = std::make_unique<Rook>();
+	// 初期化
+	rook->Initialize(model_);
+	// リストに追加
+	rooks_.push_back(std::move(rook));
+}
+
+void Player::PopBishop() {
+	// ビショップ生成
+	std::unique_ptr<Bishop> bishop = std::make_unique<Bishop>();
+	// 初期化
+	bishop->Initialize(model_);
+	// リストに追加
+	bishops_.push_back(std::move(bishop));
+}
+
+void Player::PopKnight() {
+	// ナイト生成
+	std::unique_ptr<Knight> knight = std::make_unique<Knight>();
+	// 初期化
+	knight->Initialize(model_);
+	// リストに追加
+	knights_.push_back(std::move(knight));
+}
+
+void Player::PopQueen() {
+	// クイーン生成
+	std::unique_ptr<Queen> queen = std::make_unique<Queen>();
+	// 初期化
+	queen->Initialize(model_);
+	// リストに追加
+	queen_.push_back(std::move(queen));
+}
+
+void Player::PopKing() {
+	// キング生成
+	std::unique_ptr<King> king = std::make_unique<King>();
+	// 初期化
+	king->Initialize(model_);
+	// リストに追加
+	king_.push_back(std::move(king));
 }

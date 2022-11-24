@@ -3,6 +3,8 @@ enum Scene { //シーンID
 	DEBUG,
 	TITLE,
 	INFO,
+	TUTORIAL,
+	SELECT,
 	STAGE1,
 	STAGE2,
 	STAGE3,
@@ -11,6 +13,7 @@ enum Scene { //シーンID
 };
 
 enum PHASE { // フェーズ
+	POP,
 	MOVE,
 	ATTACK,
 };

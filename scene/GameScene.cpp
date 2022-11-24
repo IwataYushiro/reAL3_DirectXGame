@@ -28,8 +28,8 @@ GameScene::~GameScene() {
 	delete gameOver_;
 	delete gameClear_;
 }
- void GameScene::Initialize() {
-
+void GameScene::Initialize() {
+	// インスタンス取得
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
@@ -54,11 +54,11 @@ GameScene::~GameScene() {
 	gameOverTexture_ = TextureManager::Load("texture/gameover.png");
 	gameClearTexture_ = TextureManager::Load("texture/gameclear.png");
 	// スプライト
-	title_ = Sprite::Create(titleTexture_, {0.0f, 0.0f});
-	howtoplay_ = Sprite::Create(howToPlayTexture_, {0.0f, 0.0f});
-	stageClear_= Sprite::Create(stageClearTexture_, {0.0f, 0.0f});
-	gameOver_= Sprite::Create(gameOverTexture_, {0.0f, 0.0f});
-	gameClear_= Sprite::Create(gameClearTexture_, {0.0f, 0.0f});
+	title_ = Sprite::Create(titleTexture_, { 0.0f, 0.0f });
+	howtoplay_ = Sprite::Create(howToPlayTexture_, { 0.0f, 0.0f });
+	stageClear_ = Sprite::Create(stageClearTexture_, { 0.0f, 0.0f });
+	gameOver_ = Sprite::Create(gameOverTexture_, { 0.0f, 0.0f });
+	gameClear_ = Sprite::Create(gameClearTexture_, { 0.0f, 0.0f });
 
 	//自キャラの生成
 	player_ = new Player();
@@ -75,81 +75,170 @@ GameScene::~GameScene() {
 	player_->Initialize(modelPlayer_);
 	// ステージの初期化
 	stage_->Initialize(model_, filename_[0]);
-
 	// マウスの初期化
 	mouse_->Initialize();
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = {0.0f, 50.0f, -50.0f};
+	viewProjection_.eye = { 0.0f, 50.0f, -50.0f };
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
 	// シーン
-	scene_ = DEBUG;
+	scene_ = TITLE;
 }
 
 void GameScene::Update() {
+	// シーン選択
 	switch (scene_) {
+#pragma region デバック
 	case DEBUG:
-		//	//自キャラの更新処理
-		player_->Update(viewProjection_);
-
-
 		break;
 
+#pragma endregion
+#pragma region タイトル
 	case TITLE:
-		// スペースを押したら操作説明へ
-		if (input_->TriggerKey(DIK_SPACE)) {
-			audio_->PlayWave(doneSe_);
+		// スペースかマウス左クリックを押したら操作説明へ
+		if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0)) {
+			// シーンを操作説明へ
 			scene_ = INFO;
+			// オーディオ再生
+			//audio_->PlayWave(doneSe_);
 		}
-
+		
 		break;
-
+#pragma endregion
+#pragma region 説明
 	case INFO:
-		if (input_->TriggerKey(DIK_SPACE)) {
-			audio_->PlayWave(doneSe_);
-			player_->Reset();
-			scene_ = STAGE1;
-			
-			// ステージ
-			//stage_->Initialize(model_, gimmick_, scene_);
-		}
-		break;
+		// スペースかマウス左クリックを押したらステージへ
+		if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0)) {
+			// シーンをステージへ
+			scene_ = TUTORIAL;
+			// オーディオ再生
+			//audio_->PlayWave(doneSe_);
 
-	case STAGE1:
-		// プレイヤーが死んでいたら終了
-		if (player_->IsDead()) {
-			scene_ = GAMEOVER;
+			// 初期化
+			stage_->Initialize(model_, filename_[0]);	// ステージ読み込み(1)
+			ownPhase_ = POP;			// 行動フェーズ(配置)
+			enemyPhase_ = MOVE;	// 行動フェーズ(移動)
+			turn_ = OWN;	// 自分のターン
+		}
+
+		break;
+#pragma endregion
+#pragma region チュートリアル
+	case TUTORIAL:
+		// 更新
+		skydome_->Update();
+		stage_->Update();
+
+		// 選択しているブロックの座標を読み込む
+		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
+		blockPos_.y = 0;
+
+		// ターン
+		switch (turn_)
+		{
+		case OWN:
+			// 自分のターンのアップデート
+			player_->Update(blockPos_, ownPhase_);
+
+			break;
+
+		case ENEMY:
+
 			break;
 		}
 
-		//	//天球データの更新処理
-		//	skydome_->Update();
-		//	// ステージ
-		//	stage_->Update();
-		//}
-		//// ステージクリア
-		//if (stage_->GetEnd()) {
-		//	if (input_->TriggerKey(DIK_SPACE)) {
-		//		audio_->PlayWave(doneSe_);
-		//		player_->Reset();
-		//		scene_ = stage2;
-		//		
-		//		// ステージ
-		//		stage_->Initialize(model_, gimmick_, scene_);
-		//		break;
-		//	}
-		//}
+		break;
+#pragma endregion
+#pragma region 駒選択
+	case SELECT:
+		// 駒選択
+		player_->Select();
+
+		// コストを使い切ったら次のシーンへ
+		if (player_->GetCost() <= 0) {
+			// シーンをステージへ
+			scene_ = STAGE1;
+
+			// 初期化
+			stage_->Initialize(model_, filename_[0]);	// ステージ読み込み(1)
+			ownPhase_ = POP;	// 配置フェーズ
+			turn_ = OWN;	// 自分のターン
+		}
+
+		debugText_->Printf("%d", player_->GetCost());
+
+		break;
+#pragma endregion
+	case STAGE1:
+		// 更新
+		skydome_->Update();
+		stage_->Update();
+
+		// 選択しているブロックの座標を読み込む
+		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
+		blockPos_.y = 0;
+
+		// ターン
+		switch (turn_)
+		{
+		case OWN:
+
+			break;
+
+		case ENEMY:
+
+			break;
+		}
+
 
 		break;
 
 	case STAGE2:
+		// 更新
+		skydome_->Update();
+		stage_->Update();
+
+		// 選択しているブロックの座標を読み込む
+		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
+		blockPos_.y = 0;
+
+		// ターン
+		switch (turn_)
+		{
+		case OWN:
+
+			break;
+
+		case ENEMY:
+
+			break;
+		}
 
 		break;
 
 	case STAGE3:
+		// 更新
+		skydome_->Update();
+		stage_->Update();
+
+		// 選択しているブロックの座標を読み込む
+		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
+		blockPos_.y = 0;
+
+		// ターン
+		switch (turn_)
+		{
+		case OWN:
+
+			break;
+
+		case ENEMY:
+
+			break;
+		}
 
 		break;
 
@@ -195,6 +284,9 @@ void GameScene::Draw() {
 	case INFO:
 		break;
 
+	case TUTORIAL:
+		break;
+
 	case STAGE1:
 		break;
 
@@ -226,12 +318,16 @@ void GameScene::Draw() {
 	switch (scene_) {
 	case DEBUG:
 		stage_->Draw(viewProjection_);
+		player_->Draw(viewProjection_);
 		break;
 
 	case TITLE:
 		break;
 
 	case INFO:
+		break;
+
+	case TUTORIAL:
 		break;
 
 	case STAGE1:
@@ -292,6 +388,9 @@ void GameScene::Draw() {
 
 	case INFO:
 		howtoplay_->Draw();
+		break;
+
+	case TUTORIAL:
 		break;
 
 	case STAGE1:

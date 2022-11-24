@@ -5,58 +5,105 @@
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
+#include "GlobalScene.h"
+#include "Pawn.h"
+#include "Rook.h"
+#include "Bishop.h"
+#include "Knight.h"
+#include "Queen.h"
+#include "King.h"
 #include <cassert>
 #include <list>
 #include <memory>
 
 class Player {
-  public:
-	~Player();
+public:
+	// —ñ‹“
+	enum PIECE {
+		NONE,
+		PAWN,
+		ROOK,
+		BISHOP,
+		KNIGHT,
+		QUEEN,
+		KING
+	};
 
-	//åˆæœŸåŒ–
+	// \‘¢‘Ì
+	struct PieceData {
+		WorldTransform worldTransform_;
+		int type_;
+	};
+
+public:
+	//‰Šú‰»
 	void Initialize(Model* model);
-	//ãƒªã‚»ãƒƒãƒˆå‡¦ç†
-	void Reset();
-	//æ­»ã‚“ã ã‚‰
-	void Death();
-	//æ›´æ–°
-	void Update(ViewProjection& viewprojection);
 
-	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•å‡¦ç†
-	void Move();
+	//XV
+	void Update(const Vector3& pos, int phase);
 
-	//ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—
-	Vector3 GetWorldPosition();
-
-	//æç”»
+	//•`‰æ
 	void Draw(ViewProjection& viewProjection);
 
-  private:
-	//éŸ³
-	Audio* audio_ = nullptr;
-	//ãƒ¯ãƒ¼ãƒ«ãƒ‰å¤‰æ›ãƒ‡ãƒ¼ã‚¿
-	WorldTransform worldTransform_;
-	//ãƒ¢ãƒ‡ãƒ«
-	Model* model_ = nullptr;
-	Model* modelDead_ = nullptr;
-	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«
-	uint32_t textureHandle_ = 0u;
-	//ã‚¤ãƒ³ãƒ—ãƒƒãƒˆ
-	Input* input_ = nullptr;
-	//ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒ¼ã‚¿
-	uint32_t jumpSound_ = 0;
-	//ãƒ‡ãƒãƒƒã‚°ãƒ†ã‚­ã‚¹ãƒˆ
-	DebugText* debugText_ = nullptr;
-	//æ­»äº¡ãƒ•ãƒ©ã‚°
-	bool isDead_ = false;
-	int life_ = 5;
-	//ãƒã‚¦ã‚¹
-	bool mouseClick_;
-	//åº§æ¨™
-	POINT po;
+	//ƒŠƒZƒbƒgˆ—
+	void Reset();
 
-  public: //ã‚¢ã‚¯ã‚»ãƒƒã‚µã€ã‚¤ãƒ³ãƒ©ã‚¤ãƒ³é–¢æ•°
+	// ƒZƒŒƒNƒg
+	void Select();
+
+private:
+	//ƒvƒŒƒCƒ„[‚ÌˆÚ“®ˆ—
+	void Move();
+
+	// ƒ`ƒFƒX‹î¶¬
+	void PopPlayer(const Vector3& pos);
+	void PopPawn(const Vector3& pos);
+	void PopRook();
+	void PopBishop();
+	void PopKnight();
+	void PopQueen();
+	void PopKing();
+
+private:
+	//ƒCƒ“ƒvƒbƒg
+	Input* input_ = nullptr;
+	//ƒfƒoƒbƒOƒeƒLƒXƒg
+	DebugText* debugText_ = nullptr;
+
+	//ƒ‚ƒfƒ‹
+	Model* model_ = nullptr;
+	//ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹
+	uint32_t textureHandle_ = 0u;
+
+	//‰¹
+	Audio* audio_ = nullptr;
+	//ƒTƒEƒ“ƒhƒf[ƒ^
+	uint32_t jumpSound_ = 0;
+
+	// ƒ[ƒ‹ƒh•ÏŠ·ƒf[ƒ^
+	std::list<std::unique_ptr<PieceData>> pieces_;
+
+	// ƒ`ƒFƒX‹î
+	std::list<std::unique_ptr<Pawn>> pawns_;
+	std::list<std::unique_ptr<Rook>> rooks_;
+	std::list<std::unique_ptr<Bishop>> bishops_;
+	std::list<std::unique_ptr<Knight>> knights_;
+	std::list<std::unique_ptr<Queen>> queen_;
+	std::list<std::unique_ptr<King>> king_;
+
+	// ƒRƒXƒg
+	int cost_ = 5;
+
+	// PopƒRƒ}ƒ“ƒh—p
+	int popCommand_[16];
+	int num_ = 0;
+
+	//€–Sƒtƒ‰ƒO
+	bool isDead_ = false;
+	//ƒ}ƒEƒX
+	bool mouseClick_;
+
+public: //ƒAƒNƒZƒbƒTAƒCƒ“ƒ‰ƒCƒ“ŠÖ”
 	bool IsDead() const { return isDead_; }
+	int GetCost() { return cost_; }
 };
