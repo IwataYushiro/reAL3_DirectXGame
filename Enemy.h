@@ -16,7 +16,7 @@
 #include <list>
 #include <memory>
 
-class Player {
+class Enemy {
 public:
 	// —ñ‹“
 	enum PIECE {

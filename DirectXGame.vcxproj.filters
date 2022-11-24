@@ -76,11 +76,17 @@
     <Filter Include="ヘッダー ファイル\Stage">
       <UniqueIdentifier>{e2b0960b-da84-4d06-9188-673db8daff9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Gimmick">
-      <UniqueIdentifier>{3447f50d-bc90-4c3f-b950-2a6474d6190b}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Enemy">
+      <UniqueIdentifier>{fdd6c59f-534a-476b-8e9d-fec012bbe28c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Gimmick">
-      <UniqueIdentifier>{a6663694-b671-452e-8ef6-da4864eae5e1}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\Enemy">
+      <UniqueIdentifier>{1071f0b5-9051-4cd2-9196-7f84d9253a39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Chess">
+      <UniqueIdentifier>{fb4a8088-ba62-4880-9866-68095ce52908}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Chess">
+      <UniqueIdentifier>{e7ec7dc9-212d-4944-b007-8dfeaeaf8d3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,17 +120,29 @@
     <ClCompile Include="Camera\RailCamera.cpp">
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="memo.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>ソース ファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Gimmick\Gimmick.cpp">
-      <Filter>ソース ファイル\Gimmick</Filter>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Gimmick\WaterFlow.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Chess\Bishop.cpp">
+      <Filter>ソース ファイル\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess\King.cpp">
+      <Filter>ソース ファイル\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess\Knight.cpp">
+      <Filter>ソース ファイル\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess\Pawn.cpp">
+      <Filter>ソース ファイル\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess\Queen.cpp">
+      <Filter>ソース ファイル\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess\Rook.cpp">
+      <Filter>ソース ファイル\Chess</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>ソース ファイル</Filter>
@@ -236,11 +254,26 @@
     <ClInclude Include="Stage.h">
       <Filter>ヘッダー ファイル\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Gimmick\Gimmick.h">
-      <Filter>ヘッダー ファイル\Gimmick</Filter>
+    <ClInclude Include="Enemy.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Gimmick\WaterFrow.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Chess\Bishop.h">
+      <Filter>ヘッダー ファイル\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\King.h">
+      <Filter>ヘッダー ファイル\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\Knight.h">
+      <Filter>ヘッダー ファイル\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\Pawn.h">
+      <Filter>ヘッダー ファイル\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\Queen.h">
+      <Filter>ヘッダー ファイル\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Chess\Rook.h">
+      <Filter>ヘッダー ファイル\Chess</Filter>
     </ClInclude>
     <ClInclude Include="CollisionPrimitive.h">
       <Filter>ヘッダー ファイル</Filter>

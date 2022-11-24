@@ -5,11 +5,11 @@
 #include "DebugText.h"
 #include "DirectXCommon.h"
 #include "GlobalScene.h"
-#include "Gimmick.h"
 #include "Input.h"
 #include "Model.h"
 #include "MyMathUtility.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "SafeDelete.h"
 #include "Skydome/Skydome.h"
 #include "Stage.h"
@@ -24,11 +24,6 @@
 /// </summary>
 class GameScene {
   public: // メンバ関数
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
-	GameScene();
-
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -72,11 +67,11 @@ class GameScene {
 	uint32_t gameClearTexture_ = 0;
 
 	// スプライト
-	Sprite* title_;
-	Sprite* howtoplay_;
-	Sprite* stageClear_;
-	Sprite* gameOver_;
-	Sprite* gameClear_;
+	Sprite* title_ = nullptr;
+	Sprite* howtoplay_ = nullptr;
+	Sprite* stageClear_ = nullptr;
+	Sprite* gameOver_ = nullptr;
+	Sprite* gameClear_ = nullptr;
 
 	// 3Dモデル
 	Model* model_ = nullptr;
@@ -89,22 +84,29 @@ class GameScene {
 	//自キャラ
 	Player* player_ = nullptr;
 	Model* modelPlayer_ = nullptr;
+	// 敵
+	Player* enemy_ = nullptr;
 	//天球データ
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	// ステージ
 	Stage* stage_ = nullptr;
-
 	// マウス
 	Mouse* mouse_ = nullptr;
 
-	// シーン
-	size_t scene_;
 	// シーン用ファイルネーム
-	const std::string filename_[3] = { "1", "2", "3" };
+	const std::string filename_[4] = { "0", "1", "2", "3"};
 
-	// アクション
-	ActionData action_;
+	// シーン
+	size_t scene_ = TITLE;
+	// フェーズ
+	size_t ownPhase_;
+	size_t enemyPhase_;
+	// ターン
+	size_t turn_;
+
+	// 選択ブロックの座標
+	Vector3 blockPos_;
 	
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;

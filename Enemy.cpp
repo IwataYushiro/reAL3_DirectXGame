@@ -1,24 +1,24 @@
-#include "Player.h"
+#include "Enemy.h"
 
-void Player::Initialize(Model* model) {
-	// NULLãƒã‚¤ãƒ³ã‚¿ãƒã‚§ãƒƒã‚¯
+void Enemy::Initialize(Model* model) {
+	// NULLƒ|ƒCƒ“ƒ^ƒ`ƒFƒbƒN
 	assert(model);
 
-	//ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—
+	//ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾
 	input_ = Input::GetInstance();
 	debugText_ = DebugText::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	// å¼•æ•°ã¨ã—ã¦å—ã‘å–ã£ãŸãƒ‡ãƒ¼ã‚¿ã‚’ãƒ¡ãƒ³ãƒå¤‰æ•°ã«è¨˜éŒ²ã™ã‚‹
+	// ˆø”‚Æ‚µ‚Äó‚¯æ‚Á‚½ƒf[ƒ^‚ğƒƒ“ƒo•Ï”‚É‹L˜^‚·‚é
 	model_ = model;
 
-	//éŸ³
+	//‰¹
 	jumpSound_ = audio_->LoadWave("sound/se/jump.wav");
-  
+
 }
 
-void Player::Update(const Vector3& pos, int phase) {
-	
+void Enemy::Update(const Vector3& pos, int phase) {
+
 	switch (phase)
 	{
 	case POP:
@@ -34,7 +34,7 @@ void Player::Update(const Vector3& pos, int phase) {
 
 }
 
-void Player::Draw(ViewProjection& viewProjection) {
+void Enemy::Draw(ViewProjection& viewProjection) {
 	for (std::unique_ptr<Pawn>& pawn : pawns_) {
 		pawn->Draw(viewProjection);
 	}
@@ -55,11 +55,11 @@ void Player::Draw(ViewProjection& viewProjection) {
 	}
 }
 
-void Player::Reset() {
+void Enemy::Reset() {
 
 }
 
-void Player::Select() {
+void Enemy::Select() {
 	if (input_->TriggerKey(DIK_0)) {
 		popCommand_[num_] = PAWN;
 		num_++;
@@ -67,21 +67,21 @@ void Player::Select() {
 	}
 }
 
-void Player::PopPlayer(const Vector3& pos) {
-	// numã‚’0ã«
+void Enemy::PopPlayer(const Vector3& pos) {
+	// num‚ğ0‚É
 	num_ = 0;
 
-	// SPACEã‚’æŠ¼ã—ãŸã‚‰PopCommandã«å¾“ã£ã¦ç”Ÿæˆã™ã‚‹
+	// SPACE‚ğ‰Ÿ‚µ‚½‚çPopCommand‚É]‚Á‚Ä¶¬‚·‚é
 	if (input_->TriggerKey(DIK_SPACE)) {
 		switch (popCommand_[num_])
 		{
 		case NONE:
-			// ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
+			// ƒCƒ“ƒNƒŠƒƒ“ƒg
 			num_++;
 
 			break;
 		case PAWN:
-			// ãƒãƒ¼ãƒ³ã‚’ç”Ÿæˆ
+			// ƒ|[ƒ“‚ğ¶¬
 			PopPawn(pos);
 
 			break;
@@ -89,60 +89,60 @@ void Player::PopPlayer(const Vector3& pos) {
 	}
 }
 
-void Player::Move() {
+void Enemy::Move() {
 
 }
 
-void Player::PopPawn(const Vector3& pos) {
-	// ãƒãƒ¼ãƒ³ç”Ÿæˆ
+void Enemy::PopPawn(const Vector3& pos) {
+	// ƒ|[ƒ“¶¬
 	std::unique_ptr<Pawn> pawn = std::make_unique<Pawn>();
-	// åˆæœŸåŒ–
+	// ‰Šú‰»
 	pawn->Initialize(model_, pos);
-	// ãƒªã‚¹ãƒˆã«è¿½åŠ 
+	// ƒŠƒXƒg‚É’Ç‰Á
 	pawns_.push_back(std::move(pawn));
 }
 
-void Player::PopRook() {
-	// ãƒ«ãƒ¼ã‚¯ç”Ÿæˆ
+void Enemy::PopRook() {
+	// ƒ‹[ƒN¶¬
 	std::unique_ptr<Rook> rook = std::make_unique<Rook>();
-	// åˆæœŸåŒ–
+	// ‰Šú‰»
 	rook->Initialize(model_);
-	// ãƒªã‚¹ãƒˆã«è¿½åŠ 
+	// ƒŠƒXƒg‚É’Ç‰Á
 	rooks_.push_back(std::move(rook));
 }
 
-void Player::PopBishop() {
-	// ãƒ“ã‚·ãƒ§ãƒƒãƒ—ç”Ÿæˆ
+void Enemy::PopBishop() {
+	// ƒrƒVƒ‡ƒbƒv¶¬
 	std::unique_ptr<Bishop> bishop = std::make_unique<Bishop>();
-	// åˆæœŸåŒ–
+	// ‰Šú‰»
 	bishop->Initialize(model_);
-	// ãƒªã‚¹ãƒˆã«è¿½åŠ 
+	// ƒŠƒXƒg‚É’Ç‰Á
 	bishops_.push_back(std::move(bishop));
 }
 
-void Player::PopKnight() {
-	// ãƒŠã‚¤ãƒˆç”Ÿæˆ
+void Enemy::PopKnight() {
+	// ƒiƒCƒg¶¬
 	std::unique_ptr<Knight> knight = std::make_unique<Knight>();
-	// åˆæœŸåŒ–
+	// ‰Šú‰»
 	knight->Initialize(model_);
-	// ãƒªã‚¹ãƒˆã«è¿½åŠ 
+	// ƒŠƒXƒg‚É’Ç‰Á
 	knights_.push_back(std::move(knight));
 }
 
-void Player::PopQueen() {
-	// ã‚¯ã‚¤ãƒ¼ãƒ³ç”Ÿæˆ
+void Enemy::PopQueen() {
+	// ƒNƒC[ƒ“¶¬
 	std::unique_ptr<Queen> queen = std::make_unique<Queen>();
-	// åˆæœŸåŒ–
+	// ‰Šú‰»
 	queen->Initialize(model_);
-	// ãƒªã‚¹ãƒˆã«è¿½åŠ 
+	// ƒŠƒXƒg‚É’Ç‰Á
 	queen_.push_back(std::move(queen));
 }
 
-void Player::PopKing() {
-	// ã‚­ãƒ³ã‚°ç”Ÿæˆ
+void Enemy::PopKing() {
+	// ƒLƒ“ƒO¶¬
 	std::unique_ptr<King> king = std::make_unique<King>();
-	// åˆæœŸåŒ–
+	// ‰Šú‰»
 	king->Initialize(model_);
-	// ãƒªã‚¹ãƒˆã«è¿½åŠ 
+	// ƒŠƒXƒg‚É’Ç‰Á
 	king_.push_back(std::move(king));
 }

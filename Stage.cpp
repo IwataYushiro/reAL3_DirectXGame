@@ -3,8 +3,17 @@
 #include <fstream>
 
 void Stage::Initialize(Model* model, const std::string stageNum) {
+	//シングルトンインスタンスを取得
+	debugText_ = DebugText::GetInstance();
+	input_ = Input::GetInstance();
+
 	// 最初に残っている要素を削除
-	stageBlock_.clear();
+	stageBlocks_.clear();
+
+	// バッファをクリア
+	stageCommands.str("");
+	// 状態をクリア
+	stageCommands.clear(std::stringstream::goodbit);
 
 	// モデル読み込み
 	model_ = model;
@@ -14,22 +23,44 @@ void Stage::Initialize(Model* model, const std::string stageNum) {
 	// ステージファイルで各要素を設定
 	LoadStageCommands();
 
-	// デバックテキスト
-	debugText_ = DebugText::GetInstance();
+	// 初期化
+	stageLine_ = 1;
+	stageRow_ = 1;
+
 }
 
 void Stage::Update() {
+	// ブロック選択
+	if (input_->TriggerKey(DIK_UP) || input_->TriggerKey(DIK_DOWN) ||
+		input_->TriggerKey(DIK_LEFT) || input_->TriggerKey(DIK_RIGHT)) {
+		if (input_->TriggerKey(DIK_UP)) {
+			stageRow_++;
+		}
+		else if (input_->TriggerKey(DIK_DOWN)) {
+			stageRow_--;
+		}
+		if (input_->TriggerKey(DIK_RIGHT)) {
+			stageLine_++;
+		}
+		else if (input_->TriggerKey(DIK_LEFT)) {
+			stageLine_--;
+		}
+	}
+
+	// デバックテキスト
+	debugText_->SetPos(0, 0);
+	debugText_->Printf("%d, %d", stageLine_, stageRow_);
 }
 
 void Stage::Draw(ViewProjection viewProjection) {
-	for (std::unique_ptr<StageData>& block : stageBlock_) {
+	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		if (block->type_ != NONE) {
 			model_->Draw(block->worldTransform_, viewProjection);
 		}
 	}
 }
 
-void Stage::StageBlockInitialize(std::unique_ptr<StageData>& block, Vector3 pos) {
+void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3 pos, int line, int row) {
 	// ワールドトランスフォームの初期化設定
 	block->worldTransform_.Initialize();
 
@@ -42,6 +73,10 @@ void Stage::StageBlockInitialize(std::unique_ptr<StageData>& block, Vector3 pos)
 	block->worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
 	block->worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(block->worldTransform_);
 	block->worldTransform_.TransferMatrix();
+
+	// マップチップ用番号
+	block->line_ = line;
+	block->row_ = row;
 }
 
 void Stage::LoadStageData(const std::string stageNum) {
@@ -67,11 +102,11 @@ void Stage::LoadStageCommands() {
 	// 1行分の文字列を入れる変数
 	std::string line;
 
+	// マップチップ用番号(列)
+	int mapRow = 1;		// 列(Y)
+
 	// コマンド実行ループ
 	while (getline(stageCommands, line)) {
-		// リストに入れるために新しく宣言
-		std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
-
 		// 1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);
 
@@ -93,6 +128,10 @@ void Stage::LoadStageCommands() {
 			continue;
 		}
 		else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
+			// リストに入れるために新しく宣言
+			std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
+
+			// ブロックの種類
 			newBlock->type_ = BLOCK;
 			// x座標
 			getline(line_stream, word, ',');
@@ -104,11 +143,33 @@ void Stage::LoadStageCommands() {
 			getline(line_stream, word, ',');
 			float z = (float)std::atof(word.c_str());
 
+			// マップチップ用番号(行)
+			getline(line_stream, word, ',');
+			int mapLine = (int)std::atoi(word.c_str());		// 行(X)
+
 			// 初期化する
-			StageBlockInitialize(newBlock, Vector3(x, y, z));
+			InitializeStageBlock(newBlock, Vector3(x, y, z), mapLine, mapRow);
 
 			// リストに追加
-			stageBlock_.push_back(std::move(newBlock));
+			stageBlocks_.push_back(std::move(newBlock));
+
+		}
+		else if (word.find("UP") == 0) {
+			// インクリメント
+			mapRow++;
 		}
 	}
+}
+
+Vector3 Stage::GetBlockPosition(int line, int row) {
+	// 範囲for
+	for (std::unique_ptr<StageData>& block : stageBlocks_) {
+		// 指定した番号に合った座標を返す
+		if (block->line_ == line && block->row_ == row) {
+			return block->worldTransform_.translation_;
+		}
+	}
+
+	// なかったら0を返す
+	return Vector3(0, 0, 0);
 }

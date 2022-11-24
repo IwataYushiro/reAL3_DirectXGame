@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;$(ProjectDir)Gimmick;C:\k021g1138\re AL3\KamataEngine\DirectXGame\Enemy;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;$(ProjectDir)Chess;C:\k021g1138\re AL3\KamataEngine\DirectXGame\Enemy;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,7 +78,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;$(ProjectDir)Gimmick;$(ProjectDir)Enemy;$(ProjectDir)Skydome;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;$(ProjectDir)Player;$(ProjectDir)Camera;$(ProjectDir)Chess;$(ProjectDir)Enemy;$(ProjectDir)Skydome;%(AdditionalIncludeDirectories);"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick";"C:\k021g1138\re AL3\KamataEngine\DirectXGame\Gimmick"</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MinSpace</Optimization>
     </ClCompile>
@@ -99,11 +99,15 @@
     <ClCompile Include="base\TextureManager.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Camera\RailCamera.cpp" />
-    <ClCompile Include="Gimmick\Gimmick.cpp" />
-    <ClCompile Include="Gimmick\WaterFlow.cpp" />
+    <ClCompile Include="Chess\Bishop.cpp" />
+    <ClCompile Include="Chess\King.cpp" />
+    <ClCompile Include="Chess\Knight.cpp" />
+    <ClCompile Include="Chess\Pawn.cpp" />
+    <ClCompile Include="Chess\Queen.cpp" />
+    <ClCompile Include="Chess\Rook.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\MyMathUtility.cpp" />
-    <ClCompile Include="memo.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Player\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
@@ -135,8 +139,13 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Camera\GlobalScene.h" />
     <ClInclude Include="Camera\RailCamera.h" />
-    <ClInclude Include="Gimmick\Gimmick.h" />
-    <ClInclude Include="Gimmick\WaterFrow.h" />
+    <ClInclude Include="Chess\Bishop.h" />
+    <ClInclude Include="Chess\King.h" />
+    <ClInclude Include="Chess\Knight.h" />
+    <ClInclude Include="Chess\Pawn.h" />
+    <ClInclude Include="Chess\Queen.h" />
+    <ClInclude Include="Chess\Rook.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\MathUtility.h" />
     <ClInclude Include="math\Matrix4.h" />
