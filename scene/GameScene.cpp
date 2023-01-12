@@ -335,7 +335,6 @@ void GameScene::Draw() {
 	case STAGE1:
 		// 3Dモデル描画
 		skydome_->Draw(viewProjection_);
-
 		stage_->Draw(viewProjection_);
 
 		player_->Draw(viewProjection_);

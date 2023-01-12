@@ -91,11 +91,11 @@ void Stage::LoadStageData(const std::string stageNum) {
 	file.open("Resources/stage/stage1.csv");
 	assert(file.is_open());
 
-	// ファイルの内容を文字列ストリームにコピー
-	stageCommands << file.rdbuf();
+	//// ファイルの内容を文字列ストリームにコピー
+	//stageCommands << file.rdbuf();
 
-	// ファイルを閉じる
-	file.close();
+	//// ファイルを閉じる
+	//file.close();
 }
 
 void Stage::LoadStageCommands() {
