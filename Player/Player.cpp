@@ -3,6 +3,7 @@
 Player::Player() {}
 
 Player::~Player() {
+	//ギミック解放
 	delete gimmick_;
 	//オプションの解放
 	delete modelDead_;
