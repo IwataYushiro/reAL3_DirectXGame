@@ -76,11 +76,13 @@ void GameScene::Initialize() {
 	// ステージの初期化
 	stage_->Initialize(model_, filename_[0]);
 	// マウスの初期化
-	mouse_->Initialize();
+	//mouse_->Initialize();
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 0.0f, 50.0f, -50.0f };
+	viewProjection_.eye = { 0.0f, 100.0f, -5.0f };
+	viewProjection_.target = { 0.0f, -100.0f, 0.0f };
+	//viewProjection_.fovAngleY = 360.0f * MathUtility::PI / 180.0f;
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -88,7 +90,7 @@ void GameScene::Initialize() {
 	mouse_->Initialize(viewProjection_);
 
 	// シーン
-	scene_ = TITLE;
+	scene_ = DEBUG;
 }
 
 void GameScene::Update() {
