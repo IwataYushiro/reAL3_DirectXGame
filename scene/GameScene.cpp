@@ -75,7 +75,9 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_);
 	// ステージの初期化
 	stage_->Initialize(model_, filename_[0]);
-	
+	// マウスの初期化
+	mouse_->Initialize();
+
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 0.0f, 50.0f, -50.0f };
@@ -114,7 +116,7 @@ void GameScene::Update() {
 		// スペースかマウス左クリックを押したらステージへ
 		if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0)) {
 			// シーンをステージへ
-			scene_ = SELECT;
+			scene_ = TUTORIAL;
 			// オーディオ再生
 			//audio_->PlayWave(doneSe_);
 
@@ -147,7 +149,7 @@ void GameScene::Update() {
 			break;
 
 		case ENEMY:
-			enemy_->Update(blockPos_, enemyPhase_);
+
 			break;
 		}
 
@@ -186,14 +188,11 @@ void GameScene::Update() {
 		switch (turn_)
 		{
 		case OWN:
-			// 自分のターンのアップデート
-			player_->Update(blockPos_, ownPhase_);
 
 			break;
 
 		case ENEMY:
-			enemy_->Update(blockPos_, enemyPhase_);
-			
+
 			break;
 		}
 
@@ -331,15 +330,6 @@ void GameScene::Draw() {
 		break;
 
 	case TUTORIAL:
-		// 3Dモデル描画
-		skydome_->Draw(viewProjection_);
-
-		stage_->Draw(viewProjection_);
-
-		player_->Draw(viewProjection_);
-
-		mouse_->Draw(viewProjection_);
-
 		break;
 
 	case STAGE1:
@@ -397,7 +387,7 @@ void GameScene::Draw() {
 		break;
 
 	case TITLE:
-		title_->Draw();
+		//title_->Draw();
 		break;
 
 	case INFO:
@@ -405,27 +395,24 @@ void GameScene::Draw() {
 		break;
 
 	case TUTORIAL:
-		if (stage_->GetIsClear()) {
-			stageClear_->Draw();
-		}
 		break;
 
 	case STAGE1:
-		if (stage_->GetIsClear()) {
+		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
-		}
+		}*/
 		break;
 
 	case STAGE2:
-		if (stage_->GetIsClear()) {
+		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
-		}
+		}*/
 		break;
 
 	case STAGE3:
-		if (stage_->GetIsClear()) {
+		/*if (stage_->GetEnd()) {
 			stageClear_->Draw();
-		}
+		}*/
 		break;
 
 	case CLEAR:
