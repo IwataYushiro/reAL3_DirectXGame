@@ -66,9 +66,9 @@ private:
 	// クリアフラグ
 	bool isClear_ = false;
 	// 倍率
-	float five_ = 5.0f;
+	float five_ = 2.0f;
 	// 半径
-	float radius_ = 5.0f;
+	float radius_ = 2.0f;
 
 public: // アクセッサ
 	//半径を返す
