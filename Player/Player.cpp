@@ -19,6 +19,7 @@ void Player::Initialize(Model* model) {
 
 void Player::Update(const Vector3& pos, int phase) {
 	
+	//フェーズ
 	switch (phase)
 	{
 	case POP:
