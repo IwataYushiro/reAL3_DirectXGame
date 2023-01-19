@@ -82,7 +82,6 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 0.0f, 100.0f, -5.0f };
 	viewProjection_.target = { 0.0f, -100.0f, 0.0f };
-	//viewProjection_.fovAngleY = 360.0f * MathUtility::PI / 180.0f;
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -159,9 +158,6 @@ void GameScene::Update() {
 #pragma endregion
 #pragma region 駒選択
 	case SELECT:
-		// 駒選択
-		player_->Select();
-
 		// コストを使い切ったら次のシーンへ
 		if (player_->GetCost() <= 0) {
 			// シーンをステージへ

@@ -99,12 +99,6 @@
     <ClCompile Include="base\TextureManager.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Camera\RailCamera.cpp" />
-    <ClCompile Include="Chess\Bishop.cpp" />
-    <ClCompile Include="Chess\King.cpp" />
-    <ClCompile Include="Chess\Knight.cpp" />
-    <ClCompile Include="Chess\Pawn.cpp" />
-    <ClCompile Include="Chess\Queen.cpp" />
-    <ClCompile Include="Chess\Rook.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\MyMathUtility.cpp" />
@@ -139,12 +133,6 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Camera\GlobalScene.h" />
     <ClInclude Include="Camera\RailCamera.h" />
-    <ClInclude Include="Chess\Bishop.h" />
-    <ClInclude Include="Chess\King.h" />
-    <ClInclude Include="Chess\Knight.h" />
-    <ClInclude Include="Chess\Pawn.h" />
-    <ClInclude Include="Chess\Queen.h" />
-    <ClInclude Include="Chess\Rook.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\MathUtility.h" />
