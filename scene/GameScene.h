@@ -80,9 +80,12 @@ class GameScene {
 
 	//自キャラ
 	Player* player_ = nullptr;
+	Player* player2_ = nullptr;
+	
 	Model* modelPlayer_ = nullptr;
+	Model* modelPlayer2_ = nullptr;
 	// 敵
-	Player* enemy_ = nullptr;
+	
 	//天球データ
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;

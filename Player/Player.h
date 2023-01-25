@@ -19,10 +19,10 @@ public:
 
 public:
 	//初期化
-	void Initialize(Model* model);
+  void Initialize(Model* model, Vector3 pos = {0.0f, 0.0f, 0.0f});
 
 	//更新
-	void Update(const Vector3& pos, int phase);
+	void Update();
 
 	//描画
 	void Draw(ViewProjection& viewProjection);
@@ -51,7 +51,7 @@ private:
 	uint32_t jumpSound_ = 0;
 
 	// ワールド変換データ
-
+	PieceData wt;
 	// コスト
 	int cost_ = 5;
 
