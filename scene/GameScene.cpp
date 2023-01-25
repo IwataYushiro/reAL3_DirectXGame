@@ -13,7 +13,9 @@ GameScene::~GameScene() {
 	// BGM解放
 	//自キャラの解放
 	delete player_;
+	delete player2_;
 	delete modelPlayer_;
+	delete modelPlayer2_;
 	//天球データ解放
 	delete skydome_;
 	delete modelSkydome_;
@@ -41,7 +43,8 @@ void GameScene::Initialize() {
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//プレイヤー
-	modelPlayer_ = Model::CreateFromOBJ("player", true);
+	modelPlayer_ = Model::CreateFromOBJ("bplayer", true);
+	modelPlayer2_ = Model::CreateFromOBJ("wplayer", true);
 	//天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
@@ -60,6 +63,7 @@ void GameScene::Initialize() {
 
 	//自キャラの生成
 	player_ = new Player();
+	player2_ = new Player();
 	//天球データ生成
 	skydome_ = new Skydome();
 	// ステージ
@@ -68,7 +72,9 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	//自キャラの初期化
+	Vector3 pos = {20.0f, 0.0f, 10.0f};
 	player_->Initialize(modelPlayer_);
+	player2_->Initialize(modelPlayer2_, pos);
 	// ステージの初期化
 	stage_->Initialize(model_, filename_[0]);
 	// マウスの初期化
@@ -90,6 +96,8 @@ void GameScene::Update() {
 	switch (scene_) {
 #pragma region デバック
 	case DEBUG:
+		player_->Update();
+		player2_->Update();
 		break;
 
 #pragma endregion
@@ -138,7 +146,6 @@ void GameScene::Update() {
 		{
 		case OWN:
 			// 自分のターンのアップデート
-			player_->Update(blockPos_, ownPhase_);
 
 			break;
 
@@ -295,6 +302,7 @@ void GameScene::Draw() {
 	case DEBUG:
 		stage_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
+		player2_->Draw(viewProjection_);
 		break;
 
 	case TITLE:
