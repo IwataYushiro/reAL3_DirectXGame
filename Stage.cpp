@@ -103,7 +103,8 @@ void Stage::LoadStageCommands() {
 	std::string line;
 
 	// マップチップ用番号(列)
-	int mapRow = 1;		// 列(Y)
+	int mapLine = 0;		// 行(X)左から
+	int mapRow = 0;		// 列(Y)奥から
 
 	// コマンド実行ループ
 	while (getline(stageCommands, line)) {
@@ -122,41 +123,95 @@ void Stage::LoadStageCommands() {
 			continue;
 		}
 
-		// コマンド読み込み
-		if (word.find("NONE") == 0 || word.find("0") == 0) {
-			// NONEは読み飛ばす
-			continue;
-		}
-		else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
-			// リストに入れるために新しく宣言
-			std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
-
-			// ブロックの種類
-			newBlock->type_ = BLOCK;
-			// x座標
-			getline(line_stream, word, ',');
-			float x = (float)std::atof(word.c_str());
-			// y座標
-			getline(line_stream, word, ',');
-			float y = (float)std::atof(word.c_str());
-			// z座標
-			getline(line_stream, word, ',');
-			float z = (float)std::atof(word.c_str());
-
-			// マップチップ用番号(行)
-			getline(line_stream, word, ',');
-			int mapLine = (int)std::atoi(word.c_str());		// 行(X)
-
-			// 初期化する
-			InitializeStageBlock(newBlock, Vector3(x, y, z), mapLine, mapRow);
-
-			// リストに追加
-			stageBlocks_.push_back(std::move(newBlock));
-
-		}
-		else if (word.find("UP") == 0) {
-			// インクリメント
+		if (mapLine == 20) {
+			mapLine = 0;
 			mapRow++;
+		}
+
+		// コマンド読み込み
+		while (mapLine != 20) {
+			if (word.find("NONE") == 0 || word.find("0") == 0) {
+				// NONEは読み飛ばす
+				mapLine++;
+			}
+			else if (word.find("BLOCK") == 0 || word.find("1") == 0) {
+				// リストに入れるために新しく宣言
+				std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
+
+				// ブロックの種類
+				newBlock->type_ = BLOCK;
+				//// x座標
+				//getline(line_stream, word, ',');
+				//float x = (float)std::atof(word.c_str());
+				//// y座標
+				//getline(line_stream, word, ',');
+				//float y = (float)std::atof(word.c_str());
+				//// z座標
+				//getline(line_stream, word, ',');
+				//float z = (float)std::atof(word.c_str());
+
+				//// マップチップ用番号(行)
+				//getline(line_stream, word, ',');
+				//int mapLine = (int)std::atoi(word.c_str());		// 行(X)
+
+				// 座標
+				Vector3 pos(-38.0f + (4.0f * mapLine), -10.0f, 38.0f - (4.0f * mapRow));
+
+				// 初期化する
+				InitializeStageBlock(newBlock, pos, mapLine, mapRow);
+
+				// リストに追加
+				stageBlocks_.push_back(std::move(newBlock));
+
+				mapLine++;
+			}
+			else if (word.find("2") == 0) {
+				mapLine++;
+			}
+			else if (word.find("3") == 0) {
+				// リストに入れるために新しく宣言
+				std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
+
+				// ブロックの種類
+				newBlock->type_ = BLOCK;
+
+				// 座標
+				Vector3 pos(-38.0f + (4.0f * mapLine), -10.0f, 38.0f - (4.0f * mapRow));
+
+				// 初期化する
+				InitializeStageBlock(newBlock, pos, mapLine, mapRow);
+
+				// リストに追加
+				stageBlocks_.push_back(std::move(newBlock));
+
+				mapLine++;
+			}
+			else if (word.find("4") == 0) {
+				mapLine++;
+			}
+			else if (word.find("5") == 0) {
+				// リストに入れるために新しく宣言
+				std::unique_ptr<StageData> newBlock = std::make_unique<StageData>();
+
+				// ブロックの種類
+				newBlock->type_ = BLOCK;
+
+				// 座標
+				Vector3 pos(-38.0f + (4.0f * mapLine), -10.0f, 38.0f - (4.0f * mapRow));
+
+				// 初期化する
+				InitializeStageBlock(newBlock, pos, mapLine, mapRow);
+
+				// リストに追加
+				stageBlocks_.push_back(std::move(newBlock));
+
+				mapLine++;
+			}
+			else if (word.find("6") == 0) {
+				mapLine++;
+			}
+			// 次の内容へ
+			getline(line_stream, word, ',');
 		}
 	}
 }

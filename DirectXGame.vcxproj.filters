@@ -76,18 +76,6 @@
     <Filter Include="ヘッダー ファイル\Stage">
       <UniqueIdentifier>{e2b0960b-da84-4d06-9188-673db8daff9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Enemy">
-      <UniqueIdentifier>{fdd6c59f-534a-476b-8e9d-fec012bbe28c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Enemy">
-      <UniqueIdentifier>{1071f0b5-9051-4cd2-9196-7f84d9253a39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Chess">
-      <UniqueIdentifier>{fb4a8088-ba62-4880-9866-68095ce52908}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Chess">
-      <UniqueIdentifier>{e7ec7dc9-212d-4944-b007-8dfeaeaf8d3c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,35 +111,14 @@
     <ClCompile Include="Stage.cpp">
       <Filter>ソース ファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Chess\Bishop.cpp">
-      <Filter>ソース ファイル\Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Chess\King.cpp">
-      <Filter>ソース ファイル\Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Chess\Knight.cpp">
-      <Filter>ソース ファイル\Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Chess\Pawn.cpp">
-      <Filter>ソース ファイル\Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Chess\Queen.cpp">
-      <Filter>ソース ファイル\Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Chess\Rook.cpp">
-      <Filter>ソース ファイル\Chess</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Mouse.cpp">
+    <ClCompile Include="Switch.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Vector3.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,34 +221,13 @@
     <ClInclude Include="Stage.h">
       <Filter>ヘッダー ファイル\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Chess\Bishop.h">
-      <Filter>ヘッダー ファイル\Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Chess\King.h">
-      <Filter>ヘッダー ファイル\Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Chess\Knight.h">
-      <Filter>ヘッダー ファイル\Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Chess\Pawn.h">
-      <Filter>ヘッダー ファイル\Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Chess\Queen.h">
-      <Filter>ヘッダー ファイル\Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Chess\Rook.h">
-      <Filter>ヘッダー ファイル\Chess</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionPrimitive.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Mouse.h">
+    <ClInclude Include="Switch.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
