@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Audio.h"
 #include "DebugText.h"
 #include "Input.h"
