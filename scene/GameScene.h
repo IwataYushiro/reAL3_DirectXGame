@@ -96,7 +96,7 @@ class GameScene {
 	const std::string filename_[4] = { "0", "1", "2", "3"};
 
 	// シーン
-	size_t scene_ = TITLE;
+	size_t scene_ = DEBUG;
 	// フェーズ
 	size_t ownPhase_;
 	size_t enemyPhase_;
