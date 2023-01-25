@@ -210,6 +210,7 @@ void Stage::LoadStageCommands() {
 			else if (word.find("6") == 0) {
 				mapLine++;
 			}
+			// ŽŸ‚Ì“à—e‚Ö
 			getline(line_stream, word, ',');
 		}
 	}

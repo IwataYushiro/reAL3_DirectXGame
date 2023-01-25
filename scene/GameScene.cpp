@@ -19,8 +19,6 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	// ステージ
 	delete stage_;
-	// マウス
-	delete mouse_;
 	// スプライト
 	delete title_;
 	delete howtoplay_;
@@ -66,8 +64,6 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	// ステージ
 	stage_ = new Stage();
-	// マウス
-	mouse_ = new Mouse();
 
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
@@ -82,12 +78,8 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 0.0f, 100.0f, -5.0f };
 	viewProjection_.target = { 0.0f, -100.0f, 0.0f };
-	//viewProjection_.fovAngleY = 360.0f * MathUtility::PI / 180.0f;
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
-
-	// マウスの初期化
-	mouse_->Initialize(viewProjection_);
 
 	// シーン
 	scene_ = DEBUG;
@@ -154,26 +146,6 @@ void GameScene::Update() {
 
 			break;
 		}
-
-		break;
-#pragma endregion
-#pragma region 駒選択
-	case SELECT:
-		// 駒選択
-		player_->Select();
-
-		// コストを使い切ったら次のシーンへ
-		if (player_->GetCost() <= 0) {
-			// シーンをステージへ
-			scene_ = STAGE1;
-
-			// 初期化
-			stage_->Initialize(model_, filename_[0]);	// ステージ読み込み(1)
-			ownPhase_ = POP;	// 配置フェーズ
-			turn_ = OWN;	// 自分のターン
-		}
-
-		debugText_->Printf("%d", player_->GetCost());
 
 		break;
 #pragma endregion
@@ -342,8 +314,6 @@ void GameScene::Draw() {
 
 		player_->Draw(viewProjection_);
 
-		mouse_->Draw(viewProjection_);
-
 		break;
 
 	case STAGE2:
@@ -400,29 +370,23 @@ void GameScene::Draw() {
 		break;
 
 	case STAGE1:
-		/*if (stage_->GetEnd()) {
-			stageClear_->Draw();
-		}*/
+
 		break;
 
 	case STAGE2:
-		/*if (stage_->GetEnd()) {
-			stageClear_->Draw();
-		}*/
+
 		break;
 
 	case STAGE3:
-		/*if (stage_->GetEnd()) {
-			stageClear_->Draw();
-		}*/
+
 		break;
 
 	case CLEAR:
-		gameClear_->Draw();
+		// gameClear_->Draw();
 		break;
 
 	case GAMEOVER:
-		gameOver_->Draw();
+		// gameOver_->Draw();
 		break;
 	}
 	// デバッグテキストの描画
