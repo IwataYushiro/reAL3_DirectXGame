@@ -88,7 +88,7 @@ void Stage::LoadStageData(const std::string stageNum) {
 	const std::string directoryPath = "Resources/" + name + "/";
 	file.open(directoryPath + filename);
 
-	file.open("Resources/stage/stage1.csv");
+
 	assert(file.is_open());
 
 	// ファイルの内容を文字列ストリームにコピー
