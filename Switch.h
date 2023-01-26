@@ -14,16 +14,18 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 private:
-	// インプット
-	Input* input_ = nullptr;
-
 	// モデル
 	Model* model_ = nullptr;
 	// テクスチャハンドル
 	int32_t textureHandle_ = 0u;
 
 	// ワールド変換データ
+	WorldTransform worldTransform_;
 
+	// フラグ
+	bool isFlag_ = false;
 
 public: // アクセッサ
+	Vector3 GetPosition() { return worldTransform_.translation_; }
+	bool GetFlag() { return isFlag_; }
 };
