@@ -1,19 +1,14 @@
 ﻿#pragma once
+#include "SafeDelete.h"
 #include "Audio.h"
 #include "DebugCamera.h"
-#include "DebugText.h"
 #include "DirectXCommon.h"
 #include "GlobalScene.h"
 #include "Input.h"
-#include "Model.h"
-#include "MyMathUtility.h"
 #include "Player.h"
-#include "SafeDelete.h"
 #include "Skydome/Skydome.h"
 #include "Stage.h"
 #include "Sprite.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
 #include <memory>
 
 /// <summary>
@@ -49,14 +44,7 @@ class GameScene {
 	Audio* audio_ = nullptr;
 	DebugText* debugText_ = nullptr;
 
-	//サウンドデータハンドル
-	uint32_t titleBgm_ = 0;
-	uint32_t doneSe_ = 0;
-	//バネ
-	uint32_t springSe_ = 0;
-	
 	//テクスチャハンドル
-	
 	uint32_t titleTexture_ = 0;
 	uint32_t howToPlayTexture_ = 0;
 	uint32_t stageClearTexture_ = 0;
@@ -69,6 +57,12 @@ class GameScene {
 	Sprite* stageClear_ = nullptr;
 	Sprite* gameOver_ = nullptr;
 	Sprite* gameClear_ = nullptr;
+
+	//サウンドデータハンドル
+	uint32_t titleBgm_ = 0;
+	uint32_t doneSe_ = 0;
+	//バネ
+	uint32_t springSe_ = 0;
 
 	// 3Dモデル
 	Model* model_ = nullptr;
@@ -96,19 +90,11 @@ class GameScene {
 	const std::string filename_[4] = { "0", "1", "2", "3"};
 
 	// シーン
-	size_t scene_ = DEBUG;
-	// フェーズ
-	size_t ownPhase_;
-	size_t enemyPhase_;
-	// ターン
-	size_t turn_;
+	size_t scene_ = TITLE;
 
 	// 選択ブロックの座標
 	Vector3 blockPos_;
 	
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
 };

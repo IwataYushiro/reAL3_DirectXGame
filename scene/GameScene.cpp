@@ -35,11 +35,6 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
 
-	// BGMロード
-	titleBgm_ = audio_->LoadWave("sound/title.wav");
-	doneSe_ = audio_->LoadWave("sound/se/done.wav");
-
-	audio_->PlayWave(titleBgm_, false, 0.1f);
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	//プレイヤー
@@ -60,6 +55,11 @@ void GameScene::Initialize() {
 	stageClear_ = Sprite::Create(stageClearTexture_, { 0.0f, 0.0f });
 	gameOver_ = Sprite::Create(gameOverTexture_, { 0.0f, 0.0f });
 	gameClear_ = Sprite::Create(gameClearTexture_, { 0.0f, 0.0f });
+	// BGMロード
+	titleBgm_ = audio_->LoadWave("sound/title.wav");
+	doneSe_ = audio_->LoadWave("sound/se/done.wav");
+
+	audio_->PlayWave(titleBgm_, false, 0.1f);
 
 	//自キャラの生成
 	player_ = new Player();
@@ -76,9 +76,8 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_);
 	player2_->Initialize(modelPlayer2_, pos);
 	// ステージの初期化
-	stage_->Initialize(model_, filename_[0]);
-	// マウスの初期化
-	//mouse_->Initialize();
+	stage_->Initialize(model_);
+	stage_->StageInitialize(filename_[0]);	 // ステージ読み込み(1)
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -123,10 +122,7 @@ void GameScene::Update() {
 			//audio_->PlayWave(doneSe_);
 
 			// 初期化
-			stage_->Initialize(model_, filename_[0]);	// ステージ読み込み(1)
-			ownPhase_ = POP;			// 行動フェーズ(配置)
-			enemyPhase_ = MOVE;	// 行動フェーズ(移動)
-			turn_ = OWN;	// 自分のターン
+			stage_->StageInitialize(filename_[0]);	 // ステージ読み込み(1)
 		}
 
 		break;
@@ -137,92 +133,15 @@ void GameScene::Update() {
 		skydome_->Update();
 		stage_->Update();
 
-		// 選択しているブロックの座標を読み込む
-		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
-		blockPos_.y = 0;
-
-		// ターン
-		switch (turn_)
-		{
-		case OWN:
-			// 自分のターンのアップデート
-
-			break;
-
-		case ENEMY:
-
-			break;
-		}
-
 		break;
 #pragma endregion
 	case STAGE1:
-		// 更新
-		skydome_->Update();
-		stage_->Update();
-
-		// 選択しているブロックの座標を読み込む
-		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
-		blockPos_.y = 0;
-
-		// ターン
-		switch (turn_)
-		{
-		case OWN:
-
-			break;
-
-		case ENEMY:
-
-			break;
-		}
-
 		break;
 
 	case STAGE2:
-		// 更新
-		skydome_->Update();
-		stage_->Update();
-
-		// 選択しているブロックの座標を読み込む
-		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
-		blockPos_.y = 0;
-
-		// ターン
-		switch (turn_)
-		{
-		case OWN:
-
-			break;
-
-		case ENEMY:
-
-			break;
-		}
-
 		break;
 
 	case STAGE3:
-		// 更新
-		skydome_->Update();
-		stage_->Update();
-
-		// 選択しているブロックの座標を読み込む
-		blockPos_ = stage_->GetBlockPosition(stage_->GetStageLine(), stage_->GetStageRow());
-		blockPos_.y = 0;
-
-		// ターン
-		switch (turn_)
-		{
-		case OWN:
-
-			break;
-
-		case ENEMY:
-
-			break;
-		}
-
 		break;
 
 	case CLEAR:
@@ -318,29 +237,14 @@ void GameScene::Draw() {
 		// 3Dモデル描画
 		skydome_->Draw(viewProjection_);
 		stage_->Draw(viewProjection_);
-
 		player_->Draw(viewProjection_);
 
 		break;
 
 	case STAGE2:
-		// 3Dモデル描画
-		skydome_->Draw(viewProjection_);
-
-		stage_->Draw(viewProjection_);
-
-		player_->Draw(viewProjection_);
-
 		break;
 
 	case STAGE3:
-		// 3Dモデル描画
-		skydome_->Draw(viewProjection_);
-
-		stage_->Draw(viewProjection_);
-
-		player_->Draw(viewProjection_);
-
 		break;
 
 	case CLEAR:
