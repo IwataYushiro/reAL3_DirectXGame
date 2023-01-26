@@ -5,6 +5,10 @@
 #include "Switch.h"
 
 class Stage {
+private: // 定数
+	static const int STAGE_WIDTH = 20;
+	static const int STAGE_HEIGHT = 20;
+
 public:
 	// 列挙
 	enum STAGE {
@@ -22,10 +26,6 @@ public:
 		int line_;
 		int row_;
 	};
-
-private: // 定数
-	static const int STAGE_WIDTH = 20;
-	static const int STAGE_HEIGHT = 20;
 
 public:
 	// 初期化
@@ -60,8 +60,6 @@ private:
 	void PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, int type, int line, int row, float depth);
 
 private:
-	// インプット
-	Input* input_ = nullptr;
 	// デバッグテキスト
 	DebugText* debugText_ = nullptr;
 	
@@ -76,9 +74,11 @@ private:
 	std::list<std::unique_ptr<StageData>> stageBlocks_;
 	std::list<std::unique_ptr<StageData>> floorBlocks_;
 
-	// 倍率
+	Switch* switch_ = nullptr;
+
+	// ブロックの倍率(Scale)
 	float magnification_ = 2.0f;
-	// 半径
+	// ブロックの半径半径
 	float radius_ = 2.0f;
 
 public: // アクセッサ

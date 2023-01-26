@@ -5,7 +5,6 @@
 void Stage::Initialize(Model* model) {
 	//シングルトンインスタンスを取得
 	debugText_ = DebugText::GetInstance();
-	input_ = Input::GetInstance();
 
 	// モデル読み込み
 	model_ = model;
@@ -41,6 +40,15 @@ void Stage::Draw(ViewProjection viewProjection) {
 		if (block->type_ == BLOCK) {
 			model_->Draw(block->worldTransform_, viewProjection);
 		}
+		/*else if (block->type_ == SWITCH) {
+
+		}
+		else if (block->type_ == WALL) {
+
+		}
+		else if (block->type_ == GOAL) {
+
+		}*/
 	}
 	// 床描画
 	for (std::unique_ptr<StageData>& block : floorBlocks_) {
@@ -167,7 +175,6 @@ void Stage::InitializeStageBlock(std::unique_ptr<StageData>& block, Vector3 pos,
 
 	block->line_ = line;
 	block->row_ = row;
-
 }
 
 void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, int type, int line, int row, float depth) {

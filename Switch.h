@@ -5,7 +5,7 @@
 class Switch {
 public:
 	// ‰Šú‰»
-	void Initialize(Model* model);
+	void Initialize(Model* model, Vector3 pos);
 
 	// XV
 	void Update();
