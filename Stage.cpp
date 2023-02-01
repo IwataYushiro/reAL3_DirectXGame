@@ -197,9 +197,12 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, i
 Vector3 Stage::GetBlockPosition(int line, int row) {
 	// 範囲for
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
-		// 指定した番号に合った座標を返す
-		if (block->line_ == line && block->row_ == row) {
-			return block->worldTransform_.translation_;
+		// NONEは返さない
+		if (block->type_ != NONE) {
+			// 指定した番号に合った座標を返す
+			if (block->line_ == line && block->row_ == row) {
+				return block->worldTransform_.translation_;
+			}
 		}
 	}
 	// なかったら0を返す

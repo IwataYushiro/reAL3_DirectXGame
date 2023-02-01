@@ -72,17 +72,18 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	//自キャラの初期化
-	Vector3 pos = {20.0f, 0.0f, 10.0f};
-	player_->Initialize(modelPlayer_);
-	player2_->Initialize(modelPlayer2_, pos);
+	Vector3 pos1 = { -38.0f, -10.0f, 38.0f };
+	Vector3 pos2 = { 2.0f, -10.0f, 38.0f };
+	player_->Initialize(modelPlayer_, pos1);
+	player2_->Initialize(modelPlayer2_, pos2);
 	// ステージの初期化
 	stage_->Initialize(model_);
 	stage_->StageInitialize(filename_[0]);	 // ステージ読み込み(1)
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 0.0f, 100.0f, -5.0f };
-	viewProjection_.target = { 0.0f, -100.0f, 0.0f };
+	viewProjection_.eye = { 0.0f, 40.0f, -100.0f };
+	viewProjection_.target = { 0.0f, 0.0f, -20.0f };
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -109,7 +110,7 @@ void GameScene::Update() {
 			// オーディオ再生
 			//audio_->PlayWave(doneSe_);
 		}
-		
+
 		break;
 #pragma endregion
 #pragma region 説明
@@ -222,6 +223,9 @@ void GameScene::Draw() {
 		stage_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
 		player2_->Draw(viewProjection_);
+
+		player_->OnCollision(CollisionFlag(player_, stage_));
+		player2_->OnCollision(CollisionFlag(player2_, stage_));
 		break;
 
 	case TITLE:
@@ -307,4 +311,41 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+bool GameScene::CollisionFlag(Player* p, Stage* s) {
+	// 各座標変数の宣言
+	Vector3 pPos = p->GetPosition();
+	float pRadius = p->GetRadius();
+	int pX1, pX2, pY1, pY2, pZ1, pZ2;
+
+	// プレイヤーの矩形座標
+	pX1 = pPos.x - pRadius;
+	pX2 = pPos.x + pRadius;
+	pY1 = pPos.y - pRadius;
+	pY2 = pPos.y + pRadius;
+	pZ1 = pPos.z - pRadius;
+	pZ2 = pPos.z + pRadius;
+
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 20; j++) {
+			// 各座標変数の宣言
+			Vector3 bPos = s->GetBlockPosition(j, i);
+			float bRadius = s->GetRadius();
+			int bX1, bX2, bY1, bY2, bZ1, bZ2;
+			// ブロックの矩形座標
+			bX1 = bPos.x - bRadius;
+			bX2 = bPos.x + bRadius;
+			bY1 = bPos.y - bRadius;
+			bY2 = bPos.y + bRadius;
+			bZ1 = bPos.z - bRadius;
+			bZ2 = bPos.z + bRadius;
+
+			// 当たり判定
+			if (pX1 < bX2 && pX2 > bX1 && pZ1 < bZ2 && pZ2 > bZ1) {
+				return true;
+			}
+		}
+	}
+	return false;
 }

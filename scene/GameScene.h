@@ -36,6 +36,8 @@ class GameScene {
 	/// </summary>
 	void Draw();
 
+	bool CollisionFlag(Player* p, Stage* s);
+
 	size_t GetScene() { return scene_; }
 
   private: // メンバ変数
@@ -91,9 +93,6 @@ class GameScene {
 
 	// シーン
 	size_t scene_ = TITLE;
-
-	// 選択ブロックの座標
-	Vector3 blockPos_;
 	
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
