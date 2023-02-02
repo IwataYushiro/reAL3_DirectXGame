@@ -14,9 +14,9 @@ void Player::Initialize(Model* model, Vector3 pos) {
 
 	//音
 	jumpSound_ = audio_->LoadWave("sound/se/jump.wav");
-	wt.worldTransform_.Initialize();
-	wt.worldTransform_.translation_ = pos;
-  
+	worldTransform_.Initialize();
+	worldTransform_.translation_ = pos;
+
 }
 
 void Player::Update() {
@@ -38,16 +38,24 @@ void Player::Update() {
 		move.z = -moveSpeed;
 	}
 
-	wt.worldTransform_.translation_ += move;
-	wt.worldTransform_.Update(wt.worldTransform_);
+	worldTransform_.translation_ += move;
+	worldTransform_.Update(worldTransform_);
 }
 
-void Player::Draw(ViewProjection& viewProjection) { 
-	model_->Draw(wt.worldTransform_, viewProjection);
+void Player::Draw(ViewProjection& viewProjection) {
+	model_->Draw(worldTransform_, viewProjection);
 }
 
 void Player::Reset() {
 
+}
+
+void Player::OnCollision(bool collisionFlag) {
+	if (collisionFlag) {
+		worldTransform_.translation_ = prePos;
+	}
+
+	prePos = worldTransform_.translation_;
 }
 
 void Player::Move() {

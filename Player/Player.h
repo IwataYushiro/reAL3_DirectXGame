@@ -11,11 +11,6 @@
 
 class Player {
 public:
-	// 構造体
-	struct PieceData {
-		WorldTransform worldTransform_;
-		int type_;
-	};
 
 public:
 	//初期化
@@ -29,6 +24,9 @@ public:
 
 	//リセット処理
 	void Reset();
+
+	// 当たり判定
+	void OnCollision(bool collisionFlag);
 
 private:
 	//プレイヤーの移動処理
@@ -51,9 +49,10 @@ private:
 	uint32_t jumpSound_ = 0;
 
 	// ワールド変換データ
-	PieceData wt;
-	// コスト
-	int cost_ = 5;
+	WorldTransform worldTransform_;
+	// 半径
+	float radius = 1.5f;
+	Vector3 prePos;
 
 	//死亡フラグ
 	bool isDead_ = false;
@@ -62,5 +61,6 @@ private:
 
 public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
-	int GetCost() { return cost_; }
+	Vector3 GetPosition() const { return worldTransform_.translation_; }
+	float GetRadius() const { return radius; }
 };
