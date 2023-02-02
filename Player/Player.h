@@ -50,6 +50,7 @@ private:
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;
+
 	// 半径
 	float radius = 1.5f;
 	Vector3 prePos;
@@ -63,4 +64,5 @@ public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
 	Vector3 GetPosition() const { return worldTransform_.translation_; }
 	float GetRadius() const { return radius; }
+
 };

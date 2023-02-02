@@ -72,8 +72,8 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	//自キャラの初期化
-	Vector3 pos1 = { -38.0f, -10.0f, 38.0f };
-	Vector3 pos2 = { 2.0f, -10.0f, 38.0f };
+	Vector3 pos1 = { 2.0f, -10.0f, 46.0f };
+	Vector3 pos2 = { 42.0f, -10.0f, 78.0f };
 	player_->Initialize(modelPlayer_, pos1);
 	player2_->Initialize(modelPlayer2_, pos2);
 	// ステージの初期化
@@ -82,8 +82,8 @@ void GameScene::Initialize() {
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 0.0f, 40.0f, -100.0f };
-	viewProjection_.target = { 0.0f, 0.0f, -20.0f };
+	viewProjection_.eye = { 40.0f, 40.0f, -50.0f };
+	viewProjection_.target = { 40.0f, 20.0f, -20.0f };
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -224,8 +224,8 @@ void GameScene::Draw() {
 		player_->Draw(viewProjection_);
 		player2_->Draw(viewProjection_);
 
-		player_->OnCollision(CollisionFlag(player_, stage_));
-		player2_->OnCollision(CollisionFlag(player2_, stage_));
+		player_->OnCollision(CollisionStageFlag(player_, stage_));
+		player2_->OnCollision(CollisionStageFlag(player2_, stage_));
 		break;
 
 	case TITLE:
@@ -313,11 +313,11 @@ void GameScene::Draw() {
 #pragma endregion
 }
 
-bool GameScene::CollisionFlag(Player* p, Stage* s) {
+bool GameScene::CollisionStageFlag(Player* p, Stage* s) {
 	// 各座標変数の宣言
 	Vector3 pPos = p->GetPosition();
 	float pRadius = p->GetRadius();
-	int pX1, pX2, pY1, pY2, pZ1, pZ2;
+	float pX1, pX2, pY1, pY2, pZ1, pZ2;
 
 	// プレイヤーの矩形座標
 	pX1 = pPos.x - pRadius;
@@ -327,10 +327,13 @@ bool GameScene::CollisionFlag(Player* p, Stage* s) {
 	pZ1 = pPos.z - pRadius;
 	pZ2 = pPos.z + pRadius;
 
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 20; j++) {
+	// プレイヤーLeftTop座標
+	int pLT[2] = { pX1 / 4, ((pZ1 / 4) - 19) * -1 };
+
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
 			// 各座標変数の宣言
-			Vector3 bPos = s->GetBlockPosition(j, i);
+			Vector3 bPos = s->GetBlockPosition(pLT[0] + i, pLT[1] + j);
 			float bRadius = s->GetRadius();
 			int bX1, bX2, bY1, bY2, bZ1, bZ2;
 			// ブロックの矩形座標
@@ -347,5 +350,10 @@ bool GameScene::CollisionFlag(Player* p, Stage* s) {
 			}
 		}
 	}
+	return false;
+}
+
+bool GameScene::CollisionPlayerFlag(Player* p1, Player* p2) {
+
 	return false;
 }

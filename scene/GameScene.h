@@ -36,7 +36,8 @@ class GameScene {
 	/// </summary>
 	void Draw();
 
-	bool CollisionFlag(Player* p, Stage* s);
+	bool CollisionStageFlag(Player* p, Stage* s);
+	bool CollisionPlayerFlag(Player* p1, Player* p2);
 
 	size_t GetScene() { return scene_; }
 
