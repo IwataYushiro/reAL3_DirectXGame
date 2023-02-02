@@ -98,6 +98,9 @@ void GameScene::Update() {
 	case DEBUG:
 		player_->Update();
 		player2_->Update();
+		player_->OnCollision(CollisionStageFlag(player_, stage_));
+		player2_->OnCollision(CollisionStageFlag(player2_, stage_));
+
 		break;
 
 #pragma endregion
@@ -224,8 +227,6 @@ void GameScene::Draw() {
 		player_->Draw(viewProjection_);
 		player2_->Draw(viewProjection_);
 
-		player_->OnCollision(CollisionStageFlag(player_, stage_));
-		player2_->OnCollision(CollisionStageFlag(player2_, stage_));
 		break;
 
 	case TITLE:

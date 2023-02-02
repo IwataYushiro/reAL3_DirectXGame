@@ -53,8 +53,9 @@ void Player::Reset() {
 void Player::OnCollision(bool collisionFlag) {
 	if (collisionFlag) {
 		worldTransform_.translation_ = prePos;
+		worldTransform_.Update(worldTransform_);
 	}
-
+	// 前フレーム座標
 	prePos = worldTransform_.translation_;
 }
 
