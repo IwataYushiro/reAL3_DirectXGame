@@ -76,7 +76,7 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	
-	Parameter({2.0f, -10.0f, 46.0f}, {42.0f, -10.0f, 78.0f}, 0);
+	Parameter({2.0f, -10.0f, 46.0f}, {42.0f, -10.0f, 78.0f}, 1);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
