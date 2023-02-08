@@ -90,6 +90,13 @@ void GameScene::Update() {
 	switch (scene_) {
 #pragma region デバック
 	case DEBUG:
+
+		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
+			scene_ = TITLE;
+		}
+		
+		stage_->Update();
+
 		player_->Update();
 		player2_->Update();
 		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));

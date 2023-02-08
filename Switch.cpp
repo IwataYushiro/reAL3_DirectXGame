@@ -2,7 +2,7 @@
 
 void Switch::Initialize(Vector3 pos) {
 	// ƒ‚ƒfƒ‹“Ç‚İ‚İ
-	model_ = Model::Create();;
+	model_ = Model::Create();
 
 	// ‰Šú‰»
 	worldTransform_.Initialize();
