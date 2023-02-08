@@ -1,6 +1,8 @@
 #include "Player.h"
 #include <cassert>
 
+bool Player::isDead_ = false;
+
 void Player::Initialize(Model* model, Vector3 pos) {
 	// NULLポインタチェック
 	assert(model);

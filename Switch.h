@@ -5,7 +5,7 @@
 class Switch {
 public:
 	// 初期化
-	void Initialize(Model* model, Vector3 pos);
+	void Initialize(Vector3 pos);
 
 	// 更新
 	void Update();
@@ -14,7 +14,7 @@ public:
 	void Draw(ViewProjection viewProjection);
 
 	// スイッチオン
-	bool OnFlag();
+	void OnCollisionSwitch();
 
 private:
 	// モデル
@@ -29,6 +29,5 @@ private:
 	bool isFlag_ = false;
 
 public: // アクセッサ
-	Vector3 GetPosition() { return worldTransform_.translation_; }
 	bool GetFlag() { return isFlag_; }
 };
