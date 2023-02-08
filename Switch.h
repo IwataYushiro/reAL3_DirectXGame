@@ -4,6 +4,9 @@
 
 class Switch {
 public:
+	// デストラクタ
+	~Switch();
+
 	// 初期化
 	void Initialize(Vector3 pos);
 

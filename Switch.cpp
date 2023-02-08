@@ -1,5 +1,9 @@
 #include "Switch.h"
 
+Switch::~Switch() {
+	delete model_;
+}
+
 void Switch::Initialize(Vector3 pos) {
 	// ÉÇÉfÉãì«Ç›çûÇ›
 	model_ = Model::Create();
@@ -19,7 +23,7 @@ void Switch::Initialize(Vector3 pos) {
 }
 
 void Switch::Update() {
-
+	isFlag_ = false;
 }
 
 void Switch::Draw(ViewProjection viewProjection) {

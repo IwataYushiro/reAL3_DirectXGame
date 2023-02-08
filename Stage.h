@@ -17,6 +17,8 @@ public:
 		SWITCHB,	// スイッチB
 		WALLB,		// 消える壁B
 		GOAL,		// ゴール
+
+		NONE2
 	};
 
 	// 構造体
