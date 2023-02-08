@@ -3,6 +3,7 @@
 #include <fstream>
 
 Stage::~Stage() {
+	delete modelGoal_;
 	delete modelSwitchR_;
 	delete modelSwitchB_;
 	delete modelWallR_;
@@ -18,6 +19,7 @@ void Stage::Initialize(Model* model) {
 	modelSwitchB_ = Model::CreateFromOBJ("bswitch", true);
 	modelWallR_ = Model::CreateFromOBJ("cubeR", true);
 	modelWallB_ = Model::CreateFromOBJ("cubeB", true);
+	modelGoal_ = Model::CreateFromOBJ("goal", true);
 
 	// スイッチ
 	switchR_ = new Switch();
@@ -103,7 +105,8 @@ void Stage::Draw(ViewProjection viewProjection) {
 		}
 		else if (block->type_ == GOAL) {
 			// ゴール描画
-
+			block->worldTransform_.translation_.y = -15.5f;
+			modelGoal_->Draw(block->worldTransform_, viewProjection);
 		}
 	}
 

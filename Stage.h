@@ -78,6 +78,7 @@ private:
 	Model* modelSwitchB_ = nullptr;
 	Model* modelWallR_ = nullptr;
 	Model* modelWallB_ = nullptr;
+	Model* modelGoal_ = nullptr;
 	// テクスチャハンドル
 	int32_t textureHandle_ = 0u;
 
