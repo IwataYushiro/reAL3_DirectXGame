@@ -36,19 +36,38 @@ void Stage::Update() {
 	if (switchR_->GetFlag()) {
 		for (std::unique_ptr<StageData>& block : stageBlocks_) {
 			if (block->type_ == WALLR) {
-				block->type_ = NONE;
+				block->type_ = NONE2;
 			}
 		}
 	}
+	else if (!switchR_->GetFlag()) {
+		for (std::unique_ptr<StageData>& block : stageBlocks_) {
+			if (block->type_ == NONE2) {
+				block->type_ = WALLR;
+			}
+		}
+	}
+
 	if (switchB_ != nullptr) {
 		if (switchB_->GetFlag()) {
 			for (std::unique_ptr<StageData>& block : stageBlocks_) {
 				if (block->type_ == WALLB) {
-					block->type_ = NONE;
+					block->type_ = NONE2;
+				}
+			}
+		}
+		else if (!switchB_->GetFlag()) {
+			for (std::unique_ptr<StageData>& block : stageBlocks_) {
+				if (block->type_ == NONE2) {
+					block->type_ = WALLB;
 				}
 			}
 		}
 	}
+
+	switchR_->Update();
+	if (switchB_ != nullptr) switchB_->Update();
+
 	isGoal_ = false;
 }
 

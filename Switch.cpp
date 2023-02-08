@@ -19,7 +19,7 @@ void Switch::Initialize(Vector3 pos) {
 }
 
 void Switch::Update() {
-
+	isFlag_ = false;
 }
 
 void Switch::Draw(ViewProjection viewProjection) {
