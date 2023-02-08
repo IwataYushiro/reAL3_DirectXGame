@@ -32,7 +32,11 @@ void Stage::StageInitialize(const std::string stageNum) {
 
 void Stage::Update() {
 	if (switch_->GetFlag()) {
-
+		for (std::unique_ptr<StageData>& block : stageBlocks_) {
+			if (block->type_ == WALL) {
+				block->type_ = NONE;
+			}
+		}
 	}
 }
 
