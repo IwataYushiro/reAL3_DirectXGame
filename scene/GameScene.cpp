@@ -89,17 +89,18 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	// ステージ
 	stage_ = new Stage();
-
+	
 	// 天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 
 	// ステージの初期化
 	stage_->Initialize(model_);
-
+// 初期化
+	Parameter({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f}, 1);
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = {40.0f, 40.0f, -50.0f};
-	viewProjection_.target = {40.0f, 20.0f, -20.0f};
+	viewProjection_.eye = {40.0f, 70.0f, -30.0f};
+	viewProjection_.target = {40.0f, 20.0f, 10.0f};
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -188,7 +189,7 @@ void GameScene::Update() {
 			}
 		} else {
 			if (input_->TriggerKey(DIK_R)) {
-				Reset({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f});
+				Reset({18.0f, -10.0f, 14.0f}, {58.0f, -10.0f, 30.0f});
 			}
 		}
 		stage_->Update();
@@ -265,7 +266,7 @@ void GameScene::Update() {
 		if (isClear) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				Parameter({10.0f, -10.0f, 78.0f}, {74.0f, -10.0f, 38.0f}, 6);
-				scene_ = STAGE4;
+				scene_ = STAGE6;
 				break;
 			}
 		} else {
@@ -292,6 +293,7 @@ void GameScene::Update() {
 		if (isClear) {
 			if (input_->TriggerKey(DIK_SPACE)) {
 				scene_ = CLEAR;
+				isClear = false;
 				break;
 			}
 		} else {
@@ -315,14 +317,7 @@ void GameScene::Update() {
 	case CLEAR:
 		// スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
-			scene_ = TITLE;
-			break;
-		}
-		break;
-
-	case GAMEOVER:
-		// スペースキーでタイトル
-		if (input_->TriggerKey(DIK_SPACE)) {
+			
 			scene_ = TITLE;
 			break;
 		}
@@ -372,8 +367,6 @@ void GameScene::Draw() {
 	case CLEAR:
 		break;
 
-	case GAMEOVER:
-		break;
 	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -431,9 +424,6 @@ void GameScene::Draw() {
 		break;
 	case CLEAR:
 		break;
-
-	case GAMEOVER:
-		break;
 	}
 
 	// 3Dオブジェクト描画後処理
@@ -480,9 +470,6 @@ void GameScene::Draw() {
 		gameClear_->Draw();
 		break;
 
-	case GAMEOVER:
-		gameOver_->Draw();
-		break;
 	}
 
 	if (isClear) {
