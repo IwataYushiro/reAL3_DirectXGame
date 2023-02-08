@@ -72,7 +72,7 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	
-	ParameterStage1({2.0f, -10.0f, 46.0f}, {42.0f, -10.0f, 78.0f});
+	Parameter({2.0f, -10.0f, 46.0f}, {42.0f, -10.0f, 78.0f}, 0);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -372,7 +372,8 @@ bool GameScene::CollisionPlayerFlag(Player* p1, Player* p2) {
 	return false;
 }
 
-void GameScene::ParameterStage1(const Vector3& playerPos1, const Vector3& playerPos2) {
+void GameScene::Parameter(const Vector3& playerPos1, const Vector3& playerPos2, const int& stageNum)
+{
 	// 自キャラの初期化
 	Vector3 pos1 = playerPos1;
 	Vector3 pos2 = playerPos2;
@@ -380,5 +381,5 @@ void GameScene::ParameterStage1(const Vector3& playerPos1, const Vector3& player
 	player2_->Initialize(modelPlayer2_, pos2);
 	// ステージの初期化
 	stage_->Initialize(model_);
-	stage_->StageInitialize(filename_[0]); // ステージ読み込み(1)
+	stage_->StageInitialize(filename_[stageNum]); // ステージ読み込み(1)
 }
