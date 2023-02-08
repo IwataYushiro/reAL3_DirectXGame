@@ -1,5 +1,9 @@
 #include "Switch.h"
 
+Switch::~Switch() {
+	delete model_;
+}
+
 void Switch::Initialize(Vector3 pos) {
 	// ƒ‚ƒfƒ‹“Ç‚İ‚İ
 	model_ = Model::Create();
