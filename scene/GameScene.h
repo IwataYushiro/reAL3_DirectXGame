@@ -58,6 +58,10 @@ class GameScene {
 	//背景用
 	uint32_t backGroundTexture1 = 0;
 	uint32_t backGroundTexture2 = 0;
+	uint32_t backGroundTexture3 = 0;
+	uint32_t backGroundTexture4 = 0;
+	uint32_t backGroundTexture5 = 0;
+	uint32_t backGroundTexture6 = 0;
 	// スプライト
 	Sprite* title_ = nullptr;
 	Sprite* howtoplay_ = nullptr;
@@ -68,6 +72,10 @@ class GameScene {
 	//背景
 	Sprite* backGround1_ = nullptr;
 	Sprite* backGround2_ = nullptr;
+	Sprite* backGround3_ = nullptr;
+	Sprite* backGround4_ = nullptr;
+	Sprite* backGround5_ = nullptr;
+	Sprite* backGround6_ = nullptr;
 
 	//サウンドデータハンドル
 	uint32_t titleBgm_ = 0;

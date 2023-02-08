@@ -30,6 +30,10 @@ GameScene::~GameScene() {
 	//背景スプライト
 	delete backGround1_;
 	delete backGround2_;
+	delete backGround3_;
+	delete backGround4_;
+	delete backGround5_;
+	delete backGround6_;
 }
 void GameScene::Initialize() {
 	// インスタンス取得
@@ -54,6 +58,10 @@ void GameScene::Initialize() {
 	gameClearTexture_ = TextureManager::Load("texture/gameclear.png");
 	backGroundTexture1 = TextureManager::Load("texture/background1.png");
 	backGroundTexture2 = TextureManager::Load("texture/background2.png");
+	backGroundTexture3 = TextureManager::Load("texture/background3.png");
+	backGroundTexture4 = TextureManager::Load("texture/background4.png");
+	backGroundTexture5 = TextureManager::Load("texture/background5.png");
+	backGroundTexture6 = TextureManager::Load("texture/background6.png");
 	// スプライト
 	title_ = Sprite::Create(titleTexture_, { 0.0f, 0.0f });
 	howtoplay_ = Sprite::Create(howToPlayTexture_, { 0.0f, 0.0f });
@@ -62,6 +70,10 @@ void GameScene::Initialize() {
 	gameClear_ = Sprite::Create(gameClearTexture_, { 0.0f, 0.0f });
 	backGround1_ = Sprite::Create(backGroundTexture1, {0.0f, 0.0f});
 	backGround2_ = Sprite::Create(backGroundTexture2, {0.0f, 0.0f});
+	backGround3_ = Sprite::Create(backGroundTexture3, {0.0f, 0.0f});
+	backGround4_ = Sprite::Create(backGroundTexture4, {0.0f, 0.0f});
+	backGround5_ = Sprite::Create(backGroundTexture5, {0.0f, 0.0f});
+	backGround6_ = Sprite::Create(backGroundTexture6, {0.0f, 0.0f});
 	// BGMロード
 	titleBgm_ = audio_->LoadWave("sound/title.wav");
 	doneSe_ = audio_->LoadWave("sound/se/done.wav");
@@ -175,6 +187,16 @@ void GameScene::Update() {
 		break;
 
 	case STAGE3:
+
+		break;
+	case STAGE4:
+		
+		break;
+	case STAGE5:
+		
+		break;
+	case STAGE6:
+		
 		break;
 
 	case CLEAR:
@@ -229,7 +251,15 @@ void GameScene::Draw() {
 
 	case STAGE3:
 		break;
+	case STAGE4:
 
+		break;
+	case STAGE5:
+
+		break;
+	case STAGE6:
+
+		break;
 	case CLEAR:
 		break;
 
@@ -275,7 +305,15 @@ void GameScene::Draw() {
 
 	case STAGE3:
 		break;
+	case STAGE4:
 
+		break;
+	case STAGE5:
+
+		break;
+	case STAGE6:
+
+		break;
 	case CLEAR:
 		break;
 
@@ -317,7 +355,15 @@ void GameScene::Draw() {
 	case STAGE3:
 
 		break;
+	case STAGE4:
 
+		break;
+	case STAGE5:
+
+		break;
+	case STAGE6:
+
+		break;
 	case CLEAR:
 		 gameClear_->Draw();
 		break;

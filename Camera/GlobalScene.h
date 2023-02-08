@@ -7,6 +7,9 @@ enum Scene { //ÉVÅ[ÉìID
 	STAGE1,
 	STAGE2,
 	STAGE3,
+	STAGE4,
+	STAGE5,
+	STAGE6,
 	CLEAR,
 	GAMEOVER,
 };
