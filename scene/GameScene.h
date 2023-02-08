@@ -43,6 +43,8 @@ class GameScene {
 
 	void Parameter(const Vector3& playerPos1, const Vector3& playerPos2, const int& stageNum);
 
+	void Reset(const Vector3& playerPos1, const Vector3& playerPos2);
+
   private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;

@@ -154,9 +154,19 @@ void GameScene::Update() {
 				scene_ = STAGE2;
 				break;
 			}
+		} 
+		else 
+		{
+			if (input_->TriggerKey(DIK_R)) 
+			{
+				Reset({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f});
+			}
 		}
 
 		stage_->Update();
+
+		CollisionStageFlag(player_, stage_);
+		CollisionStageFlag(player2_, stage_);
 
 		player_->Update();
 		player2_->Update();
@@ -176,8 +186,15 @@ void GameScene::Update() {
 				scene_ = STAGE3;
 				break;
 			}
+		} else {
+			if (input_->TriggerKey(DIK_R)) {
+				Reset({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f});
+			}
 		}
 		stage_->Update();
+
+		CollisionStageFlag(player_, stage_);
+		CollisionStageFlag(player2_, stage_);
 
 		player_->Update();
 		player2_->Update();
@@ -197,8 +214,15 @@ void GameScene::Update() {
 				scene_ = STAGE4;
 				break;
 			}
+		} else {
+			if (input_->TriggerKey(DIK_R)) {
+				Reset({2.0f, -10.0f, 54.0f}, {54.0f, -10.0f, 78.0f});
+			}
 		}
 		stage_->Update();
+
+		CollisionStageFlag(player_, stage_);
+		CollisionStageFlag(player2_, stage_);
 
 		player_->Update();
 		player2_->Update();
@@ -217,8 +241,15 @@ void GameScene::Update() {
 				scene_ = STAGE5;
 				break;
 			}
+		} else {
+			if (input_->TriggerKey(DIK_R)) {
+				Reset({14.0f, -10.0f, 78.0f}, {54.0f, -10.0f, 58.0f});
+			}
 		}
 		stage_->Update();
+
+		CollisionStageFlag(player_, stage_);
+		CollisionStageFlag(player2_, stage_);
 
 		player_->Update();
 		player2_->Update();
@@ -237,8 +268,15 @@ void GameScene::Update() {
 				scene_ = STAGE4;
 				break;
 			}
+		} else {
+			if (input_->TriggerKey(DIK_R)) {
+				Reset({34.0f, -10.0f, 6.0f}, {62.0f, -10.0f, 50.0f});
+			}
 		}
 		stage_->Update();
+
+		CollisionStageFlag(player_, stage_);
+		CollisionStageFlag(player2_, stage_);
 
 		player_->Update();
 		player2_->Update();
@@ -256,8 +294,15 @@ void GameScene::Update() {
 				scene_ = CLEAR;
 				break;
 			}
+		} else {
+			if (input_->TriggerKey(DIK_R)) {
+				Reset({10.0f, -10.0f, 78.0f}, {74.0f, -10.0f, 38.0f});
+			}
 		}
 		stage_->Update();
+
+		CollisionStageFlag(player_, stage_);
+		CollisionStageFlag(player2_, stage_);
 
 		player_->Update();
 		player2_->Update();
@@ -534,4 +579,13 @@ void GameScene::Parameter(
 	stage_->StageInitialize(filename_[stageNum]); // ステージ読み込み(1)
 
 	isClear = false;
+}
+
+void GameScene::Reset(const Vector3& playerPos1, const Vector3& playerPos2) {
+	// 自キャラの再初期化
+	Vector3 pos1 = playerPos1;
+	Vector3 pos2 = playerPos2;
+
+	player_->Initialize(modelPlayer_, pos1);
+	player2_->Initialize(modelPlayer2_, pos2);
 }

@@ -34,7 +34,7 @@ void Player::Update() {
 	}
 
 	Vector3 move = MyMathUtility::MySetVector3Zero();
-	float moveSpeed = 1.0f;
+	float moveSpeed = 0.4f;
 
 	// キーボード入力による移動処理
 	Matrix4 matTrans = MyMathUtility::MySetMatrix4Identity();
