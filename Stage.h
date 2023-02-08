@@ -1,7 +1,5 @@
 #pragma once
 #include <sstream>
-
-#include "DebugText.h"
 #include "Switch.h"
 
 class Stage {
@@ -14,8 +12,10 @@ public:
 	enum STAGE {
 		NONE,		// 穴
 		BLOCK,		// 地面, 壁
-		SWITCH,	// スイッチ
-		WALL,		// 消える壁
+		SWITCHR,	// スイッチR
+		WALLR,		// 消える壁R
+		SWITCHB,	// スイッチB
+		WALLB,		// 消える壁B
 		GOAL,		// ゴール
 	};
 
@@ -28,6 +28,9 @@ public:
 	};
 
 public:
+	// デストラクタ
+	~Stage();
+
 	// 初期化
 	void Initialize(Model* model);
 
@@ -63,9 +66,6 @@ private:
 	void PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, int type, int line, int row, float depth);
 
 private:
-	// デバッグテキスト
-	DebugText* debugText_ = nullptr;
-	
 	// モデル
 	Model* model_ = nullptr;
 	// テクスチャハンドル
@@ -77,7 +77,8 @@ private:
 	std::list<std::unique_ptr<StageData>> stageBlocks_;
 	std::list<std::unique_ptr<StageData>> floorBlocks_;
 
-	Switch* switch_ = nullptr;
+	Switch* switchR_ = nullptr;
+	Switch* switchB_ = nullptr;
 
 	// ブロックの倍率(Scale)
 	float magnification_ = 2.0f;

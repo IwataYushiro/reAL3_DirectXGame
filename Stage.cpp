@@ -2,10 +2,12 @@
 #include <cassert>
 #include <fstream>
 
-void Stage::Initialize(Model* model) {
-	//シングルトンインスタンスを取得
-	debugText_ = DebugText::GetInstance();
+Stage::~Stage() {
+	delete switchR_;
+	delete switchB_;
+}
 
+void Stage::Initialize(Model* model) {
 	// モデル読み込み
 	model_ = model;
 
@@ -31,37 +33,52 @@ void Stage::StageInitialize(const std::string stageNum) {
 }
 
 void Stage::Update() {
-	if (switch_->GetFlag()) {
+	if (switchR_->GetFlag()) {
 		for (std::unique_ptr<StageData>& block : stageBlocks_) {
-			if (block->type_ == WALL) {
+			if (block->type_ == WALLR) {
 				block->type_ = NONE;
 			}
 		}
 	}
+	if (switchB_->GetFlag()) {
+		for (std::unique_ptr<StageData>& block : stageBlocks_) {
+			if (block->type_ == WALLB) {
+				block->type_ = NONE;
+			}
+		}
+	}
+	isGoal_ = false;
 }
 
 void Stage::Draw(ViewProjection viewProjection) {
 	// ステージ描画
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		if (block->type_ == BLOCK) {
+			// 壁描画
 			model_->Draw(block->worldTransform_, viewProjection);
 		}
-		else if (block->type_ == SWITCH) {
-
+		else if (block->type_ == WALLR) {
+			// 赤壁描画
+			model_->Draw(block->worldTransform_, viewProjection);
 		}
-		else if (block->type_ == WALL) {
+		else if (block->type_ == WALLB) {
+			// 青壁描画
 			model_->Draw(block->worldTransform_, viewProjection);
 		}
 		else if (block->type_ == GOAL) {
+			// ゴール描画
 
 		}
 	}
+
 	// 床描画
 	for (std::unique_ptr<StageData>& block : floorBlocks_) {
 		model_->Draw(block->worldTransform_, viewProjection);
 	}
+
 	// スイッチ描画
-	switch_->Draw(viewProjection);
+	switchR_->Draw(viewProjection);
+	switchB_->Draw(viewProjection);
 }
 
 void Stage::LoadStageData(const std::string stageNum) {
@@ -119,25 +136,25 @@ void Stage::LoadStageCommands() {
 			}
 			else if (word.find("SWITCH") == 0 || word.find("2") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, SWITCH, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, SWITCHR, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("3") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, WALL, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, WALLR, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("SWITCH") == 0 || word.find("4") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, SWITCH, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, SWITCHB, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
 			else if (word.find("WALL") == 0 || word.find("5") == 0) {
 				// ステージのブロックを追加
-				PushStageBlockList(stageBlocks_, WALL, mapLine, mapRow, -10.0f);
+				PushStageBlockList(stageBlocks_, WALLB, mapLine, mapRow, -10.0f);
 				// インクリメント
 				mapLine++;
 			}
@@ -201,12 +218,20 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, i
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
 
-	if (type == SWITCH) {
-		if (switch_ == nullptr) {
-			switch_ = new Switch();
+	if (type == SWITCHR) {
+		if (switchR_ == nullptr) {
+			switchR_ = new Switch();
 			pos.x += 2.0f;
 			pos.z -= 2.0f;
-			switch_->Initialize(pos);
+			switchR_->Initialize(pos);
+		}
+	}
+	if (type == SWITCHB) {
+		if (switchB_ == nullptr) {
+			switchB_ = new Switch();
+			pos.x += 2.0f;
+			pos.z -= 2.0f;
+			switchB_->Initialize(pos);
 		}
 	}
 }
@@ -215,10 +240,16 @@ void Stage::CheckBlock(int line, int row) {
 	// 範囲for
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		// NONEは返さない
-		if (block->type_ == SWITCH) {
+		if (block->type_ == SWITCHR) {
 			// 指定した番号に合った座標を返す
 			if (block->line_ == line && block->row_ == row) {
-				switch_->OnCollisionSwitch();
+				switchR_->OnCollisionSwitch();
+			}
+		}
+		else if (block->type_ == SWITCHB) {
+			// 指定した番号に合った座標を返す
+			if (block->line_ == line && block->row_ == row) {
+				switchB_->OnCollisionSwitch();
 			}
 		}
 		else if (block->type_ == GOAL) {
@@ -234,7 +265,7 @@ Vector3 Stage::GetBlockPosition(int line, int row) {
 	// 範囲for
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
 		// ブロックと壁の時は返す
-		if (block->type_ == BLOCK || block->type_ == WALL) {
+		if (block->type_ == BLOCK || block->type_ == WALLR || block->type_ == WALLB) {
 			// 指定した番号に合った座標を返す
 			if (block->line_ == line && block->row_ == row) {
 				return block->worldTransform_.translation_;
