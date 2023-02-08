@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <cassert>
 
 void Player::Initialize(Model* model, Vector3 pos) {
 	// NULLポインタチェック
@@ -17,9 +18,14 @@ void Player::Initialize(Model* model, Vector3 pos) {
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = pos;
 
+	isDead_ = false;
 }
 
 void Player::Update() {
+	if (isDead_) {
+		return;
+	}
+
 	Vector3 move = MyMathUtility::MySetVector3Zero();
 	float moveSpeed = 1.0f;
 
@@ -43,19 +49,28 @@ void Player::Update() {
 }
 
 void Player::Draw(ViewProjection& viewProjection) {
-	model_->Draw(worldTransform_, viewProjection);
+	if (!isDead_) {
+		model_->Draw(worldTransform_, viewProjection);
+	}
 }
 
 void Player::Reset() {
 
 }
 
-void Player::OnCollision(bool collisionFlag) {
+void Player::OnCollisionStage(bool collisionFlag) {
 	if (collisionFlag) {
-		worldTransform_.translation_ = prePos;
+		worldTransform_.translation_ = prePos_;
+		worldTransform_.Update(worldTransform_);
 	}
+	// 前フレーム座標
+	prePos_ = worldTransform_.translation_;
+}
 
-	prePos = worldTransform_.translation_;
+void Player::OnCollisionPlayer(bool collisionFlag) {
+	if (collisionFlag) {
+		isDead_ = true;
+	}
 }
 
 void Player::Move() {

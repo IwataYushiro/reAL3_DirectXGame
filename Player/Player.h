@@ -5,13 +5,9 @@
 #include "Model.h"
 #include "MyMathUtility.h"
 #include "GlobalScene.h"
-#include <cassert>
-#include <list>
 #include <memory>
 
 class Player {
-public:
-
 public:
 	//初期化
   void Initialize(Model* model, Vector3 pos = {0.0f, 0.0f, 0.0f});
@@ -26,7 +22,8 @@ public:
 	void Reset();
 
 	// 当たり判定
-	void OnCollision(bool collisionFlag);
+	void OnCollisionStage(bool collisionFlag);
+	void OnCollisionPlayer(bool collisionFlag);
 
 private:
 	//プレイヤーの移動処理
@@ -50,17 +47,16 @@ private:
 
 	// ワールド変換データ
 	WorldTransform worldTransform_;
+	// 前フレーム座標
+	Vector3 prePos_{};
 	// 半径
-	float radius = 1.5f;
-	Vector3 prePos;
-
+	float radius_ = 1.5f;
 	//死亡フラグ
 	bool isDead_ = false;
-	//マウス
-	bool mouseClick_;
 
 public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
 	Vector3 GetPosition() const { return worldTransform_.translation_; }
-	float GetRadius() const { return radius; }
+	float GetRadius() const { return radius_; }
+
 };

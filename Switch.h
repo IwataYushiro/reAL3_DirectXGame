@@ -13,6 +13,9 @@ public:
 	// 描画
 	void Draw(ViewProjection viewProjection);
 
+	// スイッチオン
+	bool OnFlag();
+
 private:
 	// モデル
 	Model* model_ = nullptr;
