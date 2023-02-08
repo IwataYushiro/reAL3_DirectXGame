@@ -27,6 +27,8 @@ GameScene::~GameScene() {
 	delete stageClear_;
 	delete gameOver_;
 	delete gameClear_;
+	//背景スプライト
+	delete backGround1_;
 }
 void GameScene::Initialize() {
 	// インスタンス取得
@@ -49,12 +51,14 @@ void GameScene::Initialize() {
 	stageClearTexture_ = TextureManager::Load("texture/stageclear.png");
 	gameOverTexture_ = TextureManager::Load("texture/gameover.png");
 	gameClearTexture_ = TextureManager::Load("texture/gameclear.png");
+	backGroundTexture1 = TextureManager::Load("texture/background1.png");
 	// スプライト
 	title_ = Sprite::Create(titleTexture_, { 0.0f, 0.0f });
 	howtoplay_ = Sprite::Create(howToPlayTexture_, { 0.0f, 0.0f });
 	stageClear_ = Sprite::Create(stageClearTexture_, { 0.0f, 0.0f });
 	gameOver_ = Sprite::Create(gameOverTexture_, { 0.0f, 0.0f });
 	gameClear_ = Sprite::Create(gameClearTexture_, { 0.0f, 0.0f });
+	backGround1_ = Sprite::Create(backGroundTexture1, {0.0f, 0.0f});
 	// BGMロード
 	titleBgm_ = audio_->LoadWave("sound/title.wav");
 	doneSe_ = audio_->LoadWave("sound/se/done.wav");
@@ -184,8 +188,8 @@ void GameScene::Draw() {
 	/// </summary>
 	switch (scene_) {
 	case DEBUG:
+		backGround1_->Draw();
 		break;
-
 	case TITLE:
 		break;
 

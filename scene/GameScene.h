@@ -55,12 +55,17 @@ class GameScene {
 	uint32_t gameOverTexture_ = 0;
 	uint32_t gameClearTexture_ = 0;
 
+	//背景用
+	uint32_t backGroundTexture1 = 0;
 	// スプライト
 	Sprite* title_ = nullptr;
 	Sprite* howtoplay_ = nullptr;
 	Sprite* stageClear_ = nullptr;
 	Sprite* gameOver_ = nullptr;
 	Sprite* gameClear_ = nullptr;
+
+	//背景
+	Sprite* backGround1_ = nullptr;
 
 	//サウンドデータハンドル
 	uint32_t titleBgm_ = 0;
