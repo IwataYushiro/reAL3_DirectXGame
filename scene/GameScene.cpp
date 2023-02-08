@@ -29,6 +29,7 @@ GameScene::~GameScene() {
 	delete gameClear_;
 	//背景スプライト
 	delete backGround1_;
+	delete backGround2_;
 }
 void GameScene::Initialize() {
 	// インスタンス取得
@@ -52,6 +53,7 @@ void GameScene::Initialize() {
 	gameOverTexture_ = TextureManager::Load("texture/gameover.png");
 	gameClearTexture_ = TextureManager::Load("texture/gameclear.png");
 	backGroundTexture1 = TextureManager::Load("texture/background1.png");
+	backGroundTexture2 = TextureManager::Load("texture/background2.png");
 	// スプライト
 	title_ = Sprite::Create(titleTexture_, { 0.0f, 0.0f });
 	howtoplay_ = Sprite::Create(howToPlayTexture_, { 0.0f, 0.0f });
@@ -59,6 +61,7 @@ void GameScene::Initialize() {
 	gameOver_ = Sprite::Create(gameOverTexture_, { 0.0f, 0.0f });
 	gameClear_ = Sprite::Create(gameClearTexture_, { 0.0f, 0.0f });
 	backGround1_ = Sprite::Create(backGroundTexture1, {0.0f, 0.0f});
+	backGround2_ = Sprite::Create(backGroundTexture2, {0.0f, 0.0f});
 	// BGMロード
 	titleBgm_ = audio_->LoadWave("sound/title.wav");
 	doneSe_ = audio_->LoadWave("sound/se/done.wav");
@@ -76,7 +79,7 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	
-		Parameter({2.0f, -10.0f, 46.0f}, {42.0f, -10.0f, 78.0f}, 1);
+	Parameter({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f}, 1);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -132,6 +135,7 @@ void GameScene::Update() {
 		}
 		if (isClear) {
 			if (input_->TriggerKey(DIK_SPACE)) {
+				Parameter({18.0f, -10.0f, 14.0f}, {58.0f, -10.0f, 30.0f}, 2);
 				scene_ = STAGE2;
 				break;
 			}
@@ -147,6 +151,24 @@ void GameScene::Update() {
 		break;
 
 	case STAGE2:
+		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
+			isClear = true;
+		}
+		if (isClear) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				Parameter({18.0f, -10.0f, 14.0f}, {58.0f, -10.0f, 30.0f}, 2);
+				scene_ = STAGE3;
+				break;
+			}
+		}
+		stage_->Update();
+
+		player_->Update();
+		player2_->Update();
+		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
+		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
+
 		break;
 
 	case STAGE3:
@@ -199,6 +221,7 @@ void GameScene::Draw() {
 		break;
 
 	case STAGE2:
+		backGround2_->Draw();
 		break;
 
 	case STAGE3:
@@ -241,6 +264,10 @@ void GameScene::Draw() {
 		break;
 
 	case STAGE2:
+		stage_->Draw(viewProjection_);
+		player_->Draw(viewProjection_);
+		player2_->Draw(viewProjection_);
+
 		break;
 
 	case STAGE3:
