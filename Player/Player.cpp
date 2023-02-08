@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <cassert>
 
-bool Player::isDead_ = false;
+bool Player::isDeads_ = false;
 
 void Player::Initialize(Model* model, Vector3 pos) {
 	// NULLポインタチェック
@@ -21,9 +21,14 @@ void Player::Initialize(Model* model, Vector3 pos) {
 	worldTransform_.translation_ = pos;
 
 	isDead_ = false;
+	isDeads_ = false;
 }
 
 void Player::Update() {
+	if (isDeads_) {
+		isDead_ = true;
+		return;
+	}
 	if (isDead_) {
 		return;
 	}
@@ -71,7 +76,7 @@ void Player::OnCollisionStage(bool collisionFlag) {
 
 void Player::OnCollisionPlayer(bool collisionFlag) {
 	if (collisionFlag) {
-		isDead_ = true;
+		isDeads_ = true;
 	}
 }
 

@@ -46,6 +46,9 @@ public:
 	// 足元のブロックを判別する
 	void CheckBlock(int line, int row);
 
+	// 床からはみ出しているか
+	bool CheckFloorBlock(int line, int row);
+
 	// 座標ゲッター
 	Vector3 GetBlockPosition(int line, int row);
 

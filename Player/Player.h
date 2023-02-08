@@ -21,6 +21,9 @@ public:
 	//リセット処理
 	void Reset();
 
+	// 死亡
+	void IsDead() { isDead_ = true; }
+
 	// 当たり判定
 	void OnCollisionStage(bool collisionFlag);
 	static void OnCollisionPlayer(bool collisionFlag);
@@ -52,7 +55,8 @@ private:
 	// 半径
 	float radius_ = 1.5f;
 	//死亡フラグ
-	static bool isDead_;
+	bool isDead_;
+	static bool isDeads_;
 
 public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }

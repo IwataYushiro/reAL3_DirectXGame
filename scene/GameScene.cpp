@@ -343,10 +343,17 @@ bool GameScene::CollisionStageFlag(Player* p, Stage* s) {
 
 	// プレイヤーLeftTop座標
 	int pLT[2] = { static_cast<int>(pX1 / 4), static_cast<int>(((pZ1 / 4) - 19) * -1) };
+	int isFloor = 0;
 
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 2; j++) {
 			// 足元のブロックを判別
+			if (s->CheckFloorBlock(pLT[0] + i, pLT[1] + j)) {
+				isFloor++;
+			}
+			if (isFloor == 4) {
+				p->IsDead();
+			}
 			s->CheckBlock(pLT[0] + i, pLT[1] + j);
 			// 各座標変数の宣言
 			Vector3 bPos = s->GetBlockPosition(pLT[0] + i, pLT[1] + j);
