@@ -40,10 +40,12 @@ void Stage::Update() {
 			}
 		}
 	}
-	if (switchB_->GetFlag()) {
-		for (std::unique_ptr<StageData>& block : stageBlocks_) {
-			if (block->type_ == WALLB) {
-				block->type_ = NONE;
+	if (switchB_ != nullptr) {
+		if (switchB_->GetFlag()) {
+			for (std::unique_ptr<StageData>& block : stageBlocks_) {
+				if (block->type_ == WALLB) {
+					block->type_ = NONE;
+				}
 			}
 		}
 	}
@@ -78,7 +80,7 @@ void Stage::Draw(ViewProjection viewProjection) {
 
 	// スイッチ描画
 	switchR_->Draw(viewProjection);
-	switchB_->Draw(viewProjection);
+	if(switchB_ != nullptr) switchB_->Draw(viewProjection);
 }
 
 void Stage::LoadStageData(const std::string stageNum) {
@@ -122,7 +124,7 @@ void Stage::LoadStageCommands() {
 
 		while (mapLine != STAGE_WIDTH) {
 			// コマンド読み込み
-			if (word.find("NONE") == 0 || word.find("0") == 0) {
+			if (word.find("NONE") == 0 || word.find("0") == 0 || word.find("7") == 0) {
 				// ステージのブロックを追加
 				PushStageBlockList(stageBlocks_, NONE, mapLine, mapRow, -10.0f);
 				// インクリメント
