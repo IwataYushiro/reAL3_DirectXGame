@@ -80,7 +80,7 @@ void GameScene::Initialize() {
 	titleBgm_ = audio_->LoadWave("sound/title.wav");
 	doneSe_ = audio_->LoadWave("sound/se/done.wav");
 
-	audio_->PlayWave(titleBgm_, false, 0.1f);
+	audio_->PlayWave(titleBgm_, true, 0.7f);
 
 	// 自キャラの生成
 	player_ = new Player();
