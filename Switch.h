@@ -4,11 +4,8 @@
 
 class Switch {
 public:
-	// デストラクタ
-	~Switch();
-
 	// 初期化
-	void Initialize(Vector3 pos);
+	void Initialize(Model* model);
 
 	// 更新
 	void Update();
@@ -33,4 +30,16 @@ private:
 
 public: // アクセッサ
 	bool GetFlag() { return isFlag_; }
+	void SetPosition(Vector3 pos) {
+		// 初期化
+		worldTransform_.Initialize();
+		// スケール設定
+		worldTransform_.scale_ = { 2.0f, 2.0f, 2.0f };
+		// 座標設定
+		worldTransform_.translation_ = pos;
+		// 行列更新
+		worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
+		worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
+		worldTransform_.TransferMatrix();
+	}
 };

@@ -78,6 +78,9 @@ void GameScene::Initialize() {
 
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
+
+	// ステージの初期化
+	stage_->Initialize(model_);
 	
 	Parameter({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f}, 1);
 
@@ -413,7 +416,6 @@ void GameScene::Parameter(const Vector3& playerPos1, const Vector3& playerPos2, 
 	player_->Initialize(modelPlayer_, pos1);
 	player2_->Initialize(modelPlayer2_, pos2);
 	// ステージの初期化
-	stage_->Initialize(model_);
 	stage_->StageInitialize(filename_[stageNum]); // ステージ読み込み(1)
 
 	isClear = false;
