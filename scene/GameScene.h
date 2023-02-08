@@ -103,4 +103,6 @@ class GameScene {
 	
 	//デバッグカメラ有効化
 	bool isDebugCameraActive_ = false;
+	//クリアしたか
+	bool isClear = false;
 };

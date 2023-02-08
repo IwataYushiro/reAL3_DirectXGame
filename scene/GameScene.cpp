@@ -96,9 +96,15 @@ void GameScene::Update() {
 	case DEBUG:
 
 		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
-			scene_ = TITLE;
+			isClear = true;
 		}
-		
+		if (isClear) 
+		{
+			if (input_->TriggerKey(DIK_SPACE)) {
+				scene_ = TITLE;
+				break;
+			}
+		}
 		stage_->Update();
 
 		player_->Update();
@@ -189,6 +195,7 @@ void GameScene::Draw() {
 	switch (scene_) {
 	case DEBUG:
 		backGround1_->Draw();
+		
 		break;
 	case TITLE:
 		break;
@@ -278,6 +285,9 @@ void GameScene::Draw() {
 	/// </summary>
 	switch (scene_) {
 	case DEBUG:
+		if (isClear) {
+			stageClear_->Draw();
+		}
 		break;
 
 	case TITLE:
