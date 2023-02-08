@@ -76,7 +76,7 @@ void GameScene::Initialize() {
 	//天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 	
-	Parameter({2.0f, -10.0f, 46.0f}, {42.0f, -10.0f, 78.0f}, 0);
+		Parameter({2.0f, -10.0f, 46.0f}, {42.0f, -10.0f, 78.0f}, 1);
 
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
@@ -86,36 +86,13 @@ void GameScene::Initialize() {
 	viewProjection_.TransferMatrix();
 
 	// シーン
-	scene_ = DEBUG;
+	scene_ = TITLE;
 }
 
 void GameScene::Update() {
 	// シーン選択
 	switch (scene_) {
-#pragma region デバック
-	case DEBUG:
 
-		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
-			isClear = true;
-		}
-		if (isClear) 
-		{
-			if (input_->TriggerKey(DIK_SPACE)) {
-				scene_ = TITLE;
-				break;
-			}
-		}
-		stage_->Update();
-
-		player_->Update();
-		player2_->Update();
-		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
-		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
-		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
-
-		break;
-
-#pragma endregion
 #pragma region タイトル
 	case TITLE:
 		// スペースかマウス左クリックを押したら操作説明へ
@@ -133,12 +110,9 @@ void GameScene::Update() {
 		// スペースかマウス左クリックを押したらステージへ
 		if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0)) {
 			// シーンをステージへ
-			scene_ = TUTORIAL;
+			scene_ = STAGE1;
 			// オーディオ再生
 			//audio_->PlayWave(doneSe_);
-
-			// 初期化
-			stage_->StageInitialize(filename_[0]);	 // ステージ読み込み(1)
 		}
 
 		break;
@@ -152,6 +126,24 @@ void GameScene::Update() {
 		break;
 #pragma endregion
 	case STAGE1:
+
+		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
+			isClear = true;
+		}
+		if (isClear) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				scene_ = STAGE2;
+				break;
+			}
+		}
+		stage_->Update();
+
+		player_->Update();
+		player2_->Update();
+		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
+		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
+
 		break;
 
 	case STAGE2:
@@ -193,10 +185,6 @@ void GameScene::Draw() {
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
 	switch (scene_) {
-	case DEBUG:
-		backGround1_->Draw();
-		
-		break;
 	case TITLE:
 		break;
 
@@ -207,6 +195,7 @@ void GameScene::Draw() {
 		break;
 
 	case STAGE1:
+		backGround1_->Draw();
 		break;
 
 	case STAGE2:
@@ -235,13 +224,6 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	switch (scene_) {
-	case DEBUG:
-		stage_->Draw(viewProjection_);
-		player_->Draw(viewProjection_);
-		player2_->Draw(viewProjection_);
-
-		break;
-
 	case TITLE:
 		break;
 
@@ -252,10 +234,9 @@ void GameScene::Draw() {
 		break;
 
 	case STAGE1:
-		// 3Dモデル描画
-		skydome_->Draw(viewProjection_);
 		stage_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
+		player2_->Draw(viewProjection_);
 
 		break;
 
@@ -284,14 +265,8 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 	switch (scene_) {
-	case DEBUG:
-		if (isClear) {
-			stageClear_->Draw();
-		}
-		break;
-
 	case TITLE:
-		//title_->Draw();
+		title_->Draw();
 		break;
 
 	case INFO:
@@ -314,13 +289,16 @@ void GameScene::Draw() {
 		break;
 
 	case CLEAR:
-		// gameClear_->Draw();
+		 gameClear_->Draw();
 		break;
 
 	case GAMEOVER:
-		// gameOver_->Draw();
+		 gameOver_->Draw();
 		break;
 	}
+	if (isClear) {
+			stageClear_->Draw();
+		}
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
 
@@ -410,4 +388,6 @@ void GameScene::Parameter(const Vector3& playerPos1, const Vector3& playerPos2, 
 	// ステージの初期化
 	stage_->Initialize(model_);
 	stage_->StageInitialize(filename_[stageNum]); // ステージ読み込み(1)
+
+	isClear = false;
 }
