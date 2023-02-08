@@ -1,22 +1,22 @@
 ﻿#include "GameScene.h"
 #include "AxisIndicator.h"
+#include "Collision.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
-#include "Collision.h"
-#include <sstream>
-#include <iomanip>
 #include <cassert>
+#include <iomanip>
 #include <random>
+#include <sstream>
 
 GameScene::~GameScene() {
 	delete model_;
 	// BGM解放
-	//自キャラの解放
+	// 自キャラの解放
 	delete player_;
 	delete player2_;
 	delete modelPlayer_;
 	delete modelPlayer2_;
-	//天球データ解放
+	// 天球データ解放
 	delete skydome_;
 	delete modelSkydome_;
 	// ステージ
@@ -27,7 +27,7 @@ GameScene::~GameScene() {
 	delete stageClear_;
 	delete gameOver_;
 	delete gameClear_;
-	//背景スプライト
+	// 背景スプライト
 	delete backGround1_;
 	delete backGround2_;
 	delete backGround3_;
@@ -44,10 +44,10 @@ void GameScene::Initialize() {
 
 	// 3Dモデルの生成
 	model_ = Model::Create();
-	//プレイヤー
+	// プレイヤー
 	modelPlayer_ = Model::CreateFromOBJ("bplayer", true);
 	modelPlayer2_ = Model::CreateFromOBJ("wplayer", true);
-	//天球
+	// 天球
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// テクスチャ読み込み
@@ -62,44 +62,44 @@ void GameScene::Initialize() {
 	backGroundTexture4 = TextureManager::Load("texture/background4.png");
 	backGroundTexture5 = TextureManager::Load("texture/background5.png");
 	backGroundTexture6 = TextureManager::Load("texture/background6.png");
+
 	// スプライト
-	title_ = Sprite::Create(titleTexture_, { 0.0f, 0.0f });
-	howtoplay_ = Sprite::Create(howToPlayTexture_, { 0.0f, 0.0f });
-	stageClear_ = Sprite::Create(stageClearTexture_, { 0.0f, 0.0f });
-	gameOver_ = Sprite::Create(gameOverTexture_, { 0.0f, 0.0f });
-	gameClear_ = Sprite::Create(gameClearTexture_, { 0.0f, 0.0f });
+	title_ = Sprite::Create(titleTexture_, {0.0f, 0.0f});
+	howtoplay_ = Sprite::Create(howToPlayTexture_, {0.0f, 0.0f});
+	stageClear_ = Sprite::Create(stageClearTexture_, {0.0f, 0.0f});
+	gameOver_ = Sprite::Create(gameOverTexture_, {0.0f, 0.0f});
+	gameClear_ = Sprite::Create(gameClearTexture_, {0.0f, 0.0f});
 	backGround1_ = Sprite::Create(backGroundTexture1, {0.0f, 0.0f});
 	backGround2_ = Sprite::Create(backGroundTexture2, {0.0f, 0.0f});
 	backGround3_ = Sprite::Create(backGroundTexture3, {0.0f, 0.0f});
 	backGround4_ = Sprite::Create(backGroundTexture4, {0.0f, 0.0f});
 	backGround5_ = Sprite::Create(backGroundTexture5, {0.0f, 0.0f});
 	backGround6_ = Sprite::Create(backGroundTexture6, {0.0f, 0.0f});
+
 	// BGMロード
 	titleBgm_ = audio_->LoadWave("sound/title.wav");
 	doneSe_ = audio_->LoadWave("sound/se/done.wav");
 
 	audio_->PlayWave(titleBgm_, false, 0.1f);
 
-	//自キャラの生成
+	// 自キャラの生成
 	player_ = new Player();
 	player2_ = new Player();
-	//天球データ生成
+	// 天球データ生成
 	skydome_ = new Skydome();
 	// ステージ
 	stage_ = new Stage();
 
-	//天球データ初期化
+	// 天球データ初期化
 	skydome_->Initialize(modelSkydome_);
 
 	// ステージの初期化
 	stage_->Initialize(model_);
-	
-	Parameter({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f}, 1);
 
-	//ビュープロジェクションの初期化
+	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 40.0f, 40.0f, -50.0f };
-	viewProjection_.target = { 40.0f, 20.0f, -20.0f };
+	viewProjection_.eye = {40.0f, 40.0f, -50.0f};
+	viewProjection_.target = {40.0f, 20.0f, -20.0f};
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
 
@@ -115,10 +115,16 @@ void GameScene::Update() {
 	case TITLE:
 		// スペースかマウス左クリックを押したら操作説明へ
 		if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0)) {
+			
+			//初期化
+			Parameter({14.0f, -10.0f, 54.0f}, {38.0f, -10.0f, 26.0f}, 1);
 			// シーンを操作説明へ
 			scene_ = INFO;
+			
 			// オーディオ再生
-			//audio_->PlayWave(doneSe_);
+			// audio_->PlayWave(doneSe_);
+			
+			break;
 		}
 
 		break;
@@ -127,19 +133,13 @@ void GameScene::Update() {
 	case INFO:
 		// スペースかマウス左クリックを押したらステージへ
 		if (input_->TriggerKey(DIK_SPACE) || input_->IsTriggerMouse(0)) {
+			
 			// シーンをステージへ
 			scene_ = STAGE1;
 			// オーディオ再生
-			//audio_->PlayWave(doneSe_);
+			// audio_->PlayWave(doneSe_);
+			break;
 		}
-
-		break;
-#pragma endregion
-#pragma region チュートリアル
-	case TUTORIAL:
-		// 更新
-		skydome_->Update();
-		stage_->Update();
 
 		break;
 #pragma endregion
@@ -155,6 +155,7 @@ void GameScene::Update() {
 				break;
 			}
 		}
+
 		stage_->Update();
 
 		player_->Update();
@@ -171,7 +172,7 @@ void GameScene::Update() {
 		}
 		if (isClear) {
 			if (input_->TriggerKey(DIK_SPACE)) {
-				Parameter({18.0f, -10.0f, 14.0f}, {58.0f, -10.0f, 30.0f}, 2);
+				Parameter({2.0f, -10.0f, 54.0f}, {54.0f, -10.0f, 78.0f}, 3);
 				scene_ = STAGE3;
 				break;
 			}
@@ -187,31 +188,96 @@ void GameScene::Update() {
 		break;
 
 	case STAGE3:
+		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
+			isClear = true;
+		}
+		if (isClear) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				Parameter({14.0f, -10.0f, 78.0f}, {54.0f, -10.0f, 58.0f}, 4);
+				scene_ = STAGE4;
+				break;
+			}
+		}
+		stage_->Update();
+
+		player_->Update();
+		player2_->Update();
+		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
+		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
 
 		break;
 	case STAGE4:
-		
+		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
+			isClear = true;
+		}
+		if (isClear) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				Parameter({34.0f, -10.0f, 6.0f}, {62.0f, -10.0f, 50.0f}, 5);
+				scene_ = STAGE5;
+				break;
+			}
+		}
+		stage_->Update();
+
+		player_->Update();
+		player2_->Update();
+		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
+		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
+
 		break;
 	case STAGE5:
-		
+		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
+			isClear = true;
+		}
+		if (isClear) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				Parameter({10.0f, -10.0f, 78.0f}, {74.0f, -10.0f, 38.0f}, 6);
+				scene_ = STAGE4;
+				break;
+			}
+		}
+		stage_->Update();
+
+		player_->Update();
+		player2_->Update();
+		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
+		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
+
 		break;
 	case STAGE6:
-		
+		if (stage_->GetIsGoal() && CollisionPlayerFlag(player_, player2_)) {
+			isClear = true;
+		}
+		if (isClear) {
+			if (input_->TriggerKey(DIK_SPACE)) {
+				scene_ = CLEAR;
+				break;
+			}
+		}
+		stage_->Update();
+
+		player_->Update();
+		player2_->Update();
+		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
+		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
+		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
+
 		break;
 
 	case CLEAR:
-		//スペースキーでタイトル
+		// スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
-			audio_->PlayWave(doneSe_);
 			scene_ = TITLE;
 			break;
 		}
 		break;
 
 	case GAMEOVER:
-		//スペースキーでタイトル
+		// スペースキーでタイトル
 		if (input_->TriggerKey(DIK_SPACE)) {
-			audio_->PlayWave(doneSe_);
 			scene_ = TITLE;
 			break;
 		}
@@ -238,9 +304,6 @@ void GameScene::Draw() {
 	case INFO:
 		break;
 
-	case TUTORIAL:
-		break;
-
 	case STAGE1:
 		backGround1_->Draw();
 		break;
@@ -250,15 +313,16 @@ void GameScene::Draw() {
 		break;
 
 	case STAGE3:
+		backGround3_->Draw();
 		break;
 	case STAGE4:
-
+		backGround4_->Draw();
 		break;
 	case STAGE5:
-
+		backGround5_->Draw();
 		break;
 	case STAGE6:
-
+		backGround6_->Draw();
 		break;
 	case CLEAR:
 		break;
@@ -286,9 +350,6 @@ void GameScene::Draw() {
 	case INFO:
 		break;
 
-	case TUTORIAL:
-		break;
-
 	case STAGE1:
 		stage_->Draw(viewProjection_);
 		player_->Draw(viewProjection_);
@@ -304,15 +365,24 @@ void GameScene::Draw() {
 		break;
 
 	case STAGE3:
+		stage_->Draw(viewProjection_);
+		player_->Draw(viewProjection_);
+		player2_->Draw(viewProjection_);
 		break;
 	case STAGE4:
-
+		stage_->Draw(viewProjection_);
+		player_->Draw(viewProjection_);
+		player2_->Draw(viewProjection_);
 		break;
 	case STAGE5:
-
+		stage_->Draw(viewProjection_);
+		player_->Draw(viewProjection_);
+		player2_->Draw(viewProjection_);
 		break;
 	case STAGE6:
-
+		stage_->Draw(viewProjection_);
+		player_->Draw(viewProjection_);
+		player2_->Draw(viewProjection_);
 		break;
 	case CLEAR:
 		break;
@@ -341,9 +411,6 @@ void GameScene::Draw() {
 		howtoplay_->Draw();
 		break;
 
-	case TUTORIAL:
-		break;
-
 	case STAGE1:
 
 		break;
@@ -365,16 +432,18 @@ void GameScene::Draw() {
 
 		break;
 	case CLEAR:
-		 gameClear_->Draw();
+		gameClear_->Draw();
 		break;
 
 	case GAMEOVER:
-		 gameOver_->Draw();
+		gameOver_->Draw();
 		break;
 	}
+
 	if (isClear) {
-			stageClear_->Draw();
-		}
+		stageClear_->Draw();
+	}
+
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
 
@@ -396,7 +465,7 @@ bool GameScene::CollisionStageFlag(Player* p, Stage* s) {
 	pZ2 = pPos.z + pRadius;
 
 	// プレイヤーLeftTop座標
-	int pLT[2] = { static_cast<int>(pX1 / 4), static_cast<int>(((pZ1 / 4) - 19) * -1) };
+	int pLT[2] = {static_cast<int>(pX1 / 4), static_cast<int>(((pZ1 / 4) - 19) * -1)};
 	int isFloor = 0;
 
 	for (int i = 0; i < 2; i++) {
@@ -454,8 +523,8 @@ bool GameScene::CollisionPlayerFlag(Player* p1, Player* p2) {
 	return false;
 }
 
-void GameScene::Parameter(const Vector3& playerPos1, const Vector3& playerPos2, const int& stageNum)
-{
+void GameScene::Parameter(
+  const Vector3& playerPos1, const Vector3& playerPos2, const int& stageNum) {
 	// 自キャラの初期化
 	Vector3 pos1 = playerPos1;
 	Vector3 pos2 = playerPos2;
