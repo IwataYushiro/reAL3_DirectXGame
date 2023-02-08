@@ -1,23 +1,8 @@
 #include "Switch.h"
 
-Switch::~Switch() {
-	delete model_;
-}
-
-void Switch::Initialize(Vector3 pos) {
+void Switch::Initialize(Model* model) {
 	// モデル読み込み
-	model_ = Model::Create();
-
-	// 初期化
-	worldTransform_.Initialize();
-	// スケール設定
-	worldTransform_.scale_ = { 1.0f, 1.0f, 1.0f };
-	// 座標設定
-	worldTransform_.translation_ = pos;
-	// 行列更新
-	worldTransform_.matWorld_ = MyMathUtility::MySetMatrix4Identity();
-	worldTransform_.matWorld_ *= MyMathUtility::MySynMatrix4WorldTransform(worldTransform_);
-	worldTransform_.TransferMatrix();
+	model_ = model;
 
 	isFlag_ = false;
 }

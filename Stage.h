@@ -18,7 +18,8 @@ public:
 		WALLB,		// 消える壁B
 		GOAL,		// ゴール
 
-		NONE2
+		NONE2,
+		NONE3,
 	};
 
 	// 構造体
@@ -73,6 +74,10 @@ private:
 private:
 	// モデル
 	Model* model_ = nullptr;
+	Model* modelSwitchR_ = nullptr;
+	Model* modelSwitchB_ = nullptr;
+	Model* modelWallR_ = nullptr;
+	Model* modelWallB_ = nullptr;
 	// テクスチャハンドル
 	int32_t textureHandle_ = 0u;
 
@@ -91,6 +96,8 @@ private:
 	float radius_ = 2.0f;
 	// ゴールフラグ
 	bool isGoal_ = false;
+	bool isSwitchDrawR_ = false;
+	bool isSwitchDrawB_ = false;
 
 public: // アクセッサ
 	float GetRadius() { return radius_; }

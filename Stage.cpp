@@ -3,6 +3,10 @@
 #include <fstream>
 
 Stage::~Stage() {
+	delete modelSwitchR_;
+	delete modelSwitchB_;
+	delete modelWallR_;
+	delete modelWallB_;
 	delete switchR_;
 	delete switchB_;
 }
@@ -10,6 +14,16 @@ Stage::~Stage() {
 void Stage::Initialize(Model* model) {
 	// モデル読み込み
 	model_ = model;
+	modelSwitchR_ = Model::CreateFromOBJ("rswitch", true);
+	modelSwitchB_ = Model::CreateFromOBJ("bswitch", true);
+	modelWallR_ = Model::CreateFromOBJ("cubeR", true);
+	modelWallB_ = Model::CreateFromOBJ("cubeB", true);
+
+	// スイッチ
+	switchR_ = new Switch();
+	switchB_ = new Switch();
+	switchR_->Initialize(modelSwitchR_);
+	switchB_->Initialize(modelSwitchB_);
 
 	// ステージの床を初期化
 	LoadFloorBlock();
@@ -18,6 +32,9 @@ void Stage::Initialize(Model* model) {
 void Stage::StageInitialize(const std::string stageNum) {
 	// 最初に残っている要素を削除
 	stageBlocks_.clear();
+
+	isSwitchDrawR_ = false;
+	isSwitchDrawB_ = false;
 
 	// バッファをクリア
 	stageCommands.str("");
@@ -48,25 +65,23 @@ void Stage::Update() {
 		}
 	}
 
-	if (switchB_ != nullptr) {
-		if (switchB_->GetFlag()) {
-			for (std::unique_ptr<StageData>& block : stageBlocks_) {
-				if (block->type_ == WALLB) {
-					block->type_ = NONE2;
-				}
+	if (switchB_->GetFlag()) {
+		for (std::unique_ptr<StageData>& block : stageBlocks_) {
+			if (block->type_ == WALLB) {
+				block->type_ = NONE3;
 			}
 		}
-		else if (!switchB_->GetFlag()) {
-			for (std::unique_ptr<StageData>& block : stageBlocks_) {
-				if (block->type_ == NONE2) {
-					block->type_ = WALLB;
-				}
+	}
+	else if (!switchB_->GetFlag()) {
+		for (std::unique_ptr<StageData>& block : stageBlocks_) {
+			if (block->type_ == NONE3) {
+				block->type_ = WALLB;
 			}
 		}
 	}
 
 	switchR_->Update();
-	if (switchB_ != nullptr) switchB_->Update();
+	switchB_->Update();
 
 	isGoal_ = false;
 }
@@ -80,11 +95,11 @@ void Stage::Draw(ViewProjection viewProjection) {
 		}
 		else if (block->type_ == WALLR) {
 			// 赤壁描画
-			model_->Draw(block->worldTransform_, viewProjection);
+			modelWallR_->Draw(block->worldTransform_, viewProjection);
 		}
 		else if (block->type_ == WALLB) {
 			// 青壁描画
-			model_->Draw(block->worldTransform_, viewProjection);
+			modelWallB_->Draw(block->worldTransform_, viewProjection);
 		}
 		else if (block->type_ == GOAL) {
 			// ゴール描画
@@ -98,8 +113,8 @@ void Stage::Draw(ViewProjection viewProjection) {
 	}
 
 	// スイッチ描画
-	switchR_->Draw(viewProjection);
-	if(switchB_ != nullptr) switchB_->Draw(viewProjection);
+	if (isSwitchDrawR_) switchR_->Draw(viewProjection);
+	if (isSwitchDrawB_) switchB_->Draw(viewProjection);
 }
 
 void Stage::LoadStageData(const std::string stageNum) {
@@ -240,20 +255,16 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, i
 	blocks_.push_back(std::move(newBlock));
 
 	if (type == SWITCHR) {
-		if (switchR_ == nullptr) {
-			switchR_ = new Switch();
-			pos.x += 2.0f;
-			pos.z -= 2.0f;
-			switchR_->Initialize(pos);
-		}
+		pos.x -= 2.0f;
+		pos.z += 2.0f;
+		switchR_->SetPosition(pos);
+		isSwitchDrawR_ = true;
 	}
 	if (type == SWITCHB) {
-		if (switchB_ == nullptr) {
-			switchB_ = new Switch();
-			pos.x += 2.0f;
-			pos.z -= 2.0f;
-			switchB_->Initialize(pos);
-		}
+		pos.x -= 2.0f;
+		pos.z += 2.0f;
+		switchB_->SetPosition(pos);
+		isSwitchDrawB_ = true;
 	}
 }
 
