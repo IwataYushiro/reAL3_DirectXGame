@@ -26,12 +26,14 @@ void Stage::StageInitialize(const std::string stageNum) {
 	LoadStageData(stageNum);
 	// ステージファイルで各要素を設定
 	LoadStageCommands();
+
+	isGoal_ = false;
 }
 
 void Stage::Update() {
-	// デバックテキスト
-	/*debugText_->SetPos(0, 0);
-	debugText_->Printf("%d, %d", stageLine_, stageRow_);*/
+	if (switch_->GetFlag()) {
+
+	}
 }
 
 void Stage::Draw(ViewProjection viewProjection) {
@@ -40,20 +42,22 @@ void Stage::Draw(ViewProjection viewProjection) {
 		if (block->type_ == BLOCK) {
 			model_->Draw(block->worldTransform_, viewProjection);
 		}
-		/*else if (block->type_ == SWITCH) {
+		else if (block->type_ == SWITCH) {
 
 		}
 		else if (block->type_ == WALL) {
-
+			model_->Draw(block->worldTransform_, viewProjection);
 		}
 		else if (block->type_ == GOAL) {
 
-		}*/
+		}
 	}
 	// 床描画
 	for (std::unique_ptr<StageData>& block : floorBlocks_) {
 		model_->Draw(block->worldTransform_, viewProjection);
 	}
+	// スイッチ描画
+	switch_->Draw(viewProjection);
 }
 
 void Stage::LoadStageData(const std::string stageNum) {
@@ -192,13 +196,41 @@ void Stage::PushStageBlockList(std::list<std::unique_ptr<StageData>>& blocks_, i
 	InitializeStageBlock(newBlock, pos, line, row);
 	// リストに追加
 	blocks_.push_back(std::move(newBlock));
+
+	if (type == SWITCH) {
+		if (switch_ == nullptr) {
+			switch_ = new Switch();
+			pos.x += 2.0f;
+			pos.z -= 2.0f;
+			switch_->Initialize(pos);
+		}
+	}
+}
+
+void Stage::CheckBlock(int line, int row) {
+	// 範囲for
+	for (std::unique_ptr<StageData>& block : stageBlocks_) {
+		// NONEは返さない
+		if (block->type_ == SWITCH) {
+			// 指定した番号に合った座標を返す
+			if (block->line_ == line && block->row_ == row) {
+				switch_->OnCollisionSwitch();
+			}
+		}
+		else if (block->type_ == GOAL) {
+			// 指定した番号に合った座標を返す
+			if (block->line_ == line && block->row_ == row) {
+				isGoal_ = true;
+			}
+		}
+	}
 }
 
 Vector3 Stage::GetBlockPosition(int line, int row) {
 	// 範囲for
 	for (std::unique_ptr<StageData>& block : stageBlocks_) {
-		// NONEは返さない
-		if (block->type_ != NONE) {
+		// ブロックと壁の時は返す
+		if (block->type_ == BLOCK || block->type_ == WALL) {
 			// 指定した番号に合った座標を返す
 			if (block->line_ == line && block->row_ == row) {
 				return block->worldTransform_.translation_;

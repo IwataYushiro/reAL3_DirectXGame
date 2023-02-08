@@ -79,9 +79,9 @@ class GameScene {
 	Player* player_ = nullptr;
 	Player* player2_ = nullptr;
 	
+	// モデル
 	Model* modelPlayer_ = nullptr;
 	Model* modelPlayer2_ = nullptr;
-	// 敵
 	
 	//天球データ
 	Skydome* skydome_ = nullptr;

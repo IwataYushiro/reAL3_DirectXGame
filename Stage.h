@@ -40,6 +40,9 @@ public:
 	// 描画
 	void Draw(ViewProjection viewProjection);
 
+	// 足元のブロックを判別する
+	void CheckBlock(int line, int row);
+
 	// 座標ゲッター
 	Vector3 GetBlockPosition(int line, int row);
 
@@ -80,8 +83,10 @@ private:
 	float magnification_ = 2.0f;
 	// ブロックの半径半径
 	float radius_ = 2.0f;
+	// ゴールフラグ
+	bool isGoal_ = false;
 
 public: // アクセッサ
-	// ゲッター
 	float GetRadius() { return radius_; }
+	bool GetIsGoal() { return isGoal_; }
 };

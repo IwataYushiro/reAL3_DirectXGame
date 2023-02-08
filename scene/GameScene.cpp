@@ -100,8 +100,7 @@ void GameScene::Update() {
 		player2_->Update();
 		player_->OnCollisionStage(CollisionStageFlag(player_, stage_));
 		player2_->OnCollisionStage(CollisionStageFlag(player2_, stage_));
-		player_->OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
-		player2_->OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
+		Player::OnCollisionPlayer(CollisionPlayerFlag(player_, player2_));
 
 		break;
 
@@ -320,12 +319,10 @@ bool GameScene::CollisionStageFlag(Player* p, Stage* s) {
 	// 各座標変数の宣言
 	Vector3 pPos = p->GetPosition();
 	float pRadius = p->GetRadius();
-	float pX1, pX2, pY1, pY2, pZ1, pZ2;
+	float pX1, pX2, pZ1, pZ2;
 	// プレイヤーの矩形座標
 	pX1 = pPos.x - pRadius;
 	pX2 = pPos.x + pRadius;
-	pY1 = pPos.y - pRadius;
-	pY2 = pPos.y + pRadius;
 	pZ1 = pPos.z - pRadius;
 	pZ2 = pPos.z + pRadius;
 
@@ -334,15 +331,15 @@ bool GameScene::CollisionStageFlag(Player* p, Stage* s) {
 
 	for (int i = 0; i < 2; i++) {
 		for (int j = 0; j < 2; j++) {
+			// 足元のブロックを判別
+			s->CheckBlock(pLT[0] + i, pLT[1] + j);
 			// 各座標変数の宣言
 			Vector3 bPos = s->GetBlockPosition(pLT[0] + i, pLT[1] + j);
 			float bRadius = s->GetRadius();
-			float bX1, bX2, bY1, bY2, bZ1, bZ2;
+			float bX1, bX2, bZ1, bZ2;
 			// ブロックの矩形座標
 			bX1 = bPos.x - bRadius;
 			bX2 = bPos.x + bRadius;
-			bY1 = bPos.y - bRadius;
-			bY2 = bPos.y + bRadius;
 			bZ1 = bPos.z - bRadius;
 			bZ2 = bPos.z + bRadius;
 
@@ -359,23 +356,19 @@ bool GameScene::CollisionPlayerFlag(Player* p1, Player* p2) {
 	// 各座標変数の宣言
 	Vector3 pPos1 = p1->GetPosition();
 	float pRadius1 = p1->GetRadius();
-	float p1X1, p1X2, p1Y1, p1Y2, p1Z1, p1Z2;
+	float p1X1, p1X2, p1Z1, p1Z2;
 	// プレイヤーの矩形座標
 	p1X1 = pPos1.x - pRadius1;
 	p1X2 = pPos1.x + pRadius1;
-	p1Y1 = pPos1.y - pRadius1;
-	p1Y2 = pPos1.y + pRadius1;
 	p1Z1 = pPos1.z - pRadius1;
 	p1Z2 = pPos1.z + pRadius1;
 
 	Vector3 pPos2 = p2->GetPosition();
 	float pRadius2 = p2->GetRadius();
-	float p2X1, p2X2, p2Y1, p2Y2, p2Z1, p2Z2;
+	float p2X1, p2X2, p2Z1, p2Z2;
 	// プレイヤーの矩形座標
 	p2X1 = pPos2.x - pRadius2;
 	p2X2 = pPos2.x + pRadius2;
-	p2Y1 = pPos2.y - pRadius2;
-	p2Y2 = pPos2.y + pRadius2;
 	p2Z1 = pPos2.z - pRadius2;
 	p2Z2 = pPos2.z + pRadius2;
 	// 当たり判定

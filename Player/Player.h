@@ -23,7 +23,7 @@ public:
 
 	// 当たり判定
 	void OnCollisionStage(bool collisionFlag);
-	void OnCollisionPlayer(bool collisionFlag);
+	static void OnCollisionPlayer(bool collisionFlag);
 
 private:
 	//プレイヤーの移動処理
@@ -52,7 +52,7 @@ private:
 	// 半径
 	float radius_ = 1.5f;
 	//死亡フラグ
-	bool isDead_ = false;
+	static bool isDead_;
 
 public: //アクセッサ、インライン関数
 	bool IsDead() const { return isDead_; }
