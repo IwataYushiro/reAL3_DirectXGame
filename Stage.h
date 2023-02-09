@@ -74,6 +74,7 @@ private:
 private:
 	// ƒ‚ƒfƒ‹
 	Model* model_ = nullptr;
+	Model* modelFloor_ = nullptr;
 	Model* modelSwitchR_ = nullptr;
 	Model* modelSwitchB_ = nullptr;
 	Model* modelWallR_ = nullptr;

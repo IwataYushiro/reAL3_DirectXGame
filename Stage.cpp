@@ -15,6 +15,7 @@ Stage::~Stage() {
 void Stage::Initialize(Model* model) {
 	// モデル読み込み
 	model_ = model;
+	modelFloor_ = Model::CreateFromOBJ("floor", true);
 	modelSwitchR_ = Model::CreateFromOBJ("rswitch", true);
 	modelSwitchB_ = Model::CreateFromOBJ("bswitch", true);
 	modelWallR_ = Model::CreateFromOBJ("cubeR", true);
@@ -112,7 +113,7 @@ void Stage::Draw(ViewProjection viewProjection) {
 
 	// 床描画
 	for (std::unique_ptr<StageData>& block : floorBlocks_) {
-		model_->Draw(block->worldTransform_, viewProjection);
+		modelFloor_->Draw(block->worldTransform_, viewProjection);
 	}
 
 	// スイッチ描画
